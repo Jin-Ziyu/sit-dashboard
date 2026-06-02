@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIT Student Dashboard</title>
-    <!-- Typography & Icons -->
+    <title>SIT Student Workspace</title>
+    
+    <!-- Google Fonts API & FontAwesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Syne:wght@400..800&display=swap" rel="stylesheet">
@@ -12,1013 +13,797 @@
 
     <style>
         /* ==========================================================================
-           1. DESIGN TOKENS & THEMING
+           1. DESIGN TOKENS & SYSTEM VARIABLES
            ========================================================================== */
         :root {
             --bg: #0d0f14;
-            --surface: #161925;
-            --surface-card: #1e2235;
-            --border: #2a2f45;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            
-            --primary: #ff2a5f;
-            --primary-glow: rgba(ff, 42, 95, 0.4);
-            --accent: #00f0ff;
-            --accent-glow: rgba(0, 240, 255, 0.3);
-            --success: #00ff66;
-            
+            --surface: #1e2133;
+            --surface-hover: #2a2e45;
+            --border: #2d314d;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #ff3366;
+            --accent-secondary: #00f3ff;
+            --accent-green: #00ffaa;
             --font-display: 'Syne', sans-serif;
             --font-body: 'DM Sans', sans-serif;
-            --radius: 12px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* Reset & Base Rules */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: var(--bg);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 42, 95, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 40%);
-            color: var(--text-main);
+            color: var(--text-primary);
             font-family: var(--font-body);
             min-height: 100vh;
             overflow-x: hidden;
-            line-height: 1.5;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 51, 102, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.08) 0%, transparent 40%);
         }
 
-        /* Typography Utilities */
-        h1, h2, h3, .display-font {
-            font-family: var(--font-display);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
+        /* Typography */
+        h1, h2, h3, .font-display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; }
+        p { color: var(--text-secondary); line-height: 1.6; }
+        a { color: inherit; text-decoration: none; }
+
+        /* Page Routing States */
+        .page-view { display: none; width: 100%; min-height: 100vh; }
+        .page-view.active { display: flex; flex-direction: column; }
 
         /* ==========================================================================
-           2. VIEW ROUTING STATES (Landing, Master Layout)
+           2. VIEW: LANDING GATE
            ========================================================================== */
-        .page-view {
-            display: none;
-            min-height: 100vh;
-            width: 100%;
-        }
-
-        .page-view.active {
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Landing Interface Style */
         #page-landing {
             align-items: center;
             justify-content: center;
             padding: 2rem;
             text-align: center;
         }
-
         .landing-card {
-            background: var(--surface);
+            background: rgba(30, 33, 51, 0.65);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border);
-            padding: 3rem 2rem;
-            border-radius: calc(var(--radius) * 2);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
             max-width: 480px;
             width: 100%;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 50px rgba(255, 42, 95, 0.05);
-            position: relative;
+            box-shadow: var(--shadow);
+            transform: translateY(0);
+            animation: floatIn 0.6s ease-out;
         }
-
-        .landing-card::before {
-            content: '';
-            position: absolute;
-            top: -1px; left: -1px; right: -1px; bottom: -1px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            border-radius: calc(var(--radius) * 2);
-            z-index: -1;
-            opacity: 0.3;
-        }
-
+        @keyframes floatIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .logo-mark {
             font-size: 3rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
-
-        .landing-input {
+        .input-group {
+            margin: 2rem 0 1.5rem 0;
+            position: relative;
+        }
+        .input-group input {
             width: 100%;
-            background: var(--bg);
+            padding: 1rem 1.25rem;
+            background: rgba(13, 15, 20, 0.8);
             border: 1px solid var(--border);
-            padding: 1rem;
-            color: var(--text-main);
-            border-radius: var(--radius);
+            border-radius: var(--radius-md);
+            color: white;
             font-size: 1rem;
-            margin: 1.5rem 0;
-            text-align: center;
-            outline: none;
+            font-family: var(--font-body);
             transition: var(--transition);
         }
-
-        .landing-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
         }
-
         .btn {
-            background: linear-gradient(135deg, var(--primary), #d61a4e);
+            background: linear-gradient(135deg, var(--accent-primary), #d01c4b);
             color: white;
             border: none;
             padding: 1rem 2rem;
-            border-radius: var(--radius);
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-weight: 700;
+            border-radius: var(--radius-md);
             cursor: pointer;
             width: 100%;
-            font-family: var(--font-display);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
         }
-
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px var(--primary-glow);
+            box-shadow: 0 6px 20px rgba(255, 51, 102, 0.5);
         }
 
-        /* Master View Application Framework */
-        .app-header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
+        /* ==========================================================================
+           3. VIEW: WORKSPACE ENVIRONMENT
+           ========================================================================== */
+        .workspace-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2.5rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(13, 15, 20, 0.8);
+            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 100;
         }
-
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.25rem;
-        }
-
-        .header-brand i {
-            color: var(--primary);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn-icon {
-            background: var(--surface-card);
+        .header-brand { font-size: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+        .header-brand i { color: var(--accent-primary); }
+        .user-badge { display: flex; align-items: center; gap: 1rem; }
+        .matric-pill {
+            background: var(--surface);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
             border: 1px solid var(--border);
-            color: var(--text-main);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            letter-spacing: 0.05em;
+        }
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
             cursor: pointer;
             transition: var(--transition);
         }
+        .logout-btn:hover { background: rgba(255, 51, 102, 0.1); color: var(--accent-primary); border-color: var(--accent-primary); }
 
-        .btn-icon:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        /* ==========================================================================
-           3. DASHBOARD WORKSPACE GRID & LAYOUTS
-           ========================================================================== */
-        .dashboard-container {
-            padding: 2rem;
+        /* Workspace Grid & Customization Panel Frame */
+        .workspace-content {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
+            padding: 2.5rem;
             max-width: 1600px;
             width: 100%;
             margin: 0 auto;
-            flex-grow: 1;
         }
+        @media(max-width: 1024px) { .workspace-content { grid-template-columns: 1fr; } }
 
-        .welcome-strip {
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .welcome-strip h2 {
-            font-size: 2rem;
-            outline: none;
-        }
-
+        /* ==========================================================================
+           4. DASHBOARD WIDGET GRID (DRAG & DROP CONTAINER)
+           ========================================================================== */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 1.5rem;
-            align-items: start;
+            align-content: start;
         }
-
-        /* Panel Card Styles */
-        .panel-card {
+        
+        .widget-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.25rem;
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease;
             position: relative;
             cursor: grab;
         }
-
-        .panel-card:active {
-            cursor: grabbing;
-        }
-
-        .panel-card.dragging {
-            opacity: 0.4;
-            border: 2px dashed var(--accent);
-            transform: scale(0.98);
-        }
-
-        .panel-header {
+        .widget-card:active { cursor: grabbing; }
+        .widget-card.dragging { opacity: 0.4; transform: scale(0.98); border: 2px dashed var(--accent-secondary); }
+        
+        .widget-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 1.25rem;
             padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(45, 49, 77, 0.5);
         }
+        .widget-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; }
+        .widget-title i { color: var(--accent-secondary); }
+        .drag-handle { color: var(--text-secondary); cursor: grab; font-size: 0.9rem; padding: 4px; }
 
-        .panel-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.1rem;
-            color: var(--text-main);
+        /* Custom Input System */
+        .editable-title {
+            outline: none;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: var(--transition);
         }
-
-        .panel-title i {
-            color: var(--accent);
-        }
-
-        .panel-drag-handle {
-            color: var(--text-muted);
-            cursor: grab;
-            font-size: 0.9rem;
-        }
+        .editable-title:focus { background: rgba(255,255,255,0.05); box-shadow: 0 0 0 1px var(--border); }
 
         /* ==========================================================================
-           4. WIDGET COMPONENT SPECIFIC INTERFACES
+           5. SPECIFIC WIDGET MODULE STYLES
            ========================================================================== */
         
-        /* Module Quick Links Grid */
-        .links-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-
+        /* Module: Campus Hyperlinks */
+        .links-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 280px; overflow-y: auto; }
         .link-item {
-            background: var(--surface-card);
-            border: 1px solid var(--border);
-            padding: 0.75rem;
-            border-radius: var(--radius);
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-            text-decoration: none;
-            color: var(--text-main);
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .link-item:hover {
-            border-color: var(--primary);
-            background: rgba(255, 42, 95, 0.03);
-            transform: translateY(-2px);
-        }
-
-        .link-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .link-url {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .delete-link-btn {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            opacity: 0;
-            font-size: 0.75rem;
-            transition: var(--transition);
-        }
-
-        .link-item:hover .delete-link-btn {
-            opacity: 1;
-        }
-
-        .delete-link-btn:hover {
-            color: var(--primary);
-        }
-
-        /* Modern Add Link Inline Form */
-        .inline-form {
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            padding-top: 1rem;
-            border-top: 1px dashed var(--border);
-        }
-
-        .inline-input {
-            background: var(--surface-card);
-            border: 1px solid var(--border);
-            padding: 0.5rem;
-            border-radius: 6px;
-            color: white;
-            font-size: 0.85rem;
-            outline: none;
-        }
-
-        .inline-input:focus {
-            border-color: var(--accent);
-        }
-
-        .btn-sm {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 0.5rem;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-
-        /* Timetable Tracker */
-        .timetable-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .class-slot {
-            background: var(--surface-card);
-            border-left: 3px solid var(--accent);
-            padding: 0.75rem;
-            border-radius: 0 var(--radius) var(--radius) 0;
-        }
-
-        .class-time {
-            font-size: 0.8rem;
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        .class-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin: 0.1rem 0;
-        }
-
-        .class-loc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* Quick Tasks List */
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .task-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: var(--surface-card);
-            padding: 0.75rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
-
-        .task-checkbox {
-            accent-color: var(--primary);
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-
-        .task-text {
-            flex-grow: 1;
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .task-item.completed .task-text {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
-
-        /* Clean System Configurations Overlay UI */
-        .config-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(13, 15, 20, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .config-overlay.active {
-            display: flex;
-        }
-
-        .config-modal {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: calc(var(--radius) * 1.5);
-            max-width: 500px;
-            width: 100%;
-            padding: 2rem;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-        }
-
-        .config-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            background: rgba(13, 15, 20, 0.4);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            transition: var(--transition);
         }
+        .link-item:hover { background: var(--surface-hover); border-color: var(--accent-secondary); transform: translateX(3px); }
+        .link-anchor { display: flex; align-items: center; gap: 0.75rem; width: 80%; }
+        .link-anchor i { color: var(--accent-secondary); font-size: 1.1rem; }
+        .link-title { font-weight: 500; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .delete-link-btn { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 4px; transition: var(--transition); }
+        .delete-link-btn:hover { color: var(--accent-primary); }
 
-        .config-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .config-group label {
-            display: block;
+        .add-link-form { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .add-link-form input {
+            background: rgba(13, 15, 20, 0.6);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-md);
             font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
         }
+        .add-link-form input:focus { outline: none; border-color: var(--accent-primary); }
+        .btn-sm { padding: 0.5rem 0.75rem; font-size: 0.85rem; width: auto; }
 
-        .config-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+        /* Module: Tracker / Timetable Piles */
+        .tracker-item {
+            background: rgba(13, 15, 20, 0.4);
+            border-left: 4px solid var(--accent-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin-bottom: 0.75rem;
         }
+        .tracker-meta { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.25rem; }
 
-        .btn-secondary {
-            background: var(--surface-card);
+        /* Module: Smart GPA Evaluation Calculator */
+        .gpa-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .gpa-input {
+            background: rgba(13, 15, 20, 0.6);
             border: 1px solid var(--border);
-            color: var(--text-main);
+            border-radius: 6px;
+            color: white;
+            padding: 0.4rem;
+            font-size: 0.85rem;
+            text-align: center;
         }
-
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-
-        /* Textarea / Note Editor Component */
-        .notepad-area {
-            width: 100%;
-            min-height: 140px;
-            background: var(--surface-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text-main);
+        .gpa-input:focus { outline: none; border-color: var(--accent-green); }
+        .gpa-display-panel {
+            margin-top: 1rem;
+            background: rgba(0, 255, 170, 0.05);
+            border: 1px dashed var(--accent-green);
             padding: 0.75rem;
-            font-family: inherit;
-            font-size: 0.9rem;
-            resize: vertical;
-            outline: none;
+            border-radius: var(--radius-md);
+            text-align: center;
         }
+        .gpa-score { font-size: 1.75rem; color: var(--accent-green); font-family: var(--font-display); }
 
-        .notepad-area:focus {
-            border-color: var(--primary);
+        /* ==========================================================================
+           6. CONTROL PANEL (SIDEBAR STYLING)
+           ========================================================================== */
+        .control-sidebar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
         }
-
-        /* File Upload Utility wrapper */
-        .file-upload-wrapper {
+        .control-section { margin-bottom: 1.75rem; }
+        .control-section h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(45, 49, 77, 0.3);
+        }
+        .switch {
             position: relative;
-            overflow: hidden;
             display: inline-block;
-            width: 100%;
+            width: 44px;
+            height: 22px;
         }
-
-        .file-upload-wrapper input[type=file] {
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
             position: absolute;
-            left: 0; top: 0; opacity: 0;
-            width: 100%; height: 100%;
             cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--border);
+            transition: .3s;
+            border-radius: 22px;
         }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--accent-primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        .system-ops { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+        .btn-alt {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-alt:hover { background: rgba(255,255,255,0.05); border-color: var(--text-secondary); }
     </style>
 </head>
 <body>
 
     <!-- ==========================================================================
-       STAGE 1: LANDING LOG-IN VIEW
+       VIEW A: LANDING GATE
        ========================================================================== -->
     <div id="page-landing" class="page-view active">
         <div class="landing-card">
-            <div class="logo-mark">
-                <i class="fa-solid fa-graduation-cap"></i>
-            </div>
-            <h1 class="display-font">SIT DASHBOARD</h1>
-            <p style="color: var(--text-muted); margin-top: 0.5rem;">Enter your student identifier context to initialize space</p>
+            <div class="logo-mark"><i class="fa-solid fa-graduation-cap"></i></div>
+            <h1 id="landing-title" class="editable-title" contenteditable="true">SIT Student Space</h1>
+            <p>Enter your student identifier credentials below to initialize your synced desktop workspace ecosystem.</p>
             
-            <input type="text" id="student-id-input" class="landing-input" placeholder="e.g., Student Name or ID" autocomplete="off">
-            <button class="btn" onclick="initializeWorkspace()">Initialize Frame</button>
+            <div class="input-group">
+                <input type="text" id="student-id" placeholder="e.g., SIT-2201942" autocomplete="off">
+            </div>
+            <button class="btn" onclick="initializeWorkspace()">Initialize System</button>
         </div>
     </div>
 
-
     <!-- ==========================================================================
-       STAGE 2: SYSTEM MASTER DESKTOP FRAMEWORK
+       VIEW B: WORKSPACE ENVIRONMENT CONTAINER
        ========================================================================== -->
     <div id="page-master" class="page-view">
-        
-        <!-- Sticky Corporate Global Navigation -->
-        <header class="app-header">
+        <header class="workspace-header">
             <div class="header-brand">
                 <i class="fa-solid fa-terminal"></i>
-                <h1 style="font-size: 1.25rem;">SIT // SYSTEM</h1>
+                <h2 id="dash-main-title" class="editable-title" contenteditable="true">SIT Dashboard</h2>
             </div>
-            <div class="header-actions">
-                <button class="btn-icon" title="System Configuration Manager" onclick="toggleConfigModal(true)">
-                    <i class="fa-solid fa-sliders"></i>
-                </button>
-                <button class="btn-icon" style="color: var(--primary)" title="Disconnect Instance" onclick="destroySession()">
-                    <i class="fa-solid fa-power-off"></i>
-                </button>
+            <div class="user-badge">
+                <span id="display-matric" class="matric-pill">SIT SYSTEM</span>
+                <button class="logout-btn" onclick="disconnectWorkspace()"><i class="fa-solid fa-power-off"></i> Lock</button>
             </div>
         </header>
 
-        <!-- Main Dashboard Layout Base Engine -->
-        <div class="dashboard-container">
-            <div class="welcome-strip">
-                <div>
-                    <h2 id="dash-welcome-title" contenteditable="true" spellcheck="false" onblur="saveDashboardTitle(this.textContent)">Student Dashboard</h2>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Interactive Local Workspace Environment</p>
-                </div>
-                <div style="text-align: right; color: var(--text-muted); font-size: 0.85rem;" id="live-timestamp">
-                    Connecting to Node...
-                </div>
-            </div>
-
-            <!-- DRAGGABLE DISPATCHER WORKSPACE GRID -->
-            <main id="dashboard-grid" class="dashboard-grid">
+        <div class="workspace-content">
+            <!-- Dynamic Drag-and-Drop Widget Grid Layer -->
+            <main id="dashboard-grid-container" class="dashboard-grid">
                 
-                <!-- WIDGET CARD: QUICK ACCESS MODULE LINKS -->
-                <div class="panel-card" draggable="true" data-widget-id="links">
-                    <div class="panel-header">
-                        <div class="panel-title">
-                            <i class="fa-solid fa-link"></i>
-                            <span>Quick Anchors</span>
+                <!-- WIDGET CARD: CAMPUS HYPERLINKS -->
+                <div class="widget-card" id="widget-links" draggable="true">
+                    <div class="widget-header">
+                        <div class="widget-title">
+                            <i class="fa-solid fa-compass"></i>
+                            <span class="editable-title" contenteditable="true" id="title-links">Quick Links</span>
                         </div>
-                        <div class="panel-drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
+                        <div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
                     </div>
-                    <div id="links-container" class="links-grid">
-                        <!-- Rendered Systematically inside App Script -->
+                    <div class="links-list" id="links-container">
+                        <!-- Dynamic items populated by script engine -->
                     </div>
-                    <form class="inline-form" onsubmit="addNewLink(event)">
-                        <input type="text" id="new-link-name" class="inline-input" placeholder="Link Display Name" required>
-                        <input type="url" id="new-link-url" class="inline-input" placeholder="https://..." required>
-                        <button type="submit" class="btn-sm">Append Anchor</button>
+                    <form class="add-link-form" onsubmit="addNewLink(event)">
+                        <input type="text" id="new-link-title" placeholder="Name" required style="width: 40%;">
+                        <input type="url" id="new-link-url" placeholder="https://" required style="width: 45%;">
+                        <button type="submit" class="btn btn-sm"><i class="fa-solid fa-plus"></i></button>
                     </form>
                 </div>
 
-                <!-- WIDGET CARD: TIMETABLE COMPONENT -->
-                <div class="panel-card" draggable="true" data-widget-id="timetable">
-                    <div class="panel-header">
-                        <div class="panel-title">
-                            <i class="fa-solid fa-calendar-clock"></i>
-                            <span>Today's Sessions</span>
+                <!-- WIDGET CARD: COURSE MODULE TRACKER -->
+                <div class="widget-card" id="widget-timetable" draggable="true">
+                    <div class="widget-header">
+                        <div class="widget-title">
+                            <i class="fa-solid fa-calendar-day"></i>
+                            <span class="editable-title" contenteditable="true" id="title-timetable">Module Timetable</span>
                         </div>
-                        <div class="panel-drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
+                        <div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
                     </div>
-                    <div class="timetable-list">
-                        <div class="class-slot">
-                            <div class="class-time">09:00 - 11:00</div>
-                            <div class="class-title">CSC1106: Interactive Design</div>
-                            <div class="class-loc">SIT@NYP - Tech Lab 3</div>
+                    <div class="tracker-list">
+                        <div class="tracker-item" style="border-color: var(--accent-primary);">
+                            <h4 class="editable-title" contenteditable="true">ICT2101 Software Engineering</h4>
+                            <div class="tracker-meta"><span>Tuesday 09:00 - 11:00</span><span>SR 2A</span></div>
                         </div>
-                        <div class="class-slot" style="border-left-color: var(--primary);">
-                            <div class="class-time">13:00 - 15:00</div>
-                            <div class="class-title">CSC2102: Software Engineering</div>
-                            <div class="class-loc">SIT@Dover - Room 4.2</div>
+                        <div class="tracker-item" style="border-color: var(--accent-secondary);">
+                            <h4 class="editable-title" contenteditable="true">ICT2102 Data Structures</h4>
+                            <div class="tracker-meta"><span>Thursday 14:00 - 16:00</span><span>Lab 3B</span></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- WIDGET CARD: COMPACT TASK TRACKER -->
-                <div class="panel-card" draggable="true" data-widget-id="tasks">
-                    <div class="panel-header">
-                        <div class="panel-title">
-                            <i class="fa-solid fa-list-check"></i>
-                            <span>Action Matrix</span>
+                <!-- WIDGET CARD: ESTIMATION CALCULATOR -->
+                <div class="widget-card" id="widget-calculator" draggable="true">
+                    <div class="widget-header">
+                        <div class="widget-title">
+                            <i class="fa-solid fa-calculator"></i>
+                            <span class="editable-title" contenteditable="true" id="title-calculator">GPA Estimator</span>
                         </div>
-                        <div class="panel-drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
+                        <div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
                     </div>
-                    <div id="task-container" class="task-list">
-                        <!-- Rendered Systematically inside App Script -->
-                    </div>
-                    <div class="inline-form" style="margin-top:0.75rem; flex-direction:row; border-top:none; padding-top:0;">
-                        <input type="text" id="new-task-input" class="inline-input" placeholder="Commit new task..." style="flex-grow:1;" onkeydown="if(event.key==='Enter') appendNewTask()">
-                        <button type="button" class="btn-sm" style="padding: 0.5rem 0.75rem;" onclick="appendNewTask()"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                </div>
-
-                <!-- WIDGET CARD: PERSISTENT NOTE AREA -->
-                <div class="panel-card" draggable="true" data-widget-id="notes">
-                    <div class="panel-header">
-                        <div class="panel-title">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                            <span>Scratchpad Node</span>
+                    <div id="gpa-rows-box">
+                        <div class="gpa-row">
+                            <input type="text" class="gpa-input" value="Module 1" placeholder="Module">
+                            <input type="number" class="gpa-input gpa-credits" value="6" placeholder="Credits" step="1">
+                            <input type="number" class="gpa-input gpa-grade" value="4.5" placeholder="GPA" step="0.1" max="5">
                         </div>
-                        <div class="panel-drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
+                        <div class="gpa-row">
+                            <input type="text" class="gpa-input" value="Module 2" placeholder="Module">
+                            <input type="number" class="gpa-input gpa-credits" value="6" placeholder="Credits" step="1">
+                            <input type="number" class="gpa-input gpa-grade" value="4.0" placeholder="GPA" step="0.1" max="5">
+                        </div>
                     </div>
-                    <textarea id="scratchpad" class="notepad-area" placeholder="Dump internal runtime thoughts here... Auto saves automatically." oninput="saveScratchpadContent(this.value)"></textarea>
+                    <button class="btn-alt" style="padding:0.4rem; margin-top:0.5rem; font-size:0.8rem;" onclick="addGpaRow()">+ Add Module Row</button>
+                    <div class="gpa-display-panel">
+                        <p style="font-size:0.8rem; text-transform:uppercase; color: var(--accent-green)">Estimated Trimester GPA</p>
+                        <div class="gpa-score" id="gpa-output-score">4.25</div>
+                    </div>
                 </div>
 
             </main>
-        </div>
-    </div>
 
-    <!-- ==========================================================================
-       STAGE 3: CONFIGURATION AND EXPORT MANAGER OVERLAY
-       ========================================================================== -->
-    <div id="config-overlay" class="config-overlay">
-        <div class="config-modal">
-            <div class="config-header">
-                <h3 style="font-size: 1.25rem;"><i class="fa-solid fa-sliders" style="color:var(--accent); margin-right:0.5rem;"></i> Environment Dashboard Engine</h3>
-                <button class="btn-icon" onclick="toggleConfigModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="config-group">
-                <label>Data Backup Portability</label>
-                <button class="btn btn-secondary" style="width:100%; text-align:left; margin-bottom:0.5rem;" onclick="exportDashboardConfiguration()">
-                    <i class="fa-solid fa-download" style="margin-right:0.5rem;"></i> Export Settings Matrix (.json)
-                </button>
-                <div class="file-upload-wrapper">
-                    <button class="btn btn-secondary" style="width:100%; text-align:left;">
-                        <i class="fa-solid fa-upload" style="margin-right:0.5rem;"></i> Import Layout Configuration File
-                    </button>
-                    <input type="file" id="import-config-file" accept=".json" onchange="importDashboardConfiguration(event)">
+            <!-- SIDEBAR CONTROL CONSOLE UNIT -->
+            <aside class="control-sidebar">
+                <div class="control-section">
+                    <h3>Panel Visibility</h3>
+                    <div class="toggle-row">
+                        <span>Quick Links</span>
+                        <label class="switch"><input type="checkbox" id="toggle-widget-links" checked onchange="togglePanelVisibility('widget-links')"><span class="slider"></span></label>
+                    </div>
+                    <div class="toggle-row">
+                        <span>Module Timetable</span>
+                        <label class="switch"><input type="checkbox" id="toggle-widget-timetable" checked onchange="togglePanelVisibility('widget-timetable')"><span class="slider"></span></label>
+                    </div>
+                    <div class="toggle-row">
+                        <span>GPA Estimator</span>
+                        <label class="switch"><input type="checkbox" id="toggle-widget-calculator" checked onchange="togglePanelVisibility('widget-calculator')"><span class="slider"></span></label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="config-group" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border);">
-                <label style="color: var(--primary);">Destructive Management Actions</label>
-                <button class="btn" style="background: rgba(255,42,95,0.1); border: 1px solid var(--primary); color: var(--primary);" onclick="clearAllDataEnvironments()">Wipe Workspace Storage Cache</button>
-            </div>
+                <div class="control-section">
+                    <h3>Data Management</h3>
+                    <p style="font-size: 0.8rem; margin-bottom: 1rem;">Export config layout presets safely for cloud storage backups.</p>
+                    <div class="system-ops">
+                        <button class="btn-alt" onclick="exportConfigData()"><i class="fa-solid fa-download"></i> Backup Layout</button>
+                        <button class="btn-alt" onclick="triggerImportSelection()"><i class="fa-solid fa-upload"></i> Restore Layout</button>
+                        <input type="file" id="import-hidden-field" style="display:none;" onchange="importConfigData(event)">
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 
     <!-- ==========================================================================
-       5. COMPREHENSIVE JAVASCRIPT STATE ENGINE
+       7. CORE JAVASCRIPT STATE ENGINE LOGIC
        ========================================================================== -->
     <script>
-        // System Encapsulated Local State Variables
-        let studentSessionKey = "";
-        let quickLinks = [];
-        let systemTasks = [];
-        let dashboardPanelOrder = ["links", "timetable", "tasks", "notes"];
+        // System State Data Storage Cache
+        let currentState = {
+            studentId: '',
+            dashTitle: 'SIT Dashboard',
+            landingTitle: 'SIT Student Space',
+            panelOrder: ['widget-links', 'widget-timetable', 'widget-calculator'],
+            hiddenPanels: [],
+            links: [
+                { title: 'SIT INTRANET', url: 'https://academicprofile.singaporetech.edu.sg/' },
+                { title: 'INX (Student Portal)', url: 'https://inx.singaporetech.edu.sg/' },
+                { title: 'xSITe Learning Hub', url: 'https://xsite.singaporetech.edu.sg/' }
+            ]
+        };
 
-        // Initialization Lifecycles on Document Mount
-        document.addEventListener("DOMContentLoaded", () => {
-            initializeLiveClock();
-            checkExistingSession();
-            setupDragAndDropEngine();
+        // System-wide Storage Keys Prefix Wrapper
+        const KEY = 'sit_workspace_store';
+
+        function saveToLocalStorage() {
+            localStorage.setItem(KEY, JSON.stringify(currentState));
+        }
+
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem(KEY);
+            if (savedData) {
+                try {
+                    const parsed = JSON.parse(savedData);
+                    currentState = { ...currentState, ...parsed };
+                } catch (e) {
+                    console.error("Data tracking reference parsed incorrectly, resetting to default.", e);
+                }
+            }
+        }
+
+        // View Control Routing Logic
+        function showPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Initialization Routine Engine
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            
+            // Rehydrate Dynamic Text Blocks
+            document.getElementById('landing-title').textContent = currentState.landingTitle;
+            document.getElementById('dash-main-title').textContent = currentState.dashTitle;
+            
+            if (currentState.studentId) {
+                initializeDOMDashboard();
+                showPage('page-master');
+            } else {
+                showPage('page-landing');
+            }
+
+            setupDragAndDropMechanics();
+            setupLiveCalculationHooks();
+            setupAutoContentEditableSaves();
         });
 
-        // Live Clock Engine Updating Header Context
-        function initializeLiveClock() {
-            const timeContainer = document.getElementById("live-timestamp");
-            const refreshTime = () => {
-                const now = new Date();
-                timeContainer.innerHTML = `<i class="fa-solid fa-clock" style="color:var(--accent)"></i> ${now.toLocaleDateString()} // ${now.toLocaleTimeString()}`;
-            };
-            setInterval(refreshTime, 1000);
-            refreshTime();
-        }
-
-        // Dedicated Global LocalStorage Namespace Utility Safe Keys
-        function saveToStorage(key, value) {
-            localStorage.setItem('sit_dash_' + key, JSON.stringify(value));
-        }
-
-        function loadFromStorage(key, defaultValue) {
-            const raw = localStorage.getItem('sit_dash_' + key);
-            try {
-                return raw ? JSON.parse(raw) : defaultValue;
-            } catch (e) {
-                return defaultValue;
-            }
-        }
-
-        // Verification Checking for Saved Sessions
-        function checkExistingSession() {
-            const savedSession = localStorage.getItem('sit_dash_session_user');
-            if (savedSession) {
-                studentSessionKey = JSON.parse(savedSession);
-                mountWorkspaceEnvironment();
-            }
-        }
-
-        // Initialize user login framework context
         function initializeWorkspace() {
-            const inputNode = document.getElementById("student-id-input");
-            const val = inputNode.value.trim();
-            if (!val) {
-                alert("Please declare an identifier mapping context to unlock framework.");
-                return;
-            }
-            studentSessionKey = val;
-            saveToStorage('session_user', val);
-            mountWorkspaceEnvironment();
-        }
-
-        // Mount views and layout configurations completely
-        function mountWorkspaceEnvironment() {
-            // Swap Router Active Classes
-            document.getElementById("page-landing").classList.remove("active");
-            document.getElementById("page-master").classList.add("active");
-
-            // Load Global Saved Configuration Datastores
-            const defaultLinks = [
-                { name: "SIT INTRANET", url: "https://academicprofile.sit.edu.sg" },
-                { name: "xSite LMS", url: "https://xsite.singaporetech.edu.sg" },
-                { name: "SIT Library", url: "https://library.singaporetech.edu.sg" },
-                { name: "SIT Main Website", url: "https://www.singaporetech.edu.sg" }
-            ];
-            quickLinks = loadFromStorage('links', defaultLinks);
+            const inputField = document.getElementById('student-id');
+            const targetVal = inputField.value.trim();
             
-            const defaultTasks = [
-                { id: 1, text: "Review Integrated Software Project Milestones", completed: false },
-                { id: 2, text: "Submit Math Formulation Assignment via xSite Portal", completed: true }
-            ];
-            systemTasks = loadFromStorage('tasks', defaultTasks);
-            
-            dashboardPanelOrder = loadFromStorage('panel_order', dashboardPanelOrder);
-
-            // Populate Text Labels & Field Inputs
-            document.getElementById("dash-welcome-title").textContent = loadFromStorage('title_ctx', `${studentSessionKey}'s Interface`);
-            document.getElementById("scratchpad").value = loadFromStorage('scratchpad_data', '');
-
-            // Render Framework Components
-            renderQuickLinks();
-            renderTasksMatrix();
-            arrangeDashboardPanels();
-        }
-
-        // Save customized title content to storage
-        function saveDashboardTitle(text) {
-            saveToStorage('title_ctx', text.trim() || `${studentSessionKey}'s Interface`);
-        }
-
-        // Save persistent text files from scratchpad
-        function saveScratchpadContent(text) {
-            saveToStorage('scratchpad_data', text);
-        }
-
-        // Disconnect Session Handler Logic
-        function destroySession() {
-            if(confirm("Confirm standard closure context? Local assets will stay cached internally.")) {
-                document.getElementById("page-master").classList.remove("active");
-                document.getElementById("page-landing").classList.add("active");
-                document.getElementById("student-id-input").value = "";
-                localStorage.removeItem('sit_dash_session_user');
+            if (targetVal !== "") {
+                currentState.studentId = targetVal;
+                saveToLocalStorage();
+                initializeDOMDashboard();
+                showPage('page-master');
+            } else {
+                alert("Please declare your secure Student Credentials.");
             }
         }
 
-        // Render Quick Access Module Grid
-        function renderQuickLinks() {
-            const container = document.getElementById("links-container");
-            container.innerHTML = "";
-            quickLinks.forEach((link, index) => {
-                const el = document.createElement("a");
-                el.className = "link-item";
-                el.href = link.url;
-                el.target = "_blank";
-                el.innerHTML = `
-                    <span class="link-name">${link.name}</span>
-                    <span class="link-url">${link.url.replace('https://','')}</span>
-                    <button class="delete-link-btn" onclick="removeLinkItem(event, ${index})"><i class="fa-solid fa-trash-can"></i></button>
-                `;
-                container.appendChild(el);
+        function disconnectWorkspace() {
+            currentState.studentId = '';
+            saveToLocalStorage();
+            showPage('page-landing');
+        }
+
+        function initializeDOMDashboard() {
+            document.getElementById('display-matric').textContent = currentState.studentId;
+            renderLinks();
+            applyPanelArrangements();
+            applyVisibilityToggles();
+            calculateGpaScore();
+        }
+
+        // Content Editable Real-Time Synchronization Listener Hooks
+        function setupAutoContentEditableSaves() {
+            const configBindings = [
+                { id: 'landing-title', key: 'landingTitle' },
+                { id: 'dash-main-title', key: 'dashTitle' }
+            ];
+
+            configBindings.forEach(binding => {
+                const element = document.getElementById(binding.id);
+                if (element) {
+                    element.addEventListener('input', () => {
+                        currentState[binding.key] = element.textContent;
+                        saveToLocalStorage();
+                    });
+                }
             });
         }
 
-        // Append explicit custom links into grid array
-        function addNewLink(e) {
-            e.preventDefault();
-            const nameNode = document.getElementById("new-link-name");
-            const urlNode = document.getElementById("new-link-url");
+        /* Hyperlink Module Function Engines */
+        function renderLinks() {
+            const container = document.getElementById('links-container');
+            container.innerHTML = '';
             
-            quickLinks.push({ name: nameNode.value.trim(), url: urlNode.value.trim() });
-            saveToStorage('links', quickLinks);
-            renderQuickLinks();
-            
-            nameNode.value = "";
-            urlNode.value = "";
-        }
-
-        // Remove link array item securely
-        function removeLinkItem(e, index) {
-            e.preventDefault();
-            e.stopPropagation();
-            quickLinks.splice(index, 1);
-            saveToStorage('links', quickLinks);
-            renderQuickLinks();
-        }
-
-        // Render Active System Action Matrix Tasks
-        function renderTasksMatrix() {
-            const container = document.getElementById("task-container");
-            container.innerHTML = "";
-            systemTasks.forEach((task) => {
-                const item = document.createElement("div");
-                item.className = `task-item ${task.completed ? 'completed' : ''}`;
-                item.innerHTML = `
-                    <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTaskState(${task.id})">
-                    <span class="task-text" contenteditable="true" spellcheck="false" onblur="updateTaskText(${task.id}, this.textContent)">${task.text}</span>
-                    <i class="fa-solid fa-trash-can" style="color:var(--text-muted); cursor:pointer; font-size:0.85rem;" onclick="removeTaskItem(${task.id})"></i>
+            currentState.links.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'link-item';
+                div.innerHTML = `
+                    <a href="${item.url}" target="_blank" class="link-anchor">
+                        <i class="fa-solid fa-link"></i>
+                        <span class="link-title">${item.title}</span>
+                    </a>
+                    <button class="delete-link-btn" onclick="deleteLink(${index})" title="Delete Link">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
                 `;
-                container.appendChild(item);
+                container.appendChild(div);
             });
         }
 
-        // Append text structures into task matrix array
-        function appendNewTask() {
-            const input = document.getElementById("new-task-input");
-            const val = input.value.trim();
-            if(!val) return;
+        function addNewLink(event) {
+            event.preventDefault();
+            const titleInput = document.getElementById('new-link-title');
+            const urlInput = document.getElementById('new-link-url');
             
-            systemTasks.push({ id: Date.now(), text: val, completed: false });
-            saveToStorage('tasks', systemTasks);
-            renderTasksMatrix();
-            input.value = "";
+            currentState.links.push({
+                title: titleInput.value.trim(),
+                url: urlInput.value.trim()
+            });
+            
+            saveToLocalStorage();
+            renderLinks();
+            
+            titleInput.value = '';
+            urlInput.value = '';
         }
 
-        // Update task completion binary switch
-        function toggleTaskState(id) {
-            systemTasks = systemTasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
-            saveToStorage('tasks', systemTasks);
-            renderTasksMatrix();
+        function deleteLink(index) {
+            currentState.links.splice(index, 1);
+            saveToLocalStorage();
+            renderLinks();
         }
 
-        // Handle inline edit tasks updates
-        function updateTaskText(id, newText) {
-            systemTasks = systemTasks.map(t => t.id === id ? { ...t, text: newText.trim() || "Untitled Task" } : t);
-            saveToStorage('tasks', systemTasks);
-            renderTasksMatrix();
+        /* GPA Module Evaluation Computation Engines */
+        function setupLiveCalculationHooks() {
+            document.getElementById('widget-calculator').addEventListener('input', (e) => {
+                if (e.target.classList.contains('gpa-input')) {
+                    calculateGpaScore();
+                }
+            });
         }
 
-        // Remove item row data from tasks matrix
-        function removeTaskItem(id) {
-            systemTasks = systemTasks.filter(t => t.id !== id);
-            saveToStorage('tasks', systemTasks);
-            renderTasksMatrix();
+        function addGpaRow() {
+            const targetContainer = document.getElementById('gpa-rows-box');
+            const row = document.createElement('div');
+            row.className = 'gpa-row';
+            row.innerHTML = `
+                <input type="text" class="gpa-input" placeholder="Module">
+                <input type="number" class="gpa-input gpa-credits" placeholder="Credits" step="1">
+                <input type="number" class="gpa-input gpa-grade" placeholder="GPA" step="0.1" max="5">
+            `;
+            targetContainer.appendChild(row);
         }
 
-        // Modal Visibility Triggers
-        function toggleConfigModal(show) {
-            const modal = document.getElementById("config-overlay");
-            show ? modal.classList.add("active") : modal.classList.remove("active");
+        function calculateGpaScore() {
+            const creditsElements = document.querySelectorAll('.gpa-credits');
+            const gradeElements = document.querySelectorAll('.gpa-grade');
+            
+            let accumulatedPoints = 0;
+            let combinedCreditsCount = 0;
+            
+            creditsElements.forEach((element, idx) => {
+                const credits = parseFloat(element.value) || 0;
+                const scoreValue = parseFloat(gradeElements[idx].value) || 0;
+                
+                if (credits > 0) {
+                    accumulatedPoints += (scoreValue * credits);
+                    combinedCreditsCount += credits;
+                }
+            });
+            
+            const performanceOut = combinedCreditsCount > 0 ? (accumulatedPoints / combinedCreditsCount).toFixed(2) : "0.00";
+            document.getElementById('gpa-output-score').textContent = performanceOut;
         }
 
-        // ==========================================================================
-        // 6. ADVANCED INTERACTIVE DRAG AND DROP MATRIX COMPONENT ENGINE
-        // ==========================================================================
-        function setupDragAndDropEngine() {
-            const grid = document.getElementById("dashboard-grid");
+        /* Core UI Layout Configuration Engines (Drag, Drop, Visibility Toggles) */
+        function applyPanelArrangements() {
+            const gridContainer = document.getElementById('dashboard-grid-container');
+            currentState.panelOrder.forEach(panelId => {
+                const cardNode = document.getElementById(panelId);
+                if (cardNode) gridContainer.appendChild(cardNode);
+            });
+        }
 
-            grid.addEventListener("dragstart", (e) => {
-                const card = e.target.closest(".panel-card");
-                if (card) {
-                    card.classList.add("dragging");
-                    e.dataTransfer.setData("text/plain", card.dataset.widgetId);
+        function applyVisibilityToggles() {
+            currentState.panelOrder.forEach(panelId => {
+                const panel = document.getElementById(panelId);
+                const controlToggle = document.getElementById('toggle-' + panelId);
+                
+                if (currentState.hiddenPanels.includes(panelId)) {
+                    if (panel) panel.style.display = 'none';
+                    if (controlToggle) controlToggle.checked = false;
+                } else {
+                    if (panel) panel.style.display = 'block';
+                    if (controlToggle) controlToggle.checked = true;
+                }
+            });
+        }
+
+        function togglePanelVisibility(panelId) {
+            const isHidden = currentState.hiddenPanels.includes(panelId);
+            if (isHidden) {
+                currentState.hiddenPanels = currentState.hiddenPanels.filter(id => id !== panelId);
+            } else {
+                currentState.hiddenPanels.push(panelId);
+            }
+            saveToLocalStorage();
+            applyVisibilityToggles();
+        }
+
+        function setupDragAndDropMechanics() {
+            const gridContainer = document.getElementById('dashboard-grid-container');
+            
+            gridContainer.addEventListener('dragstart', (e) => {
+                const targetedCard = e.target.closest('.widget-card');
+                if(targetedCard) {
+                    targetedCard.classList.add('dragging');
                 }
             });
 
-            grid.addEventListener("dragend", (e) => {
-                const card = e.target.closest(".panel-card");
-                if (card) {
-                    card.classList.remove("dragging");
-                    capturePanelOrderState();
+            gridContainer.addEventListener('dragend', (e) => {
+                const targetedCard = e.target.closest('.widget-card');
+                if(targetedCard) {
+                    targetedCard.classList.remove('dragging');
+                    
+                    // Capture final order arrangement layout configuration changes
+                    const discoveredCards = gridContainer.querySelectorAll('.widget-card');
+                    const freshOrder = [];
+                    discoveredCards.forEach(card => freshOrder.push(card.id));
+                    
+                    currentState.panelOrder = freshOrder;
+                    saveToLocalStorage();
                 }
             });
 
-            grid.addEventListener("dragover", (e) => {
+            gridContainer.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                const draggingCard = document.querySelector(".panel-card.dragging");
-                if (!draggingCard) return;
+                const activeDraggingCard = document.querySelector('.dragging');
+                if (!activeDraggingCard) return;
 
-                const targetCards = [...grid.querySelectorAll(".panel-card:not(.dragging)")];
-                const nextCard = targetCards.find(card => {
+                const alternativeCards = [...gridContainer.querySelectorAll('.widget-card:not(.dragging)')];
+                
+                const immediateTargetNode = alternativeCards.find(card => {
                     const box = card.getBoundingClientRect();
-                    const offset = e.clientY - box.top - box.height / 2;
-                    return offset < 0;
+                    const boundaryOffset = e.clientY - box.top - box.height / 2;
+                    return boundaryOffset < 0;
                 });
 
-                if (nextCard) {
-                    grid.insertBefore(draggingCard, nextCard);
+                if (immediateTargetNode == null) {
+                    gridContainer.appendChild(activeDraggingCard);
                 } else {
-                    grid.appendChild(draggingCard);
+                    gridContainer.insertBefore(activeDraggingCard, immediateTargetNode);
                 }
             });
         }
 
-        // Capture current DOM state arrangements
-        function capturePanelOrderState() {
-            const elements = [...document.querySelectorAll("#dashboard-grid .panel-card")];
-            dashboardPanelOrder = elements.map(el => el.dataset.widgetId);
-            saveToStorage('panel_order', dashboardPanelOrder);
+        /* JSON Import / Export Infrastructure System Functions */
+        function exportConfigData() {
+            const dataString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentState, null, 2));
+            const alternativeAnchor = document.createElement('a');
+            alternativeAnchor.setAttribute("href", dataString);
+            alternativeAnchor.setAttribute("download", `sit_workspace_${currentState.studentId || 'backup'}.json`);
+            document.body.appendChild(alternativeAnchor);
+            alternativeAnchor.click();
+            alternativeAnchor.remove();
         }
 
-        // Order nodes array sequentially during system booting phase
-        function arrangeDashboardPanels() {
-            const grid = document.getElementById("dashboard-grid");
-            dashboardPanelOrder.forEach(id => {
-                const card = grid.querySelector(`[data-widget-id="${id}"]`);
-                if (card) grid.appendChild(card);
-            });
+        function triggerImportSelection() {
+            document.getElementById('import-hidden-field').click();
         }
 
-        // ==========================================================================
-        // 7. DATA PORTABILITY CONFIGURATION BACKUP READ/WRITE PORTS
-        // ==========================================================================
-        function exportDashboardConfiguration() {
-            const manifest = {
-                title_ctx: loadFromStorage('title_ctx', ''),
-                scratchpad_data: loadFromStorage('scratchpad_data', ''),
-                links: quickLinks,
-                tasks: systemTasks,
-                panel_order: dashboardPanelOrder
-            };
-            
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(manifest, null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `sit_dashboard_backup_${studentSessionKey || 'config'}.json`);
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
-        }
+        function importConfigData(event) {
+            const uploadedFile = event.target.files[0];
+            if (!uploadedFile) return;
 
-        function importDashboardConfiguration(e) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
+            const readerInstance = new FileReader();
+            readerInstance.onload = function(e) {
                 try {
-                    const data = JSON.parse(event.target.result);
+                    const structure = JSON.parse(e.target.result);
                     
-                    if(data.title_ctx) saveToStorage('title_ctx', data.title_ctx);
-                    if(data.scratchpad_data) saveToStorage('scratchpad_data', data.scratchpad_data);
-                    if(data.links) saveToStorage('links', data.links);
-                    if(data.tasks) saveToStorage('tasks', data.tasks);
-                    if(data.panel_order) saveToStorage('panel_order', data.panel_order);
-                    
-                    alert("System Settings Manifest Imported and Decrypted Successfully.");
-                    toggleConfigModal(false);
-                    mountWorkspaceEnvironment();
-                } catch(err) {
-                    alert("Failure loading system manifest matrix file profile context.");
+                    // Validation mapping structure checks
+                    if (structure.links || structure.panelOrder || structure.studentId) {
+                        currentState = { ...currentState, ...structure };
+                        saveToLocalStorage();
+                        
+                        // Full refresh to process state UI updates
+                        document.getElementById('landing-title').textContent = currentState.landingTitle;
+                        document.getElementById('dash-main-title').textContent = currentState.dashTitle;
+                        initializeDOMDashboard();
+                        
+                        alert("Configuration layout environment verified and restored successfully!");
+                    } else {
+                        alert("Invalid JSON format profile verified.");
+                    }
+                } catch (err) {
+                    alert("Failure executing target file parse routines.");
                 }
             };
-            reader.readAsText(e.target.files[0]);
-        }
-
-        function clearAllDataEnvironments() {
-            if(confirm("CRITICAL: Destructive action will wipe all localized storage profiles. Continue?")) {
-                localStorage.clear();
-                alert("Runtime profiles successfully wiped. Reloading environment layer.");
-                window.location.reload();
-            }
+            readerInstance.readAsText(uploadedFile);
         }
     </script>
 </body>
