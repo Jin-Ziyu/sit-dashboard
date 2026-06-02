@@ -127,6 +127,38 @@
   .color-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; }
   .color-swatch:hover { transform: scale(1.15); }
   .color-swatch.selected { border-color: var(--color-text-primary); }
+
+  /* Timetable */
+  .tt-upload-area { border: 1.5px dashed var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 1.25rem; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; position: relative; }
+  .tt-upload-area:hover, .tt-upload-area.drag-over { border-color: var(--color-border-primary); background: var(--color-background-secondary); }
+  .tt-upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .tt-upload-area .tt-upload-icon { font-size: 28px; color: var(--color-text-tertiary); margin-bottom: 6px; }
+  .tt-upload-area p { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+  .tt-upload-area small { font-size: 11px; color: var(--color-text-tertiary); }
+  .tt-file-name { font-size: 12px; color: var(--color-text-success); margin-top: 6px; display: flex; align-items: center; gap: 4px; justify-content: center; }
+  .tt-week-nav { display: flex; align-items: center; justify-content: space-between; margin: 0.75rem 0 0.5rem; }
+  .tt-week-label { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .tt-grid { display: grid; grid-template-columns: 48px repeat(5, 1fr); gap: 2px; font-size: 11px; }
+  .tt-grid-7 { grid-template-columns: 48px repeat(7, 1fr); }
+  .tt-header { background: var(--color-background-secondary); border-radius: 4px; padding: 4px 2px; text-align: center; color: var(--color-text-secondary); font-weight: 500; }
+  .tt-header.today-col { background: var(--color-background-info); color: var(--color-text-info); }
+  .tt-time { color: var(--color-text-tertiary); text-align: right; padding-right: 6px; line-height: 1; display: flex; align-items: flex-start; justify-content: flex-end; }
+  .tt-cell { min-height: 28px; border-radius: 4px; position: relative; }
+  .tt-event { border-radius: 4px; padding: 3px 5px; margin: 1px 0; overflow: hidden; cursor: default; }
+  .tt-event-title { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tt-event-loc { color: inherit; opacity: 0.75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tt-empty { font-size: 13px; color: var(--color-text-tertiary); text-align: center; padding: 1.5rem; }
+  .tt-controls { display: flex; align-items: center; gap: 6px; }
+  .tt-clear-btn { font-size: 11px; padding: 3px 8px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-tertiary); cursor: pointer; }
+  .tt-clear-btn:hover { color: var(--color-text-danger); border-color: var(--color-border-danger); }
+  .tt-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tt-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--color-text-secondary); }
+  .tt-legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* Export/Import */
+  .data-bar { display: flex; gap: 8px; margin-top: 1rem; justify-content: flex-end; }
+  .data-btn { font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .data-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
 </style>
 </head>
 <body>
@@ -155,6 +187,33 @@
         </div>
         <div id="alerts-list"></div>
       </div>
+      <!-- Timetable Panel -->
+      <div class="panel" style="margin-top:1rem">
+        <div class="panel-title">
+          Timetable
+          <div class="tt-controls">
+            <button class="tt-clear-btn" id="tt-clear-btn" onclick="clearTimetable()" style="display:none"><i class="ti ti-trash" aria-hidden="true"></i> Clear</button>
+          </div>
+        </div>
+        <div id="tt-upload-section">
+          <div class="tt-upload-area" id="tt-drop-zone">
+            <input type="file" accept=".ics" id="ics-file-input" onchange="handleIcsUpload(event)">
+            <div class="tt-upload-icon"><i class="ti ti-calendar-upload" aria-hidden="true"></i></div>
+            <p>Drop your timetable <strong>.ics</strong> file here</p>
+            <small>or click to browse &mdash; exported from IN4SIT / Google Calendar / Outlook</small>
+          </div>
+          <div id="tt-file-name" class="tt-file-name" style="display:none"></div>
+        </div>
+        <div id="tt-view" style="display:none">
+          <div class="tt-week-nav">
+            <button class="cal-nav" onclick="ttPrevWeek()"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+            <span class="tt-week-label" id="tt-week-label"></span>
+            <button class="cal-nav" onclick="ttNextWeek()"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+          </div>
+          <div id="tt-grid-container"></div>
+          <div class="tt-legend" id="tt-legend"></div>
+        </div>
+      </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:1rem">
       <div class="panel">
@@ -175,6 +234,12 @@
         <div class="cal-grid" id="cal-days"></div>
       </div>
     </div>
+  </div>
+  <!-- Export / Import bar (GitHub Pages data portability) -->
+  <div class="data-bar">
+    <button class="data-btn" onclick="exportData()"><i class="ti ti-download" aria-hidden="true"></i> Export data</button>
+    <button class="data-btn" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload" aria-hidden="true"></i> Import data</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
   </div>
 </div>
 
@@ -505,6 +570,245 @@ function saveCountdown() {
 
 document.getElementById('date-display').textContent = new Date().toLocaleDateString('en-SG', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
 renderAll();
+
+/* ── Drag-and-drop on upload area ── */
+const dropZone = document.getElementById('tt-drop-zone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.ics')) processIcsFile(file);
+});
+
+/* ── ICS Upload ── */
+function handleIcsUpload(e) { const f = e.target.files[0]; if (f) processIcsFile(f); }
+
+function processIcsFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const events = parseIcs(ev.target.result);
+    if (!events.length) { alert('No events found in this .ics file.'); return; }
+    save('sit_ics_events', events);
+    save('sit_ics_name', file.name);
+    showTimetable(events, file.name);
+  };
+  reader.readAsText(file);
+}
+
+/* ── ICS Parser ── */
+function parseIcs(text) {
+  // Unfold lines (RFC 5545: lines can be continued with CRLF + whitespace)
+  const unfolded = text.replace(/\r\n[ \t]/g, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const lines = unfolded.split('\n');
+  const events = [];
+  let cur = null;
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (line === 'BEGIN:VEVENT') { cur = {}; continue; }
+    if (line === 'END:VEVENT') { if (cur) { const ev = buildEvent(cur); if (ev) events.push(ev); } cur = null; continue; }
+    if (!cur) continue;
+    const idx = line.indexOf(':');
+    if (idx < 0) continue;
+    const key = line.slice(0, idx).toUpperCase();
+    const val = line.slice(idx + 1);
+    // strip parameters from key e.g. DTSTART;TZID=Asia/Singapore
+    const baseKey = key.split(';')[0];
+    cur[baseKey] = val;
+  }
+  return events;
+}
+
+function parseIcsDate(str) {
+  if (!str) return null;
+  // DATE-TIME: 20250101T090000Z or 20250101T090000
+  // DATE only: 20250101
+  str = str.replace('Z','');
+  if (str.length === 8) return new Date(+str.slice(0,4), +str.slice(4,6)-1, +str.slice(6,8), 0, 0);
+  return new Date(+str.slice(0,4), +str.slice(4,6)-1, +str.slice(6,8), +str.slice(9,11), +str.slice(11,13));
+}
+
+function buildEvent(raw) {
+  const start = parseIcsDate(raw['DTSTART']);
+  const end   = parseIcsDate(raw['DTEND']) || start;
+  if (!start) return null;
+  const summary  = (raw['SUMMARY']  || 'Untitled').replace(/\\n/g,'\n').replace(/\\,/g,',');
+  const location = (raw['LOCATION'] || '').replace(/\\n/g,' ').replace(/\\,/g,',');
+  return { summary, location, start: start.toISOString(), end: end.toISOString(), uid: raw['UID'] || '' };
+}
+
+/* ── Timetable display ── */
+const TT_COLORS = [
+  {bg:'#E6F1FB',text:'#0C447C'},{bg:'#E1F5EE',text:'#085041'},{bg:'#EEEDFE',text:'#3C3489'},
+  {bg:'#FAEEDA',text:'#633806'},{bg:'#FAECE7',text:'#712B13'},{bg:'#FBEAF0',text:'#72243E'},
+  {bg:'#EAF3DE',text:'#27500A'},{bg:'#FCF0E6',text:'#7A3E00'},
+];
+const ttColorMap = {};
+let ttColorIdx = 0;
+function ttColor(key) {
+  if (!ttColorMap[key]) { ttColorMap[key] = TT_COLORS[ttColorIdx % TT_COLORS.length]; ttColorIdx++; }
+  return ttColorMap[key];
+}
+
+let ttEvents = [];
+let ttWeekOffset = 0;
+
+function getWeekStart(offset) {
+  const d = new Date(); d.setHours(0,0,0,0);
+  const day = d.getDay(); // 0=Sun
+  const mon = new Date(d); mon.setDate(d.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+  return mon;
+}
+
+function showTimetable(events, fileName) {
+  ttEvents = events;
+  ttColorIdx = 0;
+  Object.keys(ttColorMap).forEach(k => delete ttColorMap[k]);
+  document.getElementById('tt-upload-section').style.display = 'none';
+  document.getElementById('tt-view').style.display = 'block';
+  document.getElementById('tt-clear-btn').style.display = '';
+  const fn = document.getElementById('tt-file-name');
+  fn.style.display = 'flex';
+  fn.innerHTML = `<i class="ti ti-check" aria-hidden="true"></i> ${fileName}`;
+  ttWeekOffset = 0;
+  renderTimetable();
+}
+
+function renderTimetable() {
+  const weekStart = getWeekStart(ttWeekOffset);
+  const weekEnd   = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+
+  // Build label
+  const fmt = d => d.toLocaleDateString('en-SG', {day:'numeric', month:'short'});
+  document.getElementById('tt-week-label').textContent = fmt(weekStart) + ' – ' + fmt(weekEnd);
+
+  // Filter events in this week
+  const days = Array.from({length:7}, (_,i) => { const d = new Date(weekStart); d.setDate(weekStart.getDate()+i); return d; });
+  const todayIso = new Date().toISOString().slice(0,10);
+
+  const dayEvents = days.map(d => {
+    const iso = d.toISOString().slice(0,10);
+    return ttEvents.filter(ev => ev.start.slice(0,10) === iso).sort((a,b) => a.start.localeCompare(b.start));
+  });
+
+  // Determine time range
+  const allToday = dayEvents.flat();
+  let minH = 8, maxH = 18;
+  allToday.forEach(ev => {
+    const h1 = new Date(ev.start).getHours();
+    const h2 = new Date(ev.end).getHours() + (new Date(ev.end).getMinutes() > 0 ? 1 : 0);
+    if (h1 < minH) minH = h1;
+    if (h2 > maxH) maxH = h2;
+  });
+
+  const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const container = document.getElementById('tt-grid-container');
+
+  if (!allToday.length) {
+    container.innerHTML = '<div class="tt-empty">No classes this week</div>';
+    renderTtLegend();
+    return;
+  }
+
+  // Build simple list layout per day (more reliable than CSS grid pixel mapping)
+  let html = `<div style="display:grid;grid-template-columns:48px repeat(7,1fr);gap:4px;overflow-x:auto;">`;
+  // Header row
+  html += `<div></div>`;
+  days.forEach((d, i) => {
+    const iso = d.toISOString().slice(0,10);
+    const isToday = iso === todayIso;
+    html += `<div class="tt-header${isToday?' today-col':''}">${DAY_NAMES[i]}<br><span style="font-weight:400;opacity:.75">${d.getDate()}</span></div>`;
+  });
+
+  // Hour rows
+  for (let h = minH; h <= maxH; h++) {
+    html += `<div class="tt-time" style="padding-top:3px;font-size:11px">${String(h).padStart(2,'0')}:00</div>`;
+    days.forEach((d, di) => {
+      const evs = dayEvents[di].filter(ev => new Date(ev.start).getHours() === h);
+      html += `<div class="tt-cell">`;
+      evs.forEach(ev => {
+        const col = ttColor(ev.summary);
+        const startM = new Date(ev.start).getMinutes();
+        const endH   = new Date(ev.end).getHours();
+        const endM   = new Date(ev.end).getMinutes();
+        const timeStr = `${String(new Date(ev.start).getHours()).padStart(2,'0')}:${String(startM).padStart(2,'0')}–${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`;
+        html += `<div class="tt-event" style="background:${col.bg};color:${col.text}" title="${ev.summary}${ev.location ? '\n'+ev.location : ''}\n${timeStr}">
+          <div class="tt-event-title">${ev.summary}</div>
+          ${ev.location ? `<div class="tt-event-loc">${ev.location}</div>` : ''}
+          <div style="font-size:10px;opacity:.7">${timeStr}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+  }
+  html += `</div>`;
+  container.innerHTML = html;
+  renderTtLegend();
+}
+
+function renderTtLegend() {
+  const seen = {};
+  ttEvents.forEach(ev => { if (!seen[ev.summary]) { seen[ev.summary] = ttColor(ev.summary); } });
+  const lg = document.getElementById('tt-legend');
+  lg.innerHTML = Object.entries(seen).map(([name, col]) =>
+    `<div class="tt-legend-item"><div class="tt-legend-dot" style="background:${col.bg};border:1px solid ${col.text}"></div>${name}</div>`
+  ).join('');
+}
+
+function ttPrevWeek() { ttWeekOffset--; renderTimetable(); }
+function ttNextWeek() { ttWeekOffset++; renderTimetable(); }
+
+function clearTimetable() {
+  ttEvents = []; ttWeekOffset = 0; ttColorIdx = 0;
+  save('sit_ics_events', []); save('sit_ics_name', '');
+  document.getElementById('tt-upload-section').style.display = '';
+  document.getElementById('tt-view').style.display = 'none';
+  document.getElementById('tt-clear-btn').style.display = 'none';
+  document.getElementById('tt-file-name').style.display = 'none';
+  document.getElementById('ics-file-input').value = '';
+}
+
+// Restore timetable on load
+(function() {
+  const saved = load('sit_ics_events', []);
+  const name  = load('sit_ics_name', '');
+  if (saved && saved.length) showTimetable(saved, name || 'timetable.ics');
+})();
+
+/* ── Export / Import data (GitHub Pages portability) ── */
+function exportData() {
+  const payload = {
+    version: 1,
+    links:      load('sit_links', DEFAULT_LINKS),
+    alerts:     load('sit_alerts', DEFAULT_ALERTS),
+    countdowns: load('sit_cds', DEFAULT_COUNTDOWNS),
+    ics_events: load('sit_ics_events', []),
+    ics_name:   load('sit_ics_name', ''),
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dashboard-data.json';
+  a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if (d.links)      { save('sit_links', d.links);      links = d.links; }
+      if (d.alerts)     { save('sit_alerts', d.alerts);    alerts = d.alerts; }
+      if (d.countdowns) { save('sit_cds', d.countdowns);   countdowns = d.countdowns; }
+      if (d.ics_events && d.ics_events.length) showTimetable(d.ics_events, d.ics_name || 'timetable.ics');
+      renderAll();
+      alert('Data imported successfully!');
+    } catch { alert('Invalid file. Please use a previously exported dashboard-data.json.'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
 </script>
 </body>
 </html>
