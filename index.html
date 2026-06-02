@@ -1,810 +1,1126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIT Student Workspace</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIT Student Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f8f9fa;
+    --color-background-tertiary: #f1f3f5;
+    --color-background-info: #e7f5ff;
+    --color-background-warning: #fff9db;
+    --color-background-danger: #fff5f5;
+    --color-background-success: #ebfbee;
     
-    <!-- Google Fonts API & FontAwesome Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Syne:wght@400..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    --color-text-primary: #212529;
+    --color-text-secondary: #495057;
+    --color-text-tertiary: #868e96;
+    --color-text-info: #1c7ed6;
+    --color-text-warning: #f59f00;
+    --color-text-danger: #f03e3e;
+    --color-text-success: #37b24d;
+    
+    --color-border-tertiary: rgba(0, 0, 0, 0.06);
+    --color-border-secondary: rgba(0, 0, 0, 0.12);
+    --color-border-primary: rgba(0, 0, 0, 0.25);
+    --color-border-info: #a5d8ff;
+    --color-border-warning: #ffe066;
+    --color-border-danger: #ffc9c9;
+    
+    --border-radius-md: 10px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 24px;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.02);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.02);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1a1b1e;
+      --color-background-secondary: #25262b;
+      --color-background-tertiary: #101113;
+      --color-background-info: #14273a;
+      --color-background-warning: #2d2615;
+      --color-background-danger: #30191a;
+      --color-background-success: #152d1b;
+      
+      --color-text-primary: #c1c2c5;
+      --color-text-secondary: #909296;
+      --color-text-tertiary: #5c5f66;
+      --color-text-info: #4dadf7;
+      --color-text-warning: #ffd43b;
+      --color-text-danger: #ff8787;
+      --color-text-success: #69db7c;
+      
+      --color-border-tertiary: rgba(255, 255, 255, 0.05);
+      --color-border-secondary: rgba(255, 255, 255, 0.12);
+      --color-border-primary: rgba(255, 255, 255, 0.25);
+      --color-border-info: #194265;
+      --color-border-warning: #5c4811;
+      --color-border-danger: #662526;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+    }
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); background: var(--color-background-tertiary); min-height: 100vh; padding: 2rem 1.5rem; color: var(--color-text-primary); -webkit-font-smoothing: antialiased; }
+  .dashboard { max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
 
-    <style>
-        /* ==========================================================================
-           1. DESIGN TOKENS & SYSTEM VARIABLES
-           ========================================================================== */
-        :root {
-            --bg: #0d0f14;
-            --surface: #1e2133;
-            --surface-hover: #2a2e45;
-            --border: #2d314d;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-primary: #ff3366;
-            --accent-secondary: #00f3ff;
-            --accent-green: #00ffaa;
-            --font-display: 'Syne', sans-serif;
-            --font-body: 'DM Sans', sans-serif;
-            --radius-lg: 16px;
-            --radius-md: 10px;
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  /* Top bar */
+  .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.75rem; background: var(--color-background-primary); border-radius: var(--border-radius-lg); border: 1px solid var(--color-border-tertiary); shadow: var(--shadow-sm); gap: 1rem; }
+  .top-bar-left { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .top-bar-title { font-size: 22px; font-weight: 700; color: var(--color-text-primary); outline: none; background: transparent; border: none; font-family: var(--font-sans); letter-spacing: -0.5px; }
+  .top-bar-title[contenteditable="true"] { border-bottom: 2px dashed var(--color-border-primary); padding-bottom: 2px; }
+  .top-bar-subtitle { font-size: 14px; color: var(--color-text-tertiary); outline: none; background: transparent; border: none; font-family: var(--font-sans); font-weight: 500; }
+  .top-bar-subtitle[contenteditable="true"] { border-bottom: 2px dashed var(--color-border-primary); }
+  .top-bar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  
+  .icon-btn { font-size: 14px; font-weight: 600; padding: 10px 16px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; box-shadow: var(--shadow-sm); }
+  .icon-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); }
+  .icon-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
 
-        /* Reset & Base Rules */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg);
-            color: var(--text-primary);
-            font-family: var(--font-body);
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 51, 102, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.08) 0%, transparent 40%);
-        }
+  /* Layout selector */
+  .layout-bar { display: none; gap: 12px; align-items: center; padding: 1rem 1.5rem; background: var(--color-background-primary); border-radius: var(--border-radius-lg); border: 1px solid var(--color-border-info); flex-wrap: wrap; box-shadow: var(--shadow-sm); animation: fadeIn 0.2s ease; }
+  .layout-bar.visible { display: flex; }
+  .layout-bar-label { font-size: 13px; color: var(--color-text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; }
+  .layout-opt { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; padding: 8px 12px; border-radius: var(--border-radius-md); border: 2px solid transparent; background: var(--color-background-secondary); transition: all 0.15s; }
+  .layout-opt:hover { border-color: var(--color-border-secondary); background: var(--color-background-primary); }
+  .layout-opt.selected { border-color: var(--color-text-info); background: var(--color-background-info); }
+  .layout-opt svg { width: 32px; height: 22px; color: var(--color-text-secondary); }
+  .layout-opt.selected svg { color: var(--color-text-info); }
+  .layout-opt span { font-size: 12px; font-weight: 600; color: var(--color-text-secondary); }
+  .layout-opt.selected span { color: var(--color-text-info); }
+  .layout-divider { width: 1px; height: 36px; background: var(--color-border-secondary); margin: 0 8px; }
+  
+  .hidden-panel-chip { font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 20px; background: var(--color-background-secondary); border: 1px dashed var(--color-border-secondary); color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+  .hidden-panel-chip:hover { color: var(--color-text-primary); border-color: var(--color-border-primary); background: var(--color-background-primary); }
 
-        /* Typography */
-        h1, h2, h3, .font-display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; }
-        p { color: var(--text-secondary); line-height: 1.6; }
-        a { color: inherit; text-decoration: none; }
+  /* Panel grid */
+  .panels-container { display: grid; gap: 1.5rem; }
+  .panels-container.cols-1 { grid-template-columns: 1fr; }
+  .panels-container.cols-2 { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+  .panels-container.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 900px) { .panels-container { grid-template-columns: 1fr !important; } }
 
-        /* Page Routing States */
-        .page-view { display: none; width: 100%; min-height: 100vh; }
-        .page-view.active { display: flex; flex-direction: column; }
+  /* Panel */
+  .panel-wrapper { display: flex; flex-direction: column; gap: 0; position: relative; transition: transform 0.2s ease; }
+  .panel-wrapper.span-2 { grid-column: span 2; }
+  .panel-wrapper.span-3 { grid-column: span 3; }
+  @media (max-width: 900px) { .panel-wrapper { grid-column: span 1 !important; } }
+  
+  .panel { background: var(--panel-bg, var(--color-background-primary)); border-radius: var(--border-radius-lg); border: 1px solid var(--panel-border, var(--color-border-tertiary)); padding: 1.5rem; box-shadow: var(--shadow-md); height: 100%; display: flex; flex-direction: column; }
+  .panel-dragging { opacity: 0.4; transform: scale(0.98); }
+  .panel-drag-over { box-shadow: 0 0 0 2px var(--color-text-info); }
 
-        /* ==========================================================================
-           2. VIEW: LANDING GATE
-           ========================================================================== */
-        #page-landing {
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            text-align: center;
-        }
-        .landing-card {
-            background: rgba(30, 33, 51, 0.65);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            padding: 3rem;
-            border-radius: var(--radius-lg);
-            max-width: 480px;
-            width: 100%;
-            box-shadow: var(--shadow);
-            transform: translateY(0);
-            animation: floatIn 0.6s ease-out;
-        }
-        @keyframes floatIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .logo-mark {
-            font-size: 3rem;
-            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-        .input-group {
-            margin: 2rem 0 1.5rem 0;
-            position: relative;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            background: rgba(13, 15, 20, 0.8);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            color: white;
-            font-size: 1rem;
-            font-family: var(--font-body);
-            transition: var(--transition);
-        }
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--accent-secondary);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-        }
-        .btn {
-            background: linear-gradient(135deg, var(--accent-primary), #d01c4b);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            font-family: var(--font-display);
-            font-weight: 700;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            width: 100%;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 51, 102, 0.5);
-        }
+  /* Panel edit overlay controls */
+  .panel-edit-bar { display: none; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px 12px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); border: 1px solid var(--color-border-secondary); animation: fadeIn 0.2s ease; }
+  .edit-mode .panel-edit-bar { display: flex; }
+  .panel-drag-handle { cursor: grab; color: var(--color-text-tertiary); font-size: 18px; padding: 2px; display: flex; align-items: center; }
+  .panel-drag-handle:active { cursor: grabbing; }
+  .panel-edit-bar-right { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+  
+  .panel-mini-btn { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--color-border-secondary); background: var(--color-background-primary); cursor: pointer; color: var(--color-text-secondary); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 4px; transition: all 0.15s; }
+  .panel-mini-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .panel-mini-btn.hide-btn:hover { color: var(--color-text-danger); border-color: var(--color-border-danger); background: var(--color-background-danger); }
+  .panel-mini-btn.span-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  
+  .panel-title { font-size: 14px; font-weight: 700; color: var(--panel-title-color, var(--color-text-secondary)); text-transform: uppercase; letter-spacing: 0.75px; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-border-tertiary); padding-bottom: 8px; }
 
-        /* ==========================================================================
-           3. VIEW: WORKSPACE ENVIRONMENT
-           ========================================================================== */
-        .workspace-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2.5rem;
-            border-bottom: 1px solid var(--border);
-            background: rgba(13, 15, 20, 0.8);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .header-brand { font-size: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .header-brand i { color: var(--accent-primary); }
-        .user-badge { display: flex; align-items: center; gap: 1rem; }
-        .matric-pill {
-            background: var(--surface);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            border: 1px solid var(--border);
-            letter-spacing: 0.05em;
-        }
-        .logout-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .logout-btn:hover { background: rgba(255, 51, 102, 0.1); color: var(--accent-primary); border-color: var(--accent-primary); }
+  /* Panel colour picker popup */
+  .panel-color-popup { position: absolute; top: 46px; right: 0; z-index: 100; background: var(--color-background-primary); border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 14px; box-shadow: var(--shadow-md); display: none; min-width: 240px; }
+  .panel-color-popup.open { display: block; animation: fadeIn 0.15s ease; }
+  .panel-color-popup-title { font-size: 12px; font-weight: 600; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
+  .pcp-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pcp-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); }
+  .pcp-swatch:hover { transform: scale(1.15); }
+  .pcp-swatch.selected { border-color: var(--color-text-primary); transform: scale(1.05); }
 
-        /* Workspace Grid & Customization Panel Frame */
-        .workspace-content {
-            display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: 2rem;
-            padding: 2.5rem;
-            max-width: 1600px;
-            width: 100%;
-            margin: 0 auto;
-        }
-        @media(max-width: 1024px) { .workspace-content { grid-template-columns: 1fr; } }
+  /* Links */
+  .links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .link-card { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px; border-radius: var(--border-radius-md); border: 1px solid var(--color-border-tertiary); text-decoration: none; cursor: pointer; position: relative; transition: all 0.2s ease; background: var(--lc-bg, var(--color-background-secondary)); box-shadow: var(--shadow-sm); }
+  .link-card:hover { border-color: var(--color-border-primary); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .link-card .lc-icon { font-size: 22px; color: var(--lc-text, var(--color-text-secondary)); }
+  .link-card .lc-name { font-size: 14px; font-weight: 600; color: var(--lc-text, var(--color-text-primary)); line-height: 1.3; margin-top: 2px; }
+  .link-card .lc-tag { font-size: 11px; font-weight: 500; color: var(--lc-sub, var(--color-text-tertiary)); opacity: 0.8; }
+  
+  .link-card .del-btn, .alert-item .del-btn, .cd-card .del-btn { position: absolute; top: 8px; right: 8px; background: var(--color-background-danger); border: none; border-radius: 6px; cursor: pointer; color: var(--color-text-danger); width: 22px; height: 22px; display: none; align-items: center; justify-content: center; font-size: 12px; transition: opacity 0.1s; }
+  .link-card .color-btn, .alert-item .color-btn, .cd-card .color-btn { position: absolute; bottom: 8px; right: 8px; background: var(--color-background-primary); border: 1px solid var(--color-border-secondary); border-radius: 6px; cursor: pointer; color: var(--color-text-secondary); width: 22px; height: 22px; display: none; align-items: center; justify-content: center; font-size: 12px; }
+  .edit-mode .link-card .del-btn, .edit-mode .alert-item .del-btn, .edit-mode .cd-card .del-btn { display: flex; }
+  .edit-mode .link-card .color-btn, .edit-mode .alert-item .color-btn, .edit-mode .cd-card .color-btn { display: flex; }
+  
+  .link-card.add-card { border-style: dashed; border-width: 1.5px; justify-content: center; align-items: center; min-height: 90px; color: var(--color-text-tertiary); font-weight: 600; font-size: 13px; gap: 6px; background: transparent; box-shadow: none; }
+  .link-card.add-card:hover { color: var(--color-text-primary); border-color: var(--color-border-primary); background: var(--color-background-secondary); }
 
-        /* ==========================================================================
-           4. DASHBOARD WIDGET GRID (DRAG & DROP CONTAINER)
-           ========================================================================== */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 1.5rem;
-            align-content: start;
-        }
-        
-        .widget-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease;
-            position: relative;
-            cursor: grab;
-        }
-        .widget-card:active { cursor: grabbing; }
-        .widget-card.dragging { opacity: 0.4; transform: scale(0.98); border: 2px dashed var(--accent-secondary); }
-        
-        .widget-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(45, 49, 77, 0.5);
-        }
-        .widget-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; }
-        .widget-title i { color: var(--accent-secondary); }
-        .drag-handle { color: var(--text-secondary); cursor: grab; font-size: 0.9rem; padding: 4px; }
+  /* Alerts */
+  .alert-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border-radius: var(--border-radius-md); border: 1px solid var(--ai-border, var(--color-border-warning)); background: var(--ai-bg, var(--color-background-warning)); margin-bottom: 10px; position: relative; box-shadow: var(--shadow-sm); }
+  .alert-item .ai-icon { font-size: 18px; color: var(--ai-text, var(--color-text-warning)); flex-shrink: 0; margin-top: 2px; }
+  .alert-item .ai-name { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ai-text, var(--color-text-secondary)); font-weight: 700; }
+  .alert-item .ai-msg { font-size: 14px; color: var(--ai-text, var(--color-text-primary)); font-weight: 500; line-height: 1.4; margin-top: 1px; }
+  .alert-item .ai-meta { font-size: 11px; font-weight: 600; color: var(--ai-sub, var(--color-text-secondary)); margin-top: 4px; display: inline-block; }
 
-        /* Custom Input System */
-        .editable-title {
-            outline: none;
-            padding: 2px 4px;
-            border-radius: 4px;
-            transition: var(--transition);
-        }
-        .editable-title:focus { background: rgba(255,255,255,0.05); box-shadow: 0 0 0 1px var(--border); }
+  /* Countdown */
+  .countdown-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
+  .cd-card { border-radius: var(--border-radius-md); padding: 14px 10px; text-align: center; border: 1px solid var(--cd-border, var(--color-border-tertiary)); background: var(--cd-bg, var(--color-background-secondary)); position: relative; box-shadow: var(--shadow-sm); }
+  .cd-num { font-size: 28px; font-weight: 800; color: var(--cd-text, var(--color-text-primary)); letter-spacing: -1px; }
+  .cd-label { font-size: 12px; font-weight: 600; color: var(--cd-sub, var(--color-text-secondary)); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cd-card.urgent .cd-num { color: var(--color-text-danger); }
 
-        /* ==========================================================================
-           5. SPECIFIC WIDGET MODULE STYLES
-           ========================================================================== */
-        
-        /* Module: Campus Hyperlinks */
-        .links-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 280px; overflow-y: auto; }
-        .link-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(13, 15, 20, 0.4);
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-        .link-item:hover { background: var(--surface-hover); border-color: var(--accent-secondary); transform: translateX(3px); }
-        .link-anchor { display: flex; align-items: center; gap: 0.75rem; width: 80%; }
-        .link-anchor i { color: var(--accent-secondary); font-size: 1.1rem; }
-        .link-title { font-weight: 500; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .delete-link-btn { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 4px; transition: var(--transition); }
-        .delete-link-btn:hover { color: var(--accent-primary); }
+  /* Calendar */
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 8px; }
+  .cal-day-name { font-size: 11px; font-weight: 700; color: var(--color-text-tertiary); text-align: center; padding: 4px 0; text-transform: uppercase; }
+  .cal-day { font-size: 13px; font-weight: 500; text-align: center; padding: 8px 0; border-radius: 8px; color: var(--color-text-secondary); transition: background 0.15s; }
+  .cal-day:hover { background: var(--color-background-secondary); }
+  .cal-day.today { background: var(--color-text-info); color: #ffffff; font-weight: 700; }
+  .cal-day.has-event { position: relative; font-weight: 600; color: var(--color-text-primary); }
+  .cal-day.has-event::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--color-text-warning); position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); }
+  .cal-day.today.has-event::after { background: #ffffff; }
+  .cal-month { font-size: 15px; font-weight: 700; color: var(--color-text-primary); display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .cal-nav { background: var(--color-background-secondary); border: 1px solid var(--color-border-secondary); cursor: pointer; color: var(--color-text-secondary); font-size: 16px; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .cal-nav:hover { background: var(--color-background-primary); color: var(--color-text-primary); }
 
-        .add-link-form { display: flex; gap: 0.5rem; margin-top: 1rem; }
-        .add-link-form input {
-            background: rgba(13, 15, 20, 0.6);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 0.5rem 0.75rem;
-            border-radius: var(--radius-md);
-            font-size: 0.85rem;
-        }
-        .add-link-form input:focus { outline: none; border-color: var(--accent-primary); }
-        .btn-sm { padding: 0.5rem 0.75rem; font-size: 0.85rem; width: auto; }
+  /* Section add button */
+  .section-add-btn { font-size: 12px; font-weight: 600; padding: 6px 12px; border: 1px dashed var(--color-border-primary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; display: none; align-items: center; gap: 4px; transition: all 0.2s; }
+  .section-add-btn:hover { color: var(--color-text-info); border-color: var(--color-text-info); background: var(--color-background-info); }
+  .edit-mode .section-add-btn { display: flex; }
 
-        /* Module: Tracker / Timetable Piles */
-        .tracker-item {
-            background: rgba(13, 15, 20, 0.4);
-            border-left: 4px solid var(--accent-primary);
-            padding: 0.75rem 1rem;
-            border-radius: 0 var(--radius-md) var(--radius-md) 0;
-            margin-bottom: 0.75rem;
-        }
-        .tracker-meta { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.25rem; }
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.75rem; width: 400px; max-width: 95vw; border: 1px solid var(--color-border-secondary); box-shadow: var(--shadow-md); animation: scaleUp 0.2s ease; }
+  .modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; color: var(--color-text-primary); letter-spacing: -0.5px; }
+  .modal label { display: block; font-size: 13px; font-weight: 600; color: var(--color-text-secondary); margin-bottom: 6px; }
+  .modal input, .modal select { width: 100%; margin-bottom: 16px; font-size: 14px; padding: 10px 12px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-primary); outline: none; font-family: var(--font-sans); transition: border-color 0.15s; }
+  .modal input:focus, .modal select:focus { border-color: var(--color-text-info); background: var(--color-background-primary); }
+  .modal-actions { display: flex; gap: 10px; margin-top: 8px; justify-content: flex-end; }
+  
+  .btn-primary { padding: 10px 18px; border-radius: var(--border-radius-md); background: var(--color-text-info); color: #ffffff; border: none; cursor: pointer; font-size: 13px; font-weight: 600; transition: opacity 0.15s; }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-cancel { padding: 10px 18px; border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border-secondary); cursor: pointer; font-size: 13px; font-weight: 600; transition: background 0.15s; }
+  .btn-cancel:hover { background: var(--color-background-secondary); }
+  
+  .color-swatch-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .color-swatch { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; }
+  .color-swatch:hover { transform: scale(1.15); }
+  .color-swatch.selected { border-color: var(--color-text-primary); transform: scale(1.05); }
 
-        /* Module: Smart GPA Evaluation Calculator */
-        .gpa-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem; }
-        .gpa-input {
-            background: rgba(13, 15, 20, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: white;
-            padding: 0.4rem;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-        .gpa-input:focus { outline: none; border-color: var(--accent-green); }
-        .gpa-display-panel {
-            margin-top: 1rem;
-            background: rgba(0, 255, 170, 0.05);
-            border: 1px dashed var(--accent-green);
-            padding: 0.75rem;
-            border-radius: var(--radius-md);
-            text-align: center;
-        }
-        .gpa-score { font-size: 1.75rem; color: var(--accent-green); font-family: var(--font-display); }
+  /* Timetable */
+  .tt-upload-area { border: 2px dashed var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease; position: relative; background: var(--color-background-secondary); }
+  .tt-upload-area:hover, .tt-upload-area.drag-over { border-color: var(--color-text-info); background: var(--color-background-info); color: var(--color-text-info); }
+  .tt-upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .tt-upload-area .tt-upload-icon { font-size: 36px; color: var(--color-text-tertiary); margin-bottom: 10px; transition: color 0.2s; }
+  .tt-upload-area:hover .tt-upload-icon { color: var(--color-text-info); }
+  .tt-upload-area p { font-size: 14px; font-weight: 600; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .tt-upload-area small { font-size: 12px; color: var(--color-text-tertiary); }
+  
+  .tt-file-name { font-size: 13px; font-weight: 600; color: var(--color-text-success); margin-top: 10px; display: flex; align-items: center; gap: 6px; justify-content: center; }
+  .tt-week-nav { display: flex; align-items: center; justify-content: space-between; margin: 0.5rem 0 1rem; }
+  .tt-week-label { font-size: 14px; font-weight: 700; color: var(--color-text-primary); }
+  
+  .tt-header { background: var(--color-background-secondary); border-radius: 6px; padding: 6px 4px; text-align: center; color: var(--color-text-secondary); font-weight: 700; font-size: 12px; line-height: 1.3; border: 1px solid var(--color-border-tertiary); }
+  .tt-header.today-col { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  .tt-time { color: var(--color-text-tertiary); text-align: right; padding-right: 8px; font-size: 11px; font-weight: 600; display: flex; align-items: flex-start; justify-content: flex-end; padding-top: 6px; }
+  .tt-cell { min-height: 42px; border-radius: 6px; display: flex; flex-direction: column; gap: 2px; }
+  
+  .tt-event { border-radius: 6px; padding: 6px 8px; margin: 1px 0; overflow: hidden; cursor: default; box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.04); }
+  .tt-event-title { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; letter-spacing: -0.2px; }
+  .tt-event-loc { opacity: 0.85; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; margin-top: 1px; }
+  .tt-empty { font-size: 14px; font-weight: 500; color: var(--color-text-tertiary); text-align: center; padding: 2.5rem; }
+  .tt-controls { display: flex; align-items: center; gap: 8px; }
+  
+  .tt-clear-btn { font-size: 12px; font-weight: 600; padding: 5px 10px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-tertiary); cursor: pointer; transition: all 0.15s; }
+  .tt-clear-btn:hover { color: var(--color-text-danger); border-color: var(--color-border-danger); background: var(--color-background-danger); }
+  
+  .tt-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--color-border-tertiary); }
+  .tt-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--color-text-secondary); }
+  .tt-legend-dot { width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; }
 
-        /* ==========================================================================
-           6. CONTROL PANEL (SIDEBAR STYLING)
-           ========================================================================== */
-        .control-sidebar {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            height: fit-content;
-        }
-        .control-section { margin-bottom: 1.75rem; }
-        .control-section h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em; }
-        
-        .toggle-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.6rem 0;
-            border-bottom: 1px solid rgba(45, 49, 77, 0.3);
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 22px;
-        }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--border);
-            transition: .3s;
-            border-radius: 22px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-        }
-        input:checked + .slider { background-color: var(--accent-primary); }
-        input:checked + .slider:before { transform: translateX(22px); }
+  /* Export/Import */
+  .data-bar { display: flex; gap: 10px; margin-top: 0.5rem; justify-content: flex-end; }
+  .data-btn { font-size: 13px; font-weight: 600; padding: 8px 14px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+  .data-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); }
 
-        .system-ops { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
-        .btn-alt {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 0.75rem;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-        .btn-alt:hover { background: rgba(255,255,255,0.05); border-color: var(--text-secondary); }
-    </style>
+  /* Animations */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scaleUp { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+</style>
 </head>
 <body>
+<div class="dashboard" id="dashboard">
 
-    <!-- ==========================================================================
-       VIEW A: LANDING GATE
-       ========================================================================== -->
-    <div id="page-landing" class="page-view active">
-        <div class="landing-card">
-            <div class="logo-mark"><i class="fa-solid fa-graduation-cap"></i></div>
-            <h1 id="landing-title" class="editable-title" contenteditable="true">SIT Student Space</h1>
-            <p>Enter your student identifier credentials below to initialize your synced desktop workspace ecosystem.</p>
-            
-            <div class="input-group">
-                <input type="text" id="student-id" placeholder="e.g., SIT-2201942" autocomplete="off">
-            </div>
-            <button class="btn" onclick="initializeWorkspace()">Initialize System</button>
-        </div>
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-bar-title" id="dash-title" contenteditable="false" spellcheck="false">Student dashboard</div>
+      <div class="top-bar-subtitle" id="dash-subtitle" contenteditable="false" spellcheck="false"></div>
     </div>
-
-    <!-- ==========================================================================
-       VIEW B: WORKSPACE ENVIRONMENT CONTAINER
-       ========================================================================== -->
-    <div id="page-master" class="page-view">
-        <header class="workspace-header">
-            <div class="header-brand">
-                <i class="fa-solid fa-terminal"></i>
-                <h2 id="dash-main-title" class="editable-title" contenteditable="true">SIT Dashboard</h2>
-            </div>
-            <div class="user-badge">
-                <span id="display-matric" class="matric-pill">SIT SYSTEM</span>
-                <button class="logout-btn" onclick="disconnectWorkspace()"><i class="fa-solid fa-power-off"></i> Lock</button>
-            </div>
-        </header>
-
-        <div class="workspace-content">
-            <!-- Dynamic Drag-and-Drop Widget Grid Layer -->
-            <main id="dashboard-grid-container" class="dashboard-grid">
-                
-                <!-- WIDGET CARD: CAMPUS HYPERLINKS -->
-                <div class="widget-card" id="widget-links" draggable="true">
-                    <div class="widget-header">
-                        <div class="widget-title">
-                            <i class="fa-solid fa-compass"></i>
-                            <span class="editable-title" contenteditable="true" id="title-links">Quick Links</span>
-                        </div>
-                        <div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
-                    </div>
-                    <div class="links-list" id="links-container">
-                        <!-- Dynamic items populated by script engine -->
-                    </div>
-                    <form class="add-link-form" onsubmit="addNewLink(event)">
-                        <input type="text" id="new-link-title" placeholder="Name" required style="width: 40%;">
-                        <input type="url" id="new-link-url" placeholder="https://" required style="width: 45%;">
-                        <button type="submit" class="btn btn-sm"><i class="fa-solid fa-plus"></i></button>
-                    </form>
-                </div>
-
-                <!-- WIDGET CARD: COURSE MODULE TRACKER -->
-                <div class="widget-card" id="widget-timetable" draggable="true">
-                    <div class="widget-header">
-                        <div class="widget-title">
-                            <i class="fa-solid fa-calendar-day"></i>
-                            <span class="editable-title" contenteditable="true" id="title-timetable">Module Timetable</span>
-                        </div>
-                        <div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
-                    </div>
-                    <div class="tracker-list">
-                        <div class="tracker-item" style="border-color: var(--accent-primary);">
-                            <h4 class="editable-title" contenteditable="true">ICT2101 Software Engineering</h4>
-                            <div class="tracker-meta"><span>Tuesday 09:00 - 11:00</span><span>SR 2A</span></div>
-                        </div>
-                        <div class="tracker-item" style="border-color: var(--accent-secondary);">
-                            <h4 class="editable-title" contenteditable="true">ICT2102 Data Structures</h4>
-                            <div class="tracker-meta"><span>Thursday 14:00 - 16:00</span><span>Lab 3B</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- WIDGET CARD: ESTIMATION CALCULATOR -->
-                <div class="widget-card" id="widget-calculator" draggable="true">
-                    <div class="widget-header">
-                        <div class="widget-title">
-                            <i class="fa-solid fa-calculator"></i>
-                            <span class="editable-title" contenteditable="true" id="title-calculator">GPA Estimator</span>
-                        </div>
-                        <div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
-                    </div>
-                    <div id="gpa-rows-box">
-                        <div class="gpa-row">
-                            <input type="text" class="gpa-input" value="Module 1" placeholder="Module">
-                            <input type="number" class="gpa-input gpa-credits" value="6" placeholder="Credits" step="1">
-                            <input type="number" class="gpa-input gpa-grade" value="4.5" placeholder="GPA" step="0.1" max="5">
-                        </div>
-                        <div class="gpa-row">
-                            <input type="text" class="gpa-input" value="Module 2" placeholder="Module">
-                            <input type="number" class="gpa-input gpa-credits" value="6" placeholder="Credits" step="1">
-                            <input type="number" class="gpa-input gpa-grade" value="4.0" placeholder="GPA" step="0.1" max="5">
-                        </div>
-                    </div>
-                    <button class="btn-alt" style="padding:0.4rem; margin-top:0.5rem; font-size:0.8rem;" onclick="addGpaRow()">+ Add Module Row</button>
-                    <div class="gpa-display-panel">
-                        <p style="font-size:0.8rem; text-transform:uppercase; color: var(--accent-green)">Estimated Trimester GPA</p>
-                        <div class="gpa-score" id="gpa-output-score">4.25</div>
-                    </div>
-                </div>
-
-            </main>
-
-            <!-- SIDEBAR CONTROL CONSOLE UNIT -->
-            <aside class="control-sidebar">
-                <div class="control-section">
-                    <h3>Panel Visibility</h3>
-                    <div class="toggle-row">
-                        <span>Quick Links</span>
-                        <label class="switch"><input type="checkbox" id="toggle-widget-links" checked onchange="togglePanelVisibility('widget-links')"><span class="slider"></span></label>
-                    </div>
-                    <div class="toggle-row">
-                        <span>Module Timetable</span>
-                        <label class="switch"><input type="checkbox" id="toggle-widget-timetable" checked onchange="togglePanelVisibility('widget-timetable')"><span class="slider"></span></label>
-                    </div>
-                    <div class="toggle-row">
-                        <span>GPA Estimator</span>
-                        <label class="switch"><input type="checkbox" id="toggle-widget-calculator" checked onchange="togglePanelVisibility('widget-calculator')"><span class="slider"></span></label>
-                    </div>
-                </div>
-
-                <div class="control-section">
-                    <h3>Data Management</h3>
-                    <p style="font-size: 0.8rem; margin-bottom: 1rem;">Export config layout presets safely for cloud storage backups.</p>
-                    <div class="system-ops">
-                        <button class="btn-alt" onclick="exportConfigData()"><i class="fa-solid fa-download"></i> Backup Layout</button>
-                        <button class="btn-alt" onclick="triggerImportSelection()"><i class="fa-solid fa-upload"></i> Restore Layout</button>
-                        <input type="file" id="import-hidden-field" style="display:none;" onchange="importConfigData(event)">
-                    </div>
-                </div>
-            </aside>
-        </div>
+    <div class="top-bar-right">
+      <button class="icon-btn" id="layout-toggle" onclick="toggleLayoutBar()" title="Change layout"><i class="ti ti-layout-columns" aria-hidden="true"></i> <span class="btn-label">Layout</span></button>
+      <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit" aria-hidden="true"></i> <span class="btn-label">Customise</span></button>
     </div>
+  </div>
 
-    <!-- ==========================================================================
-       7. CORE JAVASCRIPT STATE ENGINE LOGIC
-       ========================================================================== -->
-    <script>
-        // System State Data Storage Cache
-        let currentState = {
-            studentId: '',
-            dashTitle: 'SIT Dashboard',
-            landingTitle: 'SIT Student Space',
-            panelOrder: ['widget-links', 'widget-timetable', 'widget-calculator'],
-            hiddenPanels: [],
-            links: [
-                { title: 'SIT INTRANET', url: 'https://academicprofile.singaporetech.edu.sg/' },
-                { title: 'INX (Student Portal)', url: 'https://inx.singaporetech.edu.sg/' },
-                { title: 'xSITe Learning Hub', url: 'https://xsite.singaporetech.edu.sg/' }
-            ]
-        };
+  <!-- Layout bar -->
+  <div class="layout-bar" id="layout-bar">
+    <span class="layout-bar-label">Columns</span>
+    <div class="layout-opt" id="lopt-1" onclick="setLayout(1)" title="Single column">
+      <svg viewBox="0 0 36 24"><rect x="2" y="2" width="32" height="20" rx="2" fill="currentColor" opacity=".25"/><rect x="4" y="4" width="28" height="16" rx="1" fill="currentColor" opacity=".5"/></svg>
+      <span>1 Col</span>
+    </div>
+    <div class="layout-opt" id="lopt-2" onclick="setLayout(2)" title="Two columns">
+      <svg viewBox="0 0 36 24"><rect x="2" y="2" width="15" height="20" rx="2" fill="currentColor" opacity=".4"/><rect x="19" y="2" width="15" height="20" rx="2" fill="currentColor" opacity=".25"/></svg>
+      <span>2 Col</span>
+    </div>
+    <div class="layout-opt" id="lopt-3" onclick="setLayout(3)" title="Three columns">
+      <svg viewBox="0 0 36 24"><rect x="1" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".4"/><rect x="13" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".3"/><rect x="25" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".2"/></svg>
+      <span>3 Col</span>
+    </div>
+    <div class="layout-divider"></div>
+    <span class="layout-bar-label">Hidden Panels</span>
+    <div id="hidden-chips" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+  </div>
 
-        // System-wide Storage Keys Prefix Wrapper
-        const KEY = 'sit_workspace_store';
+  <!-- Panels container -->
+  <div class="panels-container cols-2" id="panels-container"></div>
 
-        function saveToLocalStorage() {
-            localStorage.setItem(KEY, JSON.stringify(currentState));
-        }
+  <!-- Export / Import -->
+  <div class="data-bar">
+    <button class="data-btn" onclick="exportData()"><i class="ti ti-download" aria-hidden="true"></i> Export data</button>
+    <button class="data-btn" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload" aria-hidden="true"></i> Import data</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</div>
 
-        function loadFromLocalStorage() {
-            const savedData = localStorage.getItem(KEY);
-            if (savedData) {
-                try {
-                    const parsed = JSON.parse(savedData);
-                    currentState = { ...currentState, ...parsed };
-                } catch (e) {
-                    console.error("Data tracking reference parsed incorrectly, resetting to default.", e);
-                }
-            }
-        }
+<!-- Add Link Modal -->
+<div class="modal-overlay" id="modal-link" onclick="if(event.target===this)closeModal('modal-link')">
+  <div class="modal">
+    <h3>Add quick link</h3>
+    <label>Name</label><input type="text" id="link-name" placeholder="e.g. IN4SIT">
+    <label>URL</label><input type="text" id="link-url" placeholder="https://...">
+    <label>Category</label>
+    <select id="link-cat"><option>Portal</option><option>Library</option><option>Tool</option><option>App</option><option>Forum</option><option>Other</option></select>
+    <label>Colour</label>
+    <div class="color-swatch-row" id="link-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-link')">Cancel</button>
+      <button class="btn-primary" onclick="saveLink()">Add link</button>
+    </div>
+  </div>
+</div>
 
-        // View Control Routing Logic
-        function showPage(pageId) {
-            document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-        }
+<!-- Add Alert Modal -->
+<div class="modal-overlay" id="modal-alert" onclick="if(event.target===this)closeModal('modal-alert')">
+  <div class="modal">
+    <h3>Add alert</h3>
+    <label>Module code</label><input type="text" id="alert-mod" placeholder="e.g. RSE3204">
+    <label>Message</label><input type="text" id="alert-msg" placeholder="e.g. Quiz 2 due Friday">
+    <label>Date (optional)</label><input type="date" id="alert-date">
+    <label>Colour</label>
+    <div class="color-swatch-row" id="alert-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-alert')">Cancel</button>
+      <button class="btn-primary" onclick="saveAlert()">Add alert</button>
+    </div>
+  </div>
+</div>
 
-        // Initialization Routine Engine
-        window.addEventListener('DOMContentLoaded', () => {
-            loadFromLocalStorage();
-            
-            // Rehydrate Dynamic Text Blocks
-            document.getElementById('landing-title').textContent = currentState.landingTitle;
-            document.getElementById('dash-main-title').textContent = currentState.dashTitle;
-            
-            if (currentState.studentId) {
-                initializeDOMDashboard();
-                showPage('page-master');
-            } else {
-                showPage('page-landing');
-            }
+<!-- Add Countdown Modal -->
+<div class="modal-overlay" id="modal-countdown" onclick="if(event.target===this)closeModal('modal-countdown')">
+  <div class="modal">
+    <h3>Add countdown</h3>
+    <label>Label</label><input type="text" id="cd-label-in" placeholder="e.g. Midterm exam">
+    <label>Date</label><input type="date" id="cd-date-in">
+    <label>Colour</label>
+    <div class="color-swatch-row" id="cd-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-countdown')">Cancel</button>
+      <button class="btn-primary" onclick="saveCountdown()">Add</button>
+    </div>
+  </div>
+</div>
 
-            setupDragAndDropMechanics();
-            setupLiveCalculationHooks();
-            setupAutoContentEditableSaves();
-        });
+<!-- Color Picker Modal -->
+<div class="modal-overlay" id="modal-color" onclick="if(event.target===this)closeModal('modal-color')">
+  <div class="modal">
+    <h3>Choose colour</h3>
+    <div class="color-swatch-row" id="color-picker-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-color')">Cancel</button>
+    </div>
+  </div>
+</div>
 
-        function initializeWorkspace() {
-            const inputField = document.getElementById('student-id');
-            const targetVal = inputField.value.trim();
-            
-            if (targetVal !== "") {
-                currentState.studentId = targetVal;
-                saveToLocalStorage();
-                initializeDOMDashboard();
-                showPage('page-master');
-            } else {
-                alert("Please declare your secure Student Credentials.");
-            }
-        }
+<script>
+/* ─────────────────────────────────────────────
+   DATA & DEFAULTS
+───────────────────────────────────────────── */
+const COLORS = [
+  {id:'none',   label:'Default', bg:'',        border:'',        text:'',        sub:''},
+  {id:'blue',   label:'Blue',    bg:'var(--color-background-info)', border:'var(--color-border-info)', text:'var(--color-text-info)', sub:'var(--color-text-secondary)'},
+  {id:'teal',   label:'Teal',    bg:'#e6fffa', border:'#319795', text:'#234e52', sub:'#4a5568'},
+  {id:'purple', label:'Purple',  bg:'#f3f0ff', border:'#845ef7', text:'#5f3dc4', sub:'#495057'},
+  {id:'amber',  label:'Amber',   bg:'var(--color-background-warning)', border:'var(--color-border-warning)', text:'var(--color-text-warning)', sub:'var(--color-text-secondary)'},
+  {id:'coral',  label:'Coral',   bg:'#fff4e6', border:'#ff922b', text:'#d9480f', sub:'#495057'},
+  {id:'pink',   label:'Pink',    bg:'#fff0f6', border:'#faa2c1', text:'#a61e4d', sub:'#495057'},
+  {id:'green',  label:'Green',   bg:'var(--color-background-success)', border:'var(--color-border-success)', text:'var(--color-text-success)', sub:'var(--color-text-secondary)'},
+  {id:'red',    label:'Red',     bg:'var(--color-background-danger)', border:'var(--color-border-danger)', text:'var(--color-text-danger)', sub:'var(--color-text-secondary)'},
+  {id:'gray',   label:'Gray',    bg:'var(--color-background-secondary)', border:'var(--color-border-secondary)', text:'var(--color-text-primary)', sub:'var(--color-text-tertiary)'},
+];
 
-        function disconnectWorkspace() {
-            currentState.studentId = '';
-            saveToLocalStorage();
-            showPage('page-landing');
-        }
+const PANEL_COLORS = [
+  {id:'none',   label:'Default',  bg:'',        border:'',        title:''},
+  {id:'blue',   label:'Blue',     bg:'var(--color-background-info)', border:'var(--color-border-info)', title:'var(--color-text-info)'},
+  {id:'teal',   label:'Teal',     bg:'#f0faf7', border:'#319795', title:'#234e52'},
+  {id:'purple', label:'Purple',   bg:'#f8f7ff', border:'#b197fc', title:'#5f3dc4'},
+  {id:'amber',  label:'Amber',    bg:'var(--color-background-warning)', border:'var(--color-border-warning)', title:'var(--color-text-warning)'},
+  {id:'green',  label:'Green',    bg:'var(--color-background-success)', border:'var(--color-border-success)', title:'var(--color-text-success)'},
+  {id:'gray',   label:'Gray',     bg:'var(--color-background-secondary)', border:'var(--color-border-secondary)', title:'var(--color-text-primary)'},
+];
 
-        function initializeDOMDashboard() {
-            document.getElementById('display-matric').textContent = currentState.studentId;
-            renderLinks();
-            applyPanelArrangements();
-            applyVisibilityToggles();
-            calculateGpaScore();
-        }
+const CAT_ICONS = {Portal:'ti-layout-dashboard',Library:'ti-books',Tool:'ti-tool',App:'ti-device-mobile',Forum:'ti-messages',Other:'ti-link'};
 
-        // Content Editable Real-Time Synchronization Listener Hooks
-        function setupAutoContentEditableSaves() {
-            const configBindings = [
-                { id: 'landing-title', key: 'landingTitle' },
-                { id: 'dash-main-title', key: 'dashTitle' }
-            ];
+const DEFAULT_LINKS = [
+  {id:'l1', name:'IN4SIT',            url:'https://in4sit.singaporetech.edu.sg', cat:'Portal',  icon:'ti-school',            color:'blue'},
+  {id:'l2', name:'xSITE',             url:'https://xsite.singaporetech.edu.sg',  cat:'Portal',  icon:'ti-layout-dashboard',  color:'teal'},
+  {id:'l3', name:'Outlook',           url:'https://outlook.office365.com',        cat:'Portal',  icon:'ti-mail',              color:'blue'},
+  {id:'l4', name:'Library Databases', url:'https://libguides.singaporetech.edu.sg',cat:'Library',icon:'ti-books',             color:'purple'},
+  {id:'l5', name:'ONE SEARCH',        url:'https://onesearch.singaporetech.edu.sg',cat:'Library',icon:'ti-search',            color:'purple'},
+  {id:'l6', name:'Campus Wayfinder',  url:'#',                                    cat:'Tool',    icon:'ti-map-pin',           color:'green'},
+  {id:'l7', name:'Resource Booking',  url:'#',                                    cat:'Tool',    icon:'ti-calendar-event',    color:'green'},
+  {id:'l8', name:'Loan Media Equip.', url:'#',                                    cat:'Tool',    icon:'ti-device-laptop',     color:'gray'},
+];
+const DEFAULT_ALERTS = [
+  {id:'a1', mod:'General', msg:'Check timetable for Week 1 changes', date:'', color:'amber'},
+];
+function daysFromNow(d) { const dt = new Date(); dt.setDate(dt.getDate() + d); return dt.toISOString().slice(0,10); }
+const DEFAULT_COUNTDOWNS = [
+  {id:'c1', label:'Decision Quiz 2',  date:daysFromNow(2),  color:'red'},
+  {id:'c2', label:'Assignments due',  date:daysFromNow(10), color:'amber'},
+  {id:'c3', label:'End of trimester', date:daysFromNow(70), color:'teal'},
+];
 
-            configBindings.forEach(binding => {
-                const element = document.getElementById(binding.id);
-                if (element) {
-                    element.addEventListener('input', () => {
-                        currentState[binding.key] = element.textContent;
-                        saveToLocalStorage();
-                    });
-                }
-            });
-        }
+const PANEL_DEFS = [
+  {id:'links',     title:'Quick links',         icon:'ti-link'},
+  {id:'alerts',    title:'Alerts & reminders',  icon:'ti-bell'},
+  {id:'timetable', title:'Timetable',            icon:'ti-calendar'},
+  {id:'deadlines', title:'Upcoming deadlines',  icon:'ti-clock'},
+  {id:'calendar',  title:'Calendar',            icon:'ti-calendar-month'},
+];
 
-        /* Hyperlink Module Function Engines */
-        function renderLinks() {
-            const container = document.getElementById('links-container');
-            container.innerHTML = '';
-            
-            currentState.links.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'link-item';
-                div.innerHTML = `
-                    <a href="${item.url}" target="_blank" class="link-anchor">
-                        <i class="fa-solid fa-link"></i>
-                        <span class="link-title">${item.title}</span>
-                    </a>
-                    <button class="delete-link-btn" onclick="deleteLink(${index})" title="Delete Link">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                `;
-                container.appendChild(div);
-            });
-        }
+function load(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } }
+function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
 
-        function addNewLink(event) {
-            event.preventDefault();
-            const titleInput = document.getElementById('new-link-title');
-            const urlInput = document.getElementById('new-link-url');
-            
-            currentState.links.push({
-                title: titleInput.value.trim(),
-                url: urlInput.value.trim()
-            });
-            
-            saveToLocalStorage();
-            renderLinks();
-            
-            titleInput.value = '';
-            urlInput.value = '';
-        }
+let links      = load('sit_links', DEFAULT_LINKS);
+let alerts     = load('sit_alerts', DEFAULT_ALERTS);
+let countdowns = load('sit_cds', DEFAULT_COUNTDOWNS);
+let editMode   = false;
+let layoutCols = load('sit_layout_cols', 2);
+let panelOrder = load('sit_panel_order', PANEL_DEFS.map(p=>p.id));
+let panelHidden= load('sit_panel_hidden', []);
+let panelColors= load('sit_panel_colors', {});
+let panelSpan  = load('sit_panel_span', {});
+let dashTitle  = load('sit_dash_title', 'Student dashboard');
+let calYear, calMonth;
+const todayDate = new Date();
+calYear = todayDate.getFullYear();
+calMonth = todayDate.getMonth();
+let colorTarget = null;
+const selectedColors = {};
 
-        function deleteLink(index) {
-            currentState.links.splice(index, 1);
-            saveToLocalStorage();
-            renderLinks();
-        }
+PANEL_DEFS.forEach(p => { if (!panelOrder.includes(p.id)) panelOrder.push(p.id); });
 
-        /* GPA Module Evaluation Computation Engines */
-        function setupLiveCalculationHooks() {
-            document.getElementById('widget-calculator').addEventListener('input', (e) => {
-                if (e.target.classList.contains('gpa-input')) {
-                    calculateGpaScore();
-                }
-            });
-        }
+/* ─────────────────────────────────────────────
+   LAYOUT
+───────────────────────────────────────────── */
+function setLayout(n) {
+  layoutCols = n;
+  save('sit_layout_cols', n);
+  const c = document.getElementById('panels-container');
+  c.className = `panels-container cols-${n}`;
+  [1,2,3].forEach(i => document.getElementById('lopt-'+i)?.classList.toggle('selected', i===n));
+}
 
-        function addGpaRow() {
-            const targetContainer = document.getElementById('gpa-rows-box');
-            const row = document.createElement('div');
-            row.className = 'gpa-row';
-            row.innerHTML = `
-                <input type="text" class="gpa-input" placeholder="Module">
-                <input type="number" class="gpa-input gpa-credits" placeholder="Credits" step="1">
-                <input type="number" class="gpa-input gpa-grade" placeholder="GPA" step="0.1" max="5">
-            `;
-            targetContainer.appendChild(row);
-        }
+function toggleLayoutBar() {
+  const bar = document.getElementById('layout-bar');
+  const btn = document.getElementById('layout-toggle');
+  const visible = bar.classList.toggle('visible');
+  btn.classList.toggle('active', visible);
+  renderHiddenChips();
+}
 
-        function calculateGpaScore() {
-            const creditsElements = document.querySelectorAll('.gpa-credits');
-            const gradeElements = document.querySelectorAll('.gpa-grade');
-            
-            let accumulatedPoints = 0;
-            let combinedCreditsCount = 0;
-            
-            creditsElements.forEach((element, idx) => {
-                const credits = parseFloat(element.value) || 0;
-                const scoreValue = parseFloat(gradeElements[idx].value) || 0;
-                
-                if (credits > 0) {
-                    accumulatedPoints += (scoreValue * credits);
-                    combinedCreditsCount += credits;
-                }
-            });
-            
-            const performanceOut = combinedCreditsCount > 0 ? (accumulatedPoints / combinedCreditsCount).toFixed(2) : "0.00";
-            document.getElementById('gpa-output-score').textContent = performanceOut;
-        }
+function renderHiddenChips() {
+  const el = document.getElementById('hidden-chips');
+  if (!el) return;
+  const hidden = panelOrder.filter(id => panelHidden.includes(id));
+  if (!hidden.length) { el.innerHTML = '<span style="font-size:13px;color:var(--color-text-tertiary)">None hidden</span>'; return; }
+  el.innerHTML = hidden.map(id => {
+    const def = PANEL_DEFS.find(p=>p.id===id);
+    return `<div class="hidden-panel-chip" onclick="showPanel('${id}')"><i class="ti ti-eye" aria-hidden="true"></i> ${def?.title||id}</div>`;
+  }).join('');
+}
 
-        /* Core UI Layout Configuration Engines (Drag, Drop, Visibility Toggles) */
-        function applyPanelArrangements() {
-            const gridContainer = document.getElementById('dashboard-grid-container');
-            currentState.panelOrder.forEach(panelId => {
-                const cardNode = document.getElementById(panelId);
-                if (cardNode) gridContainer.appendChild(cardNode);
-            });
-        }
+function showPanel(id) {
+  panelHidden = panelHidden.filter(x=>x!==id);
+  save('sit_panel_hidden', panelHidden);
+  renderPanels();
+  renderHiddenChips();
+}
 
-        function applyVisibilityToggles() {
-            currentState.panelOrder.forEach(panelId => {
-                const panel = document.getElementById(panelId);
-                const controlToggle = document.getElementById('toggle-' + panelId);
-                
-                if (currentState.hiddenPanels.includes(panelId)) {
-                    if (panel) panel.style.display = 'none';
-                    if (controlToggle) controlToggle.checked = false;
-                } else {
-                    if (panel) panel.style.display = 'block';
-                    if (controlToggle) controlToggle.checked = true;
-                }
-            });
-        }
+/* ─────────────────────────────────────────────
+   PANEL RENDERING
+───────────────────────────────────────────── */
+function getPanelColorStyle(panelId) {
+  const colorId = panelColors[panelId] || 'none';
+  const c = PANEL_COLORS.find(x=>x.id===colorId) || PANEL_COLORS[0];
+  if (!c.bg) return '';
+  return `--panel-bg:${c.bg};--panel-border:${c.border};--panel-title-color:${c.title}`;
+}
 
-        function togglePanelVisibility(panelId) {
-            const isHidden = currentState.hiddenPanels.includes(panelId);
-            if (isHidden) {
-                currentState.hiddenPanels = currentState.hiddenPanels.filter(id => id !== panelId);
-            } else {
-                currentState.hiddenPanels.push(panelId);
-            }
-            saveToLocalStorage();
-            applyVisibilityToggles();
-        }
+function renderPanels() {
+  const container = document.getElementById('panels-container');
+  container.innerHTML = '';
+  panelOrder.filter(id => !panelHidden.includes(id)).forEach(id => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'panel-wrapper';
+    wrapper.dataset.panelId = id;
+    if (panelSpan[id]) wrapper.classList.add('span-'+panelSpan[id]);
+    wrapper.draggable = editMode;
 
-        function setupDragAndDropMechanics() {
-            const gridContainer = document.getElementById('dashboard-grid-container');
-            
-            gridContainer.addEventListener('dragstart', (e) => {
-                const targetedCard = e.target.closest('.widget-card');
-                if(targetedCard) {
-                    targetedCard.classList.add('dragging');
-                }
-            });
+    const def = PANEL_DEFS.find(p=>p.id===id);
+    const colorId = panelColors[id] || 'none';
+    const spanActive = !!panelSpan[id];
+    wrapper.innerHTML = `
+      <div class="panel-edit-bar">
+        <span class="panel-drag-handle" title="Drag to reorder"><i class="ti ti-grip-vertical" aria-hidden="true"></i></span>
+        <span style="font-size:13px;font-weight:600;color:var(--color-text-primary)">${def?.title||id}</span>
+        <div class="panel-edit-bar-right">
+          <button class="panel-mini-btn span-btn${spanActive?' active':''}" onclick="togglePanelSpan('${id}')" title="Stretch across columns"><i class="ti ti-arrows-horizontal" aria-hidden="true"></i> Wide</button>
+          <div style="position:relative">
+            <button class="panel-mini-btn" onclick="togglePanelColorPicker('${id}')" title="Panel colour"><i class="ti ti-palette" aria-hidden="true"></i> Tint</button>
+            <div class="panel-color-popup" id="pcp-${id}">
+              <div class="panel-color-popup-title">Panel Colour</div>
+              <div class="pcp-swatches">${PANEL_COLORS.map(c=>{
+                const bg = c.bg || 'var(--color-background-secondary)';
+                const sel = c.id===colorId;
+                return `<div class="pcp-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="setPanelColor('${id}','${c.id}')" title="${c.label}"></div>`;
+              }).join('')}</div>
+            </div>
+          </div>
+          <button class="panel-mini-btn hide-btn" onclick="hidePanel('${id}')" title="Hide panel"><i class="ti ti-eye-off" aria-hidden="true"></i> Hide</button>
+        </div>
+      </div>
+    `;
 
-            gridContainer.addEventListener('dragend', (e) => {
-                const targetedCard = e.target.closest('.widget-card');
-                if(targetedCard) {
-                    targetedCard.classList.remove('dragging');
-                    
-                    // Capture final order arrangement layout configuration changes
-                    const discoveredCards = gridContainer.querySelectorAll('.widget-card');
-                    const freshOrder = [];
-                    discoveredCards.forEach(card => freshOrder.push(card.id));
-                    
-                    currentState.panelOrder = freshOrder;
-                    saveToLocalStorage();
-                }
-            });
+    const panel = document.createElement('div');
+    panel.className = 'panel';
+    const style = getPanelColorStyle(id);
+    if (style) panel.setAttribute('style', style);
+    panel.id = 'panel-'+id;
+    panel.innerHTML = buildPanelInner(id);
+    wrapper.appendChild(panel);
+    container.appendChild(wrapper);
 
-            gridContainer.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                const activeDraggingCard = document.querySelector('.dragging');
-                if (!activeDraggingCard) return;
+    wrapper.addEventListener('dragstart', onDragStart);
+    wrapper.addEventListener('dragend', onDragEnd);
+    wrapper.addEventListener('dragover', onDragOver);
+    wrapper.addEventListener('dragleave', onDragLeave);
+    wrapper.addEventListener('drop', onDrop);
+  });
 
-                const alternativeCards = [...gridContainer.querySelectorAll('.widget-card:not(.dragging)')];
-                
-                const immediateTargetNode = alternativeCards.find(card => {
-                    const box = card.getBoundingClientRect();
-                    const boundaryOffset = e.clientY - box.top - box.height / 2;
-                    return boundaryOffset < 0;
-                });
+  renderLinks(); renderAlerts(); renderCountdowns(); renderCalendar();
+  restoreTimetable();
+}
 
-                if (immediateTargetNode == null) {
-                    gridContainer.appendChild(activeDraggingCard);
-                } else {
-                    gridContainer.insertBefore(activeDraggingCard, immediateTargetNode);
-                }
-            });
-        }
+function buildPanelInner(id) {
+  switch(id) {
+    case 'links': return `
+      <div class="panel-title">Quick Links</div>
+      <div class="links-grid" id="links-grid"></div>`;
+    case 'alerts': return `
+      <div class="panel-title">
+        Alerts &amp; reminders
+        <button class="section-add-btn" onclick="openModal('modal-alert')"><i class="ti ti-plus" aria-hidden="true"></i> Add</button>
+      </div>
+      <div id="alerts-list"></div>`;
+    case 'timetable': return `
+      <div class="panel-title">
+        Timetable
+        <div class="tt-controls">
+          <button class="tt-clear-btn" id="tt-clear-btn" onclick="clearTimetable()" style="display:none"><i class="ti ti-trash" aria-hidden="true"></i> Clear</button>
+        </div>
+      </div>
+      <div id="tt-upload-section">
+        <div class="tt-upload-area" id="tt-drop-zone">
+          <input type="file" accept=".ics" id="ics-file-input" onchange="handleIcsUpload(event)">
+          <div class="tt-upload-icon"><i class="ti ti-calendar-upload" aria-hidden="true"></i></div>
+          <p>Drop your timetable <strong>.ics</strong> file here</p>
+          <small>or click to browse &mdash; exported from IN4SIT</small>
+        </div>
+        <div id="tt-file-name" class="tt-file-name" style="display:none"></div>
+      </div>
+      <div id="tt-view" style="display:none">
+        <div class="tt-week-nav">
+          <button class="cal-nav" onclick="ttPrevWeek()"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+          <span class="tt-week-label" id="tt-week-label"></span>
+          <button class="cal-nav" onclick="ttNextWeek()"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+        </div>
+        <div id="tt-grid-container"></div>
+        <div class="tt-legend" id="tt-legend"></div>
+      </div>`;
+    case 'deadlines': return `
+      <div class="panel-title">
+        Upcoming deadlines
+        <button class="section-add-btn" onclick="openModal('modal-countdown')"><i class="ti ti-plus" aria-hidden="true"></i> Add</button>
+      </div>
+      <div class="countdown-grid" id="countdown-grid"></div>`;
+    case 'calendar': return `
+      <div class="panel-title">Calendar</div>
+      <div class="cal-month">
+        <button class="cal-nav" onclick="prevMonth()"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+        <span id="cal-month-label"></span>
+        <button class="cal-nav" onclick="nextMonth()"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <div class="cal-grid" id="cal-day-names"></div>
+      <div class="cal-grid" id="cal-days"></div>`;
+    default: return `<div class="panel-title">${id}</div>`;
+  }
+}
 
-        /* JSON Import / Export Infrastructure System Functions */
-        function exportConfigData() {
-            const dataString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentState, null, 2));
-            const alternativeAnchor = document.createElement('a');
-            alternativeAnchor.setAttribute("href", dataString);
-            alternativeAnchor.setAttribute("download", `sit_workspace_${currentState.studentId || 'backup'}.json`);
-            document.body.appendChild(alternativeAnchor);
-            alternativeAnchor.click();
-            alternativeAnchor.remove();
-        }
+function hidePanel(id) {
+  panelHidden.push(id);
+  save('sit_panel_hidden', panelHidden);
+  renderPanels();
+  renderHiddenChips();
+}
 
-        function triggerImportSelection() {
-            document.getElementById('import-hidden-field').click();
-        }
+function setPanelColor(panelId, colorId) {
+  panelColors[panelId] = colorId;
+  save('sit_panel_colors', panelColors);
+  const panel = document.getElementById('panel-'+panelId);
+  if (panel) {
+    const style = getPanelColorStyle(panelId);
+    panel.setAttribute('style', style);
+  }
+  const popup = document.getElementById('pcp-'+panelId);
+  if (popup) {
+    popup.querySelector('.pcp-swatches').innerHTML = PANEL_COLORS.map(c=>{
+      const bg = c.bg || 'var(--color-background-secondary)';
+      const sel = c.id===colorId;
+      return `<div class="pcp-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="setPanelColor('${panelId}','${c.id}')" title="${c.label}"></div>`;
+    }).join('');
+  }
+}
 
-        function importConfigData(event) {
-            const uploadedFile = event.target.files[0];
-            if (!uploadedFile) return;
+function togglePanelColorPicker(panelId) {
+  document.querySelectorAll('.panel-color-popup.open').forEach(el => { if (el.id !== 'pcp-'+panelId) el.classList.remove('open'); });
+  document.getElementById('pcp-'+panelId)?.classList.toggle('open');
+}
 
-            const readerInstance = new FileReader();
-            readerInstance.onload = function(e) {
-                try {
-                    const structure = JSON.parse(e.target.result);
-                    
-                    // Validation mapping structure checks
-                    if (structure.links || structure.panelOrder || structure.studentId) {
-                        currentState = { ...currentState, ...structure };
-                        saveToLocalStorage();
-                        
-                        // Full refresh to process state UI updates
-                        document.getElementById('landing-title').textContent = currentState.landingTitle;
-                        document.getElementById('dash-main-title').textContent = currentState.dashTitle;
-                        initializeDOMDashboard();
-                        
-                        alert("Configuration layout environment verified and restored successfully!");
-                    } else {
-                        alert("Invalid JSON format profile verified.");
-                    }
-                } catch (err) {
-                    alert("Failure executing target file parse routines.");
-                }
-            };
-            readerInstance.readAsText(uploadedFile);
-        }
-    </script>
+document.addEventListener('click', e => {
+  if (!e.target.closest('.panel-mini-btn') && !e.target.closest('.panel-color-popup')) {
+    document.querySelectorAll('.panel-color-popup.open').forEach(el => el.classList.remove('open'));
+  }
+});
+
+function togglePanelSpan(id) {
+  if (panelSpan[id]) { delete panelSpan[id]; }
+  else { panelSpan[id] = layoutCols; }
+  save('sit_panel_span', panelSpan);
+  renderPanels();
+}
+
+/* ─────────────────────────────────────────────
+   DRAG & DROP PANEL REORDER
+───────────────────────────────────────────── */
+let dragSrcId = null;
+
+function onDragStart(e) {
+  dragSrcId = this.dataset.panelId;
+  this.classList.add('panel-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragEnd(e) {
+  this.classList.remove('panel-dragging');
+  document.querySelectorAll('.panel-drag-over').forEach(el=>el.classList.remove('panel-drag-over'));
+}
+function onDragOver(e) {
+  e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+  this.querySelector('.panel')?.classList.add('panel-drag-over');
+}
+function onDragLeave(e) {
+  this.querySelector('.panel')?.classList.remove('panel-drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  const targetId = this.dataset.panelId;
+  if (!dragSrcId || dragSrcId === targetId) return;
+  const srcIdx = panelOrder.indexOf(dragSrcId);
+  const tgtIdx = panelOrder.indexOf(targetId);
+  panelOrder.splice(srcIdx, 1);
+  panelOrder.splice(tgtIdx, 0, dragSrcId);
+  save('sit_panel_order', panelOrder);
+  renderPanels();
+}
+
+/* ─────────────────────────────────────────────
+   EDIT MODE
+───────────────────────────────────────────── */
+function toggleEdit() {
+  editMode = !editMode;
+  document.getElementById('dashboard').classList.toggle('edit-mode', editMode);
+  const btn = document.getElementById('edit-toggle');
+  btn.classList.toggle('active', editMode);
+  btn.innerHTML = editMode
+    ? '<i class="ti ti-check" aria-hidden="true"></i> <span class="btn-label">Done</span>'
+    : '<i class="ti ti-edit" aria-hidden="true"></i> <span class="btn-label">Customise</span>';
+
+  const title = document.getElementById('dash-title');
+  const sub   = document.getElementById('dash-subtitle');
+  title.contentEditable = editMode ? 'true' : 'false';
+  sub.contentEditable   = editMode ? 'true' : 'false';
+  if (!editMode) {
+    save('sit_dash_title', title.textContent.trim() || 'Student dashboard');
+    save('sit_dash_subtitle', sub.textContent.trim());
+  }
+
+  document.querySelectorAll('.panel-wrapper').forEach(w => { w.draggable = editMode; });
+  renderLinks();
+}
+
+/* ─────────────────────────────────────────────
+   CONTENT RENDERERS
+───────────────────────────────────────────── */
+function getColor(id) { return COLORS.find(c => c.id === id) || COLORS[0]; }
+function colorStyle(colorId, type) {
+  const c = getColor(colorId);
+  if (!c.bg) return '';
+  if (type === 'link')  return `--lc-bg:${c.bg};--lc-text:${c.text};--lc-sub:${c.sub};border-color:${c.border}`;
+  if (type === 'alert') return `--ai-bg:${c.bg};--ai-text:${c.text};--ai-sub:${c.sub};--ai-border:${c.border}`;
+  if (type === 'cd')    return `--cd-bg:${c.bg};--cd-text:${c.text};--cd-sub:${c.sub};--cd-border:${c.border}`;
+  return '';
+}
+
+function renderLinks() {
+  const g = document.getElementById('links-grid');
+  if (!g) return;
+  g.innerHTML = '';
+  links.forEach(lk => {
+    const c = document.createElement('a');
+    c.className = 'link-card';
+    c.href = editMode ? '#' : lk.url;
+    if (!editMode && lk.url !== '#') c.target = '_blank';
+    if (editMode) c.onclick = e => e.preventDefault();
+    const style = colorStyle(lk.color, 'link');
+    if (style) c.setAttribute('style', style);
+    const icon = lk.icon || (CAT_ICONS[lk.cat] || 'ti-link');
+    c.innerHTML =
+      `<i class="ti ${icon} lc-icon" aria-hidden="true"></i>` +
+      `<span class="lc-name">${lk.name}</span>` +
+      `<span class="lc-tag">${lk.cat}</span>` +
+      `<button class="del-btn" onclick="deleteItem('links','${lk.id}');event.stopPropagation();event.preventDefault()" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('links','${lk.id}');event.stopPropagation();event.preventDefault()" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+    g.appendChild(c);
+  });
+  if (editMode) {
+    const add = document.createElement('div');
+    add.className = 'link-card add-card';
+    add.innerHTML = '<i class="ti ti-plus" aria-hidden="true"></i><span>Add link</span>';
+    add.onclick = () => openModal('modal-link');
+    g.appendChild(add);
+  }
+}
+
+function renderAlerts() {
+  const l = document.getElementById('alerts-list');
+  if (!l) return;
+  l.innerHTML = '';
+  if (!alerts.length) { l.innerHTML = '<p style="font-size:13px;color:var(--color-text-tertiary);text-align:center;padding:1.5rem">No active updates.</p>'; return; }
+  alerts.forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'alert-item';
+    const style = colorStyle(a.color, 'alert');
+    if (style) d.setAttribute('style', style);
+    d.innerHTML =
+      `<i class="ti ti-alert-triangle ai-icon" aria-hidden="true"></i>` +
+      `<div><div class="ai-name">${a.mod}</div><div class="ai-msg">${a.msg}</div>${a.date?`<div class="ai-meta">${a.date}</div>`:''}</div>` +
+      `<button class="del-btn" onclick="deleteItem('alerts','${a.id}')" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('alerts','${a.id}')" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+    l.appendChild(d);
+  });
+}
+
+function renderCountdowns() {
+  const g = document.getElementById('countdown-grid');
+  if (!g) return;
+  g.innerHTML = '';
+  countdowns.forEach(c => {
+    const d = daysUntil(c.date);
+    const el = document.createElement('div');
+    el.className = 'cd-card' + (d <= 3 && !c.color ? ' urgent' : '');
+    const style = colorStyle(c.color, 'cd');
+    if (style) el.setAttribute('style', style);
+    el.innerHTML =
+      `<div class="cd-num">${d < 0 ? 'Past' : d}</div>` +
+      `<div class="cd-label">${c.label}</div>` +
+      `<button class="del-btn" onclick="deleteItem('countdowns','${c.id}')" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('countdowns','${c.id}')" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+    g.appendChild(el);
+  });
+}
+
+function daysUntil(iso) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const t = new Date(iso); t.setHours(0,0,0,0);
+  return Math.round((t - now) / 86400000);
+}
+
+function renderCalendar() {
+  const lbl = document.getElementById('cal-month-label');
+  if (!lbl) return;
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  lbl.textContent = months[calMonth] + ' ' + calYear;
+  document.getElementById('cal-day-names').innerHTML = 'Mon,Tue,Wed,Thu,Fri,Sat,Sun'.split(',').map(d => `<div class="cal-day-name">${d.slice(0,1)}</div>`).join('');
+  const daysEl = document.getElementById('cal-days');
+  daysEl.innerHTML = '';
+  const first = new Date(calYear, calMonth, 1).getDay();
+  const offset = first === 0 ? 6 : first - 1;
+  const total = new Date(calYear, calMonth + 1, 0).getDate();
+  const eventDates = countdowns.map(c => c.date);
+  for (let i = 0; i < offset; i++) daysEl.appendChild(document.createElement('div'));
+  for (let d = 1; d <= total; d++) {
+    const el = document.createElement('div');
+    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = todayDate.getFullYear()===calYear && todayDate.getMonth()===calMonth && todayDate.getDate()===d;
+    el.className = 'cal-day' + (isToday ? ' today' : '') + (eventDates.includes(iso) ? ' has-event' : '');
+    el.textContent = d;
+    daysEl.appendChild(el);
+  }
+}
+
+function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+
+function deleteItem(type, id) {
+  if (type === 'links')       { links = links.filter(x => x.id !== id); save('sit_links', links); renderLinks(); }
+  else if (type === 'alerts') { alerts = alerts.filter(x => x.id !== id); save('sit_alerts', alerts); renderAlerts(); }
+  else                        { countdowns = countdowns.filter(x => x.id !== id); save('sit_cds', countdowns); renderCountdowns(); renderCalendar(); }
+}
+
+/* ─────────────────────────────────────────────
+   MODALS
+───────────────────────────────────────────── */
+function renderSwatchRow(rowId, selectedId, modalKey) {
+  const row = document.getElementById(rowId);
+  if (!row) return;
+  row.innerHTML = COLORS.map(c => {
+    const bg = c.bg || 'var(--color-background-secondary)';
+    const sel = c.id === selectedId;
+    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="selectModalColor('${c.id}','${modalKey}')" title="${c.label}"></div>`;
+  }).join('');
+}
+function selectModalColor(colorId, modalKey) {
+  selectedColors[modalKey] = colorId;
+  const rowMap = {'modal-link':'link-color-row','modal-alert':'alert-color-row','modal-countdown':'cd-color-row'};
+  renderSwatchRow(rowMap[modalKey], colorId, modalKey);
+}
+function openModal(id) {
+  selectedColors[id] = 'none';
+  document.getElementById(id).classList.add('open');
+  const rowMap = {'modal-link':'link-color-row','modal-alert':'alert-color-row','modal-countdown':'cd-color-row'};
+  if (rowMap[id]) renderSwatchRow(rowMap[id], 'none', id);
+  if (id === 'modal-link') { document.getElementById('link-name').value=''; document.getElementById('link-url').value='https://'; document.getElementById('link-cat').value='Portal'; }
+  if (id === 'modal-alert') { document.getElementById('alert-mod').value=''; document.getElementById('alert-msg').value=''; document.getElementById('alert-date').value=''; }
+  if (id === 'modal-countdown') { document.getElementById('cd-label-in').value=''; document.getElementById('cd-date-in').value=''; }
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openColorPicker(type, id) {
+  colorTarget = { type, id };
+  const arr = type==='links'?links:type==='alerts'?alerts:countdowns;
+  const current = arr.find(x=>x.id===id)?.color || 'none';
+  const row = document.getElementById('color-picker-row');
+  row.innerHTML = COLORS.map(c => {
+    const bg = c.bg || 'var(--color-background-secondary)';
+    const sel = c.id === current;
+    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="applyColor('${c.id}')" title="${c.label}"></div>`;
+  }).join('');
+  document.getElementById('modal-color').classList.add('open');
+}
+function applyColor(colorId) {
+  const { type, id } = colorTarget;
+  if (type === 'links')       { const l = links.find(x=>x.id===id); if(l) l.color=colorId; save('sit_links',links); renderLinks(); }
+  else if (type === 'alerts') { const a = alerts.find(x=>x.id===id); if(a) a.color=colorId; save('sit_alerts',alerts); renderAlerts(); }
+  else                        { const c = countdowns.find(x=>x.id===id); if(c) c.color=colorId; save('sit_cds',countdowns); renderCountdowns(); }
+  closeModal('modal-color');
+}
+function saveLink() {
+  const n = document.getElementById('link-name').value.trim();
+  const u = document.getElementById('link-url').value.trim();
+  const cat = document.getElementById('link-cat').value;
+  if (!n) return;
+  links.push({ id:'l'+Date.now(), name:n, url:u||'#', cat, icon:CAT_ICONS[cat]||'ti-link', color:selectedColors['modal-link']||'none' });
+  save('sit_links', links); closeModal('modal-link'); renderLinks();
+}
+function saveAlert() {
+  const mod = document.getElementById('alert-mod').value.trim();
+  const msg = document.getElementById('alert-msg').value.trim();
+  const date = document.getElementById('alert-date').value;
+  if (!msg) return;
+  alerts.push({ id:'a'+Date.now(), mod:mod||'General', msg, date, color:selectedColors['modal-alert']||'amber' });
+  save('sit_alerts', alerts); closeModal('modal-alert'); renderAlerts();
+}
+function saveCountdown() {
+  const label = document.getElementById('cd-label-in').value.trim();
+  const date  = document.getElementById('cd-date-in').value;
+  if (!label || !date) return;
+  countdowns.push({ id:'c'+Date.now(), label, date, color:selectedColors['modal-countdown']||'none' });
+  save('sit_cds', countdowns); closeModal('modal-countdown'); renderCountdowns(); renderCalendar();
+}
+
+/* ─────────────────────────────────────────────
+   ICS TIMETABLE
+───────────────────────────────────────────── */
+const TT_COLORS = [
+  {bg:'var(--color-background-info)',text:'var(--color-text-info)'},
+  {bg:'#e6fffa',text:'#234e52'},
+  {bg:'#f3f0ff',text:'#5f3dc4'},
+  {bg:'var(--color-background-warning)',text:'var(--color-text-warning)'},
+  {bg:'#fff4e6',text:'#d9480f'},
+  {bg:'#fff0f6',text:'#a61e4d'},
+  {bg:'var(--color-background-success)',text:'var(--color-text-success)'},
+];
+const ttColorMap = {};
+let ttColorIdx = 0;
+function ttColor(key) {
+  if (!ttColorMap[key]) { ttColorMap[key] = TT_COLORS[ttColorIdx % TT_COLORS.length]; ttColorIdx++; }
+  return ttColorMap[key];
+}
+let ttEvents = [];
+let ttWeekOffset = 0;
+
+function restoreTimetable() {
+  const saved = load('sit_ics_events', []);
+  const name  = load('sit_ics_name', '');
+  if (saved && saved.length) showTimetable(saved, name || 'timetable.ics');
+  const dz = document.getElementById('tt-drop-zone');
+  if (dz) {
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+    dz.addEventListener('drop', e => {
+      e.preventDefault(); dz.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file && file.name.endsWith('.ics')) processIcsFile(file);
+    });
+  }
+}
+
+function handleIcsUpload(e) { const f = e.target.files[0]; if (f) processIcsFile(f); }
+
+function processIcsFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const events = parseIcs(ev.target.result);
+    if (!events.length) { alert('No events found in this .ics file.'); return; }
+    save('sit_ics_events', events);
+    save('sit_ics_name', file.name);
+    showTimetable(events, file.name);
+  };
+  reader.readAsText(file);
+}
+
+function parseIcs(text) {
+  const unfolded = text.replace(/\r\n[ \t]/g, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const lines = unfolded.split('\n');
+  const events = [];
+  let cur = null;
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (line === 'BEGIN:VEVENT') { cur = {}; continue; }
+    if (line === 'END:VEVENT')   { if (cur) { const ev = buildEvent(cur); if (ev) events.push(ev); } cur = null; continue; }
+    if (!cur) continue;
+    const idx = line.indexOf(':');
+    if (idx < 0) continue;
+    const baseKey = line.slice(0, idx).toUpperCase().split(';')[0];
+    cur[baseKey] = line.slice(idx + 1);
+  }
+  return events;
+}
+
+function parseIcsDate(str) {
+  if (!str) return null;
+  str = str.replace('Z','');
+  if (str.length === 8) return new Date(+str.slice(0,4), +str.slice(4,6)-1, +str.slice(6,8), 0, 0);
+  return new Date(+str.slice(0,4), +str.slice(4,6)-1, +str.slice(6,8), +str.slice(9,11), +str.slice(11,13));
+}
+
+function buildEvent(raw) {
+  const start = parseIcsDate(raw['DTSTART']);
+  const end   = parseIcsDate(raw['DTEND']) || start;
+  if (!start) return null;
+  const summary  = (raw['SUMMARY']  || 'Untitled').replace(/\\n/g,'\n').replace(/\\,/g,',');
+  const location = (raw['LOCATION'] || '').replace(/\\n/g,' ').replace(/\\,/g,',');
+  return { summary, location, start: start.toISOString(), end: end.toISOString() };
+}
+
+function getWeekStart(offset) {
+  const d = new Date(); d.setHours(0,0,0,0);
+  const day = d.getDay();
+  const mon = new Date(d); mon.setDate(d.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+  return mon;
+}
+
+function showTimetable(events, fileName) {
+  ttEvents = events;
+  ttColorIdx = 0; Object.keys(ttColorMap).forEach(k => delete ttColorMap[k]);
+  const up = document.getElementById('tt-upload-section');
+  const tv = document.getElementById('tt-view');
+  const clr = document.getElementById('tt-clear-btn');
+  const fn = document.getElementById('tt-file-name');
+  if (up) up.style.display = 'none';
+  if (tv) tv.style.display = 'block';
+  if (clr) clr.style.display = '';
+  if (fn) { fn.style.display = 'flex'; fn.innerHTML = `<i class="ti ti-check" aria-hidden="true"></i> ${fileName}`; }
+  ttWeekOffset = 0;
+  renderTimetable();
+}
+
+function renderTimetable() {
+  const weekStart = getWeekStart(ttWeekOffset);
+  const fmt = d => d.toLocaleDateString('en-SG', {day:'numeric', month:'short'});
+  const lbl = document.getElementById('tt-week-label');
+  if (lbl) lbl.textContent = fmt(weekStart) + ' – ' + fmt(new Date(+weekStart + 6*86400000));
+  const days = Array.from({length:7}, (_,i) => { const d = new Date(weekStart); d.setDate(weekStart.getDate()+i); return d; });
+  const todayIso = new Date().toISOString().slice(0,10);
+  const dayEvents = days.map(d => {
+    const iso = d.toISOString().slice(0,10);
+    return ttEvents.filter(ev => ev.start.slice(0,10) === iso).sort((a,b) => a.start.localeCompare(b.start));
+  });
+  const allThisWeek = dayEvents.flat();
+  const container = document.getElementById('tt-grid-container');
+  if (!container) return;
+  if (!allThisWeek.length) { container.innerHTML = '<div class="tt-empty">No classes scheduled this week.</div>'; renderTtLegend(); return; }
+  let minH = 8, maxH = 18;
+  allThisWeek.forEach(ev => {
+    const h1 = new Date(ev.start).getHours();
+    const h2 = new Date(ev.end).getHours() + (new Date(ev.end).getMinutes() > 0 ? 1 : 0);
+    if (h1 < minH) minH = h1; if (h2 > maxH) maxH = h2;
+  });
+  const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let html = `<div style="display:grid;grid-template-columns:50px repeat(7,1fr);gap:6px;overflow-x:auto;min-width:0; padding-bottom:4px;">`;
+  html += `<div></div>`;
+  days.forEach((d, i) => {
+    const iso = d.toISOString().slice(0,10);
+    html += `<div class="tt-header${iso===todayIso?' today-col':''}">${DAY_NAMES[i]}<br><span style="font-weight:500;font-size:11px;opacity:.8">${d.getDate()}</span></div>`;
+  });
+  for (let h = minH; h <= maxH; h++) {
+    html += `<div class="tt-time">${String(h).padStart(2,'0')}:00</div>`;
+    days.forEach((d, di) => {
+      const evs = dayEvents[di].filter(ev => new Date(ev.start).getHours() === h);
+      html += `<div class="tt-cell">`;
+      evs.forEach(ev => {
+        const col = ttColor(ev.summary);
+        const sh = new Date(ev.start).getHours(), sm = new Date(ev.start).getMinutes();
+        const eh = new Date(ev.end).getHours(),   em = new Date(ev.end).getMinutes();
+        const ts = `${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
+        html += `<div class="tt-event" style="background:${col.bg};color:${col.text}" title="${ev.summary}${ev.location?'\n'+ev.location:''}\n${ts}">
+          <div class="tt-event-title">${ev.summary}</div>
+          ${ev.location?`<div class="tt-event-loc">${ev.location}</div>`:''}
+          <div style="font-size:10px;opacity:.8;font-weight:600;margin-top:2px;">${ts}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+  }
+  html += '</div>';
+  container.innerHTML = html;
+  renderTtLegend();
+}
+
+function renderTtLegend() {
+  const seen = {};
+  ttEvents.forEach(ev => { if (!seen[ev.summary]) seen[ev.summary] = ttColor(ev.summary); });
+  const lg = document.getElementById('tt-legend');
+  if (lg) lg.innerHTML = Object.entries(seen).map(([name, col]) =>
+    `<div class="tt-legend-item"><div class="tt-legend-dot" style="background:${col.bg};border:1px solid ${col.text}"></div>${name}</div>`
+  ).join('');
+}
+
+function ttPrevWeek() { ttWeekOffset--; renderTimetable(); }
+function ttNextWeek() { ttWeekOffset++; renderTimetable(); }
+
+function clearTimetable() {
+  ttEvents = []; ttWeekOffset = 0; ttColorIdx = 0;
+  save('sit_ics_events', []); save('sit_ics_name', '');
+  const up = document.getElementById('tt-upload-section');
+  const tv = document.getElementById('tt-view');
+  const clr = document.getElementById('tt-clear-btn');
+  const fn = document.getElementById('tt-file-name');
+  if (up) up.style.display = '';
+  if (tv) tv.style.display = 'none';
+  if (clr) clr.style.display = 'none';
+  if (fn) fn.style.display = 'none';
+  const inp = document.getElementById('ics-file-input');
+  if (inp) inp.value = '';
+}
+
+/* ─────────────────────────────────────────────
+   EXPORT / IMPORT
+───────────────────────────────────────────── */
+function exportData() {
+  const payload = {
+    version: 2, links, alerts, countdowns,
+    ics_events: load('sit_ics_events', []),
+    ics_name:   load('sit_ics_name', ''),
+    layout_cols: layoutCols, panel_order: panelOrder,
+    panel_hidden: panelHidden, panel_colors: panelColors, panel_span: panelSpan,
+    dash_title: document.getElementById('dash-title').textContent,
+    dash_subtitle: document.getElementById('dash-subtitle').textContent,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'dashboard-data.json'; a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if (d.links)        { links = d.links;               save('sit_links', links); }
+      if (d.alerts)       { alerts = d.alerts;             save('sit_alerts', alerts); }
+      if (d.countdowns)   { countdowns = d.countdowns;     save('sit_cds', countdowns); }
+      if (d.layout_cols)  { layoutCols = d.layout_cols;    save('sit_layout_cols', layoutCols); }
+      if (d.panel_order)  { panelOrder = d.panel_order;    save('sit_panel_order', panelOrder); }
+      if (d.panel_hidden) { panelHidden = d.panel_hidden;  save('sit_panel_hidden', panelHidden); }
+      if (d.panel_colors) { panelColors = d.panel_colors;  save('sit_panel_colors', panelColors); }
+      if (d.panel_span)   { panelSpan = d.panel_span;      save('sit_panel_span', panelSpan); }
+      if (d.dash_title)   { save('sit_dash_title', d.dash_title); document.getElementById('dash-title').textContent = d.dash_title; }
+      if (d.dash_subtitle){ save('sit_dash_subtitle', d.dash_subtitle); document.getElementById('dash-subtitle').textContent = d.dash_subtitle; }
+      if (d.ics_events && d.ics_events.length) { save('sit_ics_events', d.ics_events); save('sit_ics_name', d.ics_name||''); }
+      setLayout(layoutCols);
+      renderPanels();
+      alert('Data imported successfully!');
+    } catch { alert('Invalid file format.'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+/* ─────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────── */
+const savedTitle = load('sit_dash_title', 'Student dashboard');
+const savedSubtitle = load('sit_dash_subtitle', '');
+document.getElementById('dash-title').textContent = savedTitle;
+document.getElementById('dash-subtitle').textContent = savedSubtitle ||
+  new Date().toLocaleDateString('en-SG', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+setLayout(layoutCols);
+renderPanels();
+</script>
 </body>
 </html>
