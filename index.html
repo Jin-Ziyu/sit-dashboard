@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIT Student Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f5f0;
+    --color-background-tertiary: #eeede8;
+    --color-background-info: #e6f1fb;
+    --color-background-warning: #faeeda;
+    --color-background-danger: #fcebeb;
+    --color-background-success: #eaf3de;
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-info: #0c447c;
+    --color-text-warning: #633806;
+    --color-text-danger: #791f1f;
+    --color-text-success: #27500a;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22);
+    --color-border-primary: rgba(0,0,0,0.35);
+    --color-border-info: #85b7eb;
+    --color-border-warning: #ef9f27;
+    --color-border-danger: #f09595;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #2a2a27;
+      --color-background-tertiary: #141412;
+      --color-background-info: #042c53;
+      --color-background-warning: #412402;
+      --color-background-danger: #501313;
+      --color-background-success: #173404;
+      --color-text-primary: #f0efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-info: #85b7eb;
+      --color-text-warning: #fac775;
+      --color-text-danger: #f09595;
+      --color-text-success: #97c459;
+      --color-border-tertiary: rgba(255,255,255,0.1);
+      --color-border-secondary: rgba(255,255,255,0.2);
+      --color-border-primary: rgba(255,255,255,0.35);
+      --color-border-info: #185fa5;
+      --color-border-warning: #854f0b;
+      --color-border-danger: #a32d2d;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); background: var(--color-background-tertiary); min-height: 100vh; padding: 1rem; }
+  .dashboard { max-width: 1100px; margin: 0 auto; }
+  .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding: 0.75rem 1rem; background: var(--color-background-primary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); }
+  .top-bar h1 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+  .top-bar span { font-size: 13px; color: var(--color-text-secondary); }
+  .edit-btn { font-size: 13px; padding: 6px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-primary); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .edit-btn:hover { background: var(--color-background-secondary); }
+  .edit-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  .grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1rem; }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+  .panel { background: var(--color-background-primary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 1rem; }
+  .panel-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; }
+  .links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+  .link-card { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); text-decoration: none; cursor: pointer; position: relative; transition: border-color 0.15s; background: var(--lc-bg, var(--color-background-secondary)); }
+  .link-card:hover { border-color: var(--color-border-primary); }
+  .link-card .lc-icon { font-size: 18px; color: var(--lc-text, var(--color-text-secondary)); }
+  .link-card .lc-name { font-size: 13px; font-weight: 500; color: var(--lc-text, var(--color-text-primary)); line-height: 1.3; }
+  .link-card .lc-tag { font-size: 11px; color: var(--lc-sub, var(--color-text-tertiary)); }
+  .link-card .del-btn { position: absolute; top: 6px; right: 6px; background: var(--color-background-danger); border: none; border-radius: 4px; cursor: pointer; color: var(--color-text-danger); width: 20px; height: 20px; display: none; align-items: center; justify-content: center; font-size: 12px; }
+  .link-card .color-btn { position: absolute; bottom: 6px; right: 6px; background: none; border: none; cursor: pointer; color: var(--lc-text, var(--color-text-tertiary)); width: 18px; height: 18px; display: none; align-items: center; justify-content: center; font-size: 13px; }
+  .edit-mode .link-card .del-btn { display: flex; }
+  .edit-mode .link-card .color-btn { display: flex; }
+  .link-card.add-card { border-style: dashed; justify-content: center; align-items: center; min-height: 72px; color: var(--color-text-tertiary); font-size: 13px; gap: 6px; background: transparent; }
+  .link-card.add-card:hover { color: var(--color-text-primary); border-color: var(--color-border-primary); }
+  .alert-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--ai-border, var(--color-border-warning)); background: var(--ai-bg, var(--color-background-warning)); margin-bottom: 8px; position: relative; }
+  .alert-item .ai-icon { font-size: 16px; color: var(--ai-text, var(--color-text-warning)); flex-shrink: 0; margin-top: 1px; }
+  .alert-item .ai-name { font-size: 13px; color: var(--ai-text, var(--color-text-primary)); font-weight: 500; }
+  .alert-item .ai-msg { font-size: 13px; color: var(--ai-text, var(--color-text-primary)); line-height: 1.5; }
+  .alert-item .ai-meta { font-size: 11px; color: var(--ai-sub, var(--color-text-secondary)); margin-top: 2px; }
+  .alert-item .del-btn { position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; color: var(--color-text-tertiary); display: none; font-size: 14px; }
+  .alert-item .color-btn { position: absolute; bottom: 8px; right: 8px; background: none; border: none; cursor: pointer; color: var(--ai-text, var(--color-text-tertiary)); display: none; font-size: 13px; }
+  .edit-mode .alert-item .del-btn { display: block; }
+  .edit-mode .alert-item .color-btn { display: block; }
+  .countdown-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1rem; }
+  .cd-card { border-radius: var(--border-radius-md); padding: 10px; text-align: center; border: 0.5px solid var(--cd-border, var(--color-border-tertiary)); background: var(--cd-bg, var(--color-background-secondary)); position: relative; }
+  .cd-num { font-size: 24px; font-weight: 500; color: var(--cd-text, var(--color-text-primary)); }
+  .cd-label { font-size: 11px; color: var(--cd-sub, var(--color-text-secondary)); margin-top: 2px; }
+  .cd-card.urgent .cd-num { color: var(--color-text-danger); }
+  .cd-card .del-btn { position: absolute; top: 4px; right: 4px; background: none; border: none; cursor: pointer; color: var(--color-text-tertiary); display: none; font-size: 12px; }
+  .cd-card .color-btn { position: absolute; bottom: 4px; right: 4px; background: none; border: none; cursor: pointer; color: var(--cd-text, var(--color-text-tertiary)); display: none; font-size: 12px; }
+  .edit-mode .cd-card .del-btn { display: block; }
+  .edit-mode .cd-card .color-btn { display: block; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-top: 6px; }
+  .cal-day-name { font-size: 11px; color: var(--color-text-tertiary); text-align: center; padding: 2px 0; }
+  .cal-day { font-size: 12px; text-align: center; padding: 5px 2px; border-radius: 4px; color: var(--color-text-secondary); }
+  .cal-day.today { background: var(--color-background-info); color: var(--color-text-info); font-weight: 500; border-radius: 50%; }
+  .cal-day.has-event { position: relative; }
+  .cal-day.has-event::after { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--color-text-warning); position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%); }
+  .cal-month { font-size: 13px; font-weight: 500; color: var(--color-text-primary); display: flex; align-items: center; justify-content: space-between; }
+  .cal-nav { background: none; border: none; cursor: pointer; color: var(--color-text-secondary); font-size: 16px; padding: 2px 6px; border-radius: 4px; }
+  .cal-nav:hover { background: var(--color-background-secondary); }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.25rem; width: 360px; max-width: 95vw; border: 0.5px solid var(--color-border-tertiary); }
+  .modal h3 { font-size: 16px; font-weight: 500; margin-bottom: 1rem; color: var(--color-text-primary); }
+  .modal label { display: block; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .modal input, .modal select { width: 100%; margin-bottom: 12px; font-size: 14px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); outline: none; }
+  .modal input:focus, .modal select:focus { border-color: var(--color-border-primary); }
+  .modal-actions { display: flex; gap: 8px; margin-top: 4px; justify-content: flex-end; }
+  .btn-primary { padding: 7px 16px; border-radius: var(--border-radius-md); background: var(--color-text-primary); color: var(--color-background-primary); border: none; cursor: pointer; font-size: 13px; }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-cancel { padding: 7px 16px; border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); cursor: pointer; font-size: 13px; }
+  .btn-cancel:hover { background: var(--color-background-secondary); }
+  .section-add-btn { font-size: 12px; padding: 4px 10px; border: 0.5px dashed var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-tertiary); cursor: pointer; display: none; align-items: center; gap: 4px; }
+  .section-add-btn:hover { color: var(--color-text-primary); }
+  .edit-mode .section-add-btn { display: flex; }
+  .color-swatch-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .color-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; }
+  .color-swatch:hover { transform: scale(1.15); }
+  .color-swatch.selected { border-color: var(--color-text-primary); }
+</style>
+</head>
+<body>
+
+<div class="dashboard" id="dashboard">
+  <div class="top-bar">
+    <div>
+      <h1>Student dashboard</h1>
+      <span id="date-display"></span>
+    </div>
+    <button class="edit-btn" id="edit-toggle" onclick="toggleEdit()">
+      <i class="ti ti-edit" aria-hidden="true"></i> Customise
+    </button>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="panel">
+        <div class="panel-title">Quick links</div>
+        <div class="links-grid" id="links-grid"></div>
+      </div>
+      <div class="panel" style="margin-top:1rem">
+        <div class="panel-title">
+          Alerts &amp; reminders
+          <button class="section-add-btn" onclick="openModal('modal-alert')"><i class="ti ti-plus" aria-hidden="true"></i> Add</button>
+        </div>
+        <div id="alerts-list"></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div class="panel">
+        <div class="panel-title">
+          Upcoming deadlines
+          <button class="section-add-btn" onclick="openModal('modal-countdown')"><i class="ti ti-plus" aria-hidden="true"></i> Add</button>
+        </div>
+        <div class="countdown-grid" id="countdown-grid"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Calendar</div>
+        <div class="cal-month">
+          <button class="cal-nav" onclick="prevMonth()"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+          <span id="cal-month-label"></span>
+          <button class="cal-nav" onclick="nextMonth()"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+        </div>
+        <div class="cal-grid" id="cal-day-names"></div>
+        <div class="cal-grid" id="cal-days"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Link Modal -->
+<div class="modal-overlay" id="modal-link" onclick="if(event.target===this)closeModal('modal-link')">
+  <div class="modal">
+    <h3>Add quick link</h3>
+    <label>Name</label><input type="text" id="link-name" placeholder="e.g. IN4SIT">
+    <label>URL</label><input type="text" id="link-url" placeholder="https://...">
+    <label>Category</label>
+    <select id="link-cat">
+      <option>Portal</option><option>Library</option><option>Tool</option><option>App</option><option>Forum</option><option>Other</option>
+    </select>
+    <label>Colour</label>
+    <div class="color-swatch-row" id="link-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-link')">Cancel</button>
+      <button class="btn-primary" onclick="saveLink()">Add link</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Alert Modal -->
+<div class="modal-overlay" id="modal-alert" onclick="if(event.target===this)closeModal('modal-alert')">
+  <div class="modal">
+    <h3>Add alert</h3>
+    <label>Module code</label><input type="text" id="alert-mod" placeholder="e.g. RSE3204">
+    <label>Message</label><input type="text" id="alert-msg" placeholder="e.g. Quiz 2 due Friday">
+    <label>Date (optional)</label><input type="date" id="alert-date">
+    <label>Colour</label>
+    <div class="color-swatch-row" id="alert-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-alert')">Cancel</button>
+      <button class="btn-primary" onclick="saveAlert()">Add alert</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Countdown Modal -->
+<div class="modal-overlay" id="modal-countdown" onclick="if(event.target===this)closeModal('modal-countdown')">
+  <div class="modal">
+    <h3>Add countdown</h3>
+    <label>Label</label><input type="text" id="cd-label-in" placeholder="e.g. Midterm exam">
+    <label>Date</label><input type="date" id="cd-date-in">
+    <label>Colour</label>
+    <div class="color-swatch-row" id="cd-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-countdown')">Cancel</button>
+      <button class="btn-primary" onclick="saveCountdown()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Color Picker Modal -->
+<div class="modal-overlay" id="modal-color" onclick="if(event.target===this)closeModal('modal-color')">
+  <div class="modal">
+    <h3>Choose colour</h3>
+    <div class="color-swatch-row" id="color-picker-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-color')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLORS = [
+  {id:'none',   label:'Default', bg:'',        border:'',        text:'',        sub:''},
+  {id:'blue',   label:'Blue',    bg:'#E6F1FB', border:'#85B7EB', text:'#0C447C', sub:'#185FA5'},
+  {id:'teal',   label:'Teal',    bg:'#E1F5EE', border:'#5DCAA5', text:'#085041', sub:'#0F6E56'},
+  {id:'purple', label:'Purple',  bg:'#EEEDFE', border:'#AFA9EC', text:'#3C3489', sub:'#534AB7'},
+  {id:'amber',  label:'Amber',   bg:'#FAEEDA', border:'#EF9F27', text:'#633806', sub:'#854F0B'},
+  {id:'coral',  label:'Coral',   bg:'#FAECE7', border:'#F0997B', text:'#712B13', sub:'#993C1D'},
+  {id:'pink',   label:'Pink',    bg:'#FBEAF0', border:'#ED93B1', text:'#72243E', sub:'#993556'},
+  {id:'green',  label:'Green',   bg:'#EAF3DE', border:'#97C459', text:'#27500A', sub:'#3B6D11'},
+  {id:'red',    label:'Red',     bg:'#FCEBEB', border:'#F09595', text:'#791F1F', sub:'#A32D2D'},
+  {id:'gray',   label:'Gray',    bg:'#F1EFE8', border:'#B4B2A9', text:'#444441', sub:'#5F5E5A'},
+];
+
+const CAT_ICONS = {Portal:'ti-layout-dashboard',Library:'ti-books',Tool:'ti-tool',App:'ti-device-mobile',Forum:'ti-messages',Other:'ti-link'};
+
+const DEFAULT_LINKS = [
+  {id:'l1', name:'IN4SIT',            url:'https://in4sit.singaporetech.edu.sg', cat:'Portal',  icon:'ti-school',            color:'blue'},
+  {id:'l2', name:'xSITE',             url:'https://xsite.singaporetech.edu.sg',  cat:'Portal',  icon:'ti-layout-dashboard',  color:'teal'},
+  {id:'l3', name:'Outlook',           url:'https://outlook.office365.com',        cat:'Portal',  icon:'ti-mail',              color:'blue'},
+  {id:'l4', name:'Library Databases', url:'https://libguides.singaporetech.edu.sg',cat:'Library',icon:'ti-books',             color:'purple'},
+  {id:'l5', name:'ONE SEARCH',        url:'https://onesearch.singaporetech.edu.sg',cat:'Library',icon:'ti-search',            color:'purple'},
+  {id:'l6', name:'Campus Wayfinder',  url:'#',                                    cat:'Tool',    icon:'ti-map-pin',           color:'green'},
+  {id:'l7', name:'Resource Booking',  url:'#',                                    cat:'Tool',    icon:'ti-calendar-event',    color:'green'},
+  {id:'l8', name:'Loan Media Equip.', url:'#',                                    cat:'Tool',    icon:'ti-device-laptop',     color:'gray'},
+  {id:'l9', name:'SIT 123RF',         url:'#',                                    cat:'Library', icon:'ti-photo',             color:'purple'},
+  {id:'l10',name:'MINDLINE',          url:'https://mindline.sg',                  cat:'Tool',    icon:'ti-heart',             color:'pink'},
+  {id:'l11',name:'Eight Hawker (W)',  url:'#',                                    cat:'Other',   icon:'ti-tools-kitchen-2',   color:'amber'},
+  {id:'l12',name:'Timetable Grabber', url:'#',                                    cat:'App',     icon:'ti-calendar',          color:'coral'},
+  {id:'l13',name:'Pulse',             url:'#',                                    cat:'App',     icon:'ti-activity',          color:'coral'},
+  {id:'l14',name:'CATES',             url:'#',                                    cat:'App',     icon:'ti-file-certificate',  color:'coral'},
+  {id:'l15',name:'SIT Student Forums',url:'#',                                    cat:'Forum',   icon:'ti-messages',          color:'teal'},
+];
+
+const DEFAULT_ALERTS = [
+  {id:'a1', mod:'General', msg:'Check timetable for Week 1 changes', date:'', color:'amber'},
+];
+
+function daysFromNow(d) {
+  const dt = new Date(); dt.setDate(dt.getDate() + d); return dt.toISOString().slice(0,10);
+}
+const DEFAULT_COUNTDOWNS = [
+  {id:'c1', label:'Decision Quiz 2',  date:daysFromNow(2),  color:'red'},
+  {id:'c2', label:'Assignments due',  date:daysFromNow(10), color:'amber'},
+  {id:'c3', label:'End of trimester', date:daysFromNow(70), color:'teal'},
+];
+
+function load(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } }
+function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+
+let links      = load('sit_links', DEFAULT_LINKS);
+let alerts     = load('sit_alerts', DEFAULT_ALERTS);
+let countdowns = load('sit_cds', DEFAULT_COUNTDOWNS);
+let editMode   = false;
+let calYear, calMonth;
+const todayDate = new Date();
+calYear = todayDate.getFullYear();
+calMonth = todayDate.getMonth();
+let colorTarget = null;
+const selectedColors = {};
+
+function getColor(id) { return COLORS.find(c => c.id === id) || COLORS[0]; }
+
+function colorStyle(colorId, type) {
+  const c = getColor(colorId);
+  if (!c.bg) return '';
+  if (type === 'link')  return `--lc-bg:${c.bg};--lc-text:${c.text};--lc-sub:${c.sub};border-color:${c.border}`;
+  if (type === 'alert') return `--ai-bg:${c.bg};--ai-text:${c.text};--ai-sub:${c.sub};--ai-border:${c.border}`;
+  if (type === 'cd')    return `--cd-bg:${c.bg};--cd-text:${c.text};--cd-sub:${c.sub};--cd-border:${c.border}`;
+  return '';
+}
+
+function toggleEdit() {
+  editMode = !editMode;
+  document.getElementById('dashboard').classList.toggle('edit-mode', editMode);
+  const btn = document.getElementById('edit-toggle');
+  btn.classList.toggle('active', editMode);
+  btn.innerHTML = editMode
+    ? '<i class="ti ti-check" aria-hidden="true"></i> Done'
+    : '<i class="ti ti-edit" aria-hidden="true"></i> Customise';
+  renderAll();
+}
+
+function renderLinks() {
+  const g = document.getElementById('links-grid');
+  g.innerHTML = '';
+  links.forEach(lk => {
+    const c = document.createElement('a');
+    c.className = 'link-card';
+    c.href = editMode ? '#' : lk.url;
+    if (!editMode && lk.url !== '#') c.target = '_blank';
+    if (editMode) c.onclick = e => e.preventDefault();
+    const style = colorStyle(lk.color, 'link');
+    if (style) c.setAttribute('style', style);
+    const icon = lk.icon || (CAT_ICONS[lk.cat] || 'ti-link');
+    c.innerHTML =
+      `<i class="ti ${icon} lc-icon" aria-hidden="true"></i>` +
+      `<span class="lc-name">${lk.name}</span>` +
+      `<span class="lc-tag">${lk.cat}</span>` +
+      `<button class="del-btn" onclick="deleteItem('links','${lk.id}');event.stopPropagation();event.preventDefault()" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('links','${lk.id}');event.stopPropagation();event.preventDefault()" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+    g.appendChild(c);
+  });
+  if (editMode) {
+    const add = document.createElement('div');
+    add.className = 'link-card add-card';
+    add.innerHTML = '<i class="ti ti-plus" aria-hidden="true"></i><span>Add link</span>';
+    add.onclick = () => openModal('modal-link');
+    g.appendChild(add);
+  }
+}
+
+function renderAlerts() {
+  const l = document.getElementById('alerts-list');
+  l.innerHTML = '';
+  if (!alerts.length) {
+    l.innerHTML = '<p style="font-size:13px;color:var(--color-text-tertiary);text-align:center;padding:1rem">No alerts</p>';
+    return;
+  }
+  alerts.forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'alert-item';
+    const style = colorStyle(a.color, 'alert');
+    if (style) d.setAttribute('style', style);
+    d.innerHTML =
+      `<i class="ti ti-alert-triangle ai-icon" aria-hidden="true"></i>` +
+      `<div><div class="ai-name">${a.mod}</div><div class="ai-msg">${a.msg}</div>${a.date ? `<div class="ai-meta">${a.date}</div>` : ''}</div>` +
+      `<button class="del-btn" onclick="deleteItem('alerts','${a.id}')" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('alerts','${a.id}')" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+    l.appendChild(d);
+  });
+}
+
+function renderCountdowns() {
+  const g = document.getElementById('countdown-grid');
+  g.innerHTML = '';
+  countdowns.forEach(c => {
+    const d = daysUntil(c.date);
+    const el = document.createElement('div');
+    el.className = 'cd-card' + (d <= 3 && !c.color ? ' urgent' : '');
+    const style = colorStyle(c.color, 'cd');
+    if (style) el.setAttribute('style', style);
+    el.innerHTML =
+      `<div class="cd-num">${d < 0 ? 'Past' : d}</div>` +
+      `<div class="cd-label">${c.label}</div>` +
+      `<button class="del-btn" onclick="deleteItem('countdowns','${c.id}')" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('countdowns','${c.id}')" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+    g.appendChild(el);
+  });
+}
+
+function daysUntil(iso) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const t = new Date(iso); t.setHours(0,0,0,0);
+  return Math.round((t - now) / 86400000);
+}
+
+function renderCalendar() {
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent = months[calMonth] + ' ' + calYear;
+  document.getElementById('cal-day-names').innerHTML = 'MTWTFSS'.split('').map(d => `<div class="cal-day-name">${d}</div>`).join('');
+  const daysEl = document.getElementById('cal-days');
+  daysEl.innerHTML = '';
+  const first = new Date(calYear, calMonth, 1).getDay();
+  const offset = first === 0 ? 6 : first - 1;
+  const total = new Date(calYear, calMonth + 1, 0).getDate();
+  const eventDates = countdowns.map(c => c.date);
+  for (let i = 0; i < offset; i++) daysEl.appendChild(document.createElement('div'));
+  for (let d = 1; d <= total; d++) {
+    const el = document.createElement('div');
+    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = todayDate.getFullYear()===calYear && todayDate.getMonth()===calMonth && todayDate.getDate()===d;
+    el.className = 'cal-day' + (isToday ? ' today' : '') + (eventDates.includes(iso) ? ' has-event' : '');
+    el.textContent = d;
+    daysEl.appendChild(el);
+  }
+}
+
+function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+
+function renderAll() { renderLinks(); renderAlerts(); renderCountdowns(); renderCalendar(); }
+
+function deleteItem(type, id) {
+  if (type === 'links')      { links = links.filter(x => x.id !== id); save('sit_links', links); renderLinks(); }
+  else if (type === 'alerts'){ alerts = alerts.filter(x => x.id !== id); save('sit_alerts', alerts); renderAlerts(); }
+  else                       { countdowns = countdowns.filter(x => x.id !== id); save('sit_cds', countdowns); renderCountdowns(); renderCalendar(); }
+}
+
+function renderSwatchRow(rowId, selectedId, modalKey) {
+  const row = document.getElementById(rowId);
+  if (!row) return;
+  row.innerHTML = COLORS.map(c => {
+    const bg = c.bg || 'var(--color-background-secondary)';
+    const sel = c.id === selectedId;
+    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="selectModalColor('${c.id}','${modalKey}')" title="${c.label}"></div>`;
+  }).join('');
+}
+
+function selectModalColor(colorId, modalKey) {
+  selectedColors[modalKey] = colorId;
+  const rowMap = {'modal-link':'link-color-row','modal-alert':'alert-color-row','modal-countdown':'cd-color-row'};
+  renderSwatchRow(rowMap[modalKey], colorId, modalKey);
+}
+
+function openModal(id) {
+  selectedColors[id] = 'none';
+  document.getElementById(id).classList.add('open');
+  const rowMap = {'modal-link':'link-color-row','modal-alert':'alert-color-row','modal-countdown':'cd-color-row'};
+  if (rowMap[id]) renderSwatchRow(rowMap[id], 'none', id);
+  if (id === 'modal-link') { document.getElementById('link-name').value=''; document.getElementById('link-url').value='https://'; document.getElementById('link-cat').value='Portal'; }
+  if (id === 'modal-alert') { document.getElementById('alert-mod').value=''; document.getElementById('alert-msg').value=''; document.getElementById('alert-date').value=''; }
+  if (id === 'modal-countdown') { document.getElementById('cd-label-in').value=''; document.getElementById('cd-date-in').value=''; }
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function openColorPicker(type, id) {
+  colorTarget = { type, id };
+  const arr = type==='links'?links:type==='alerts'?alerts:countdowns;
+  const current = arr.find(x=>x.id===id)?.color || 'none';
+  const row = document.getElementById('color-picker-row');
+  row.innerHTML = COLORS.map(c => {
+    const bg = c.bg || 'var(--color-background-secondary)';
+    const sel = c.id === current;
+    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="applyColor('${c.id}')" title="${c.label}"></div>`;
+  }).join('');
+  document.getElementById('modal-color').classList.add('open');
+}
+
+function applyColor(colorId) {
+  const { type, id } = colorTarget;
+  if (type === 'links')       { const l = links.find(x=>x.id===id); if(l) l.color=colorId; save('sit_links',links); renderLinks(); }
+  else if (type === 'alerts') { const a = alerts.find(x=>x.id===id); if(a) a.color=colorId; save('sit_alerts',alerts); renderAlerts(); }
+  else                        { const c = countdowns.find(x=>x.id===id); if(c) c.color=colorId; save('sit_cds',countdowns); renderCountdowns(); }
+  closeModal('modal-color');
+}
+
+function saveLink() {
+  const n = document.getElementById('link-name').value.trim();
+  const u = document.getElementById('link-url').value.trim();
+  const cat = document.getElementById('link-cat').value;
+  if (!n) return;
+  links.push({ id:'l'+Date.now(), name:n, url:u||'#', cat, icon:CAT_ICONS[cat]||'ti-link', color:selectedColors['modal-link']||'none' });
+  save('sit_links', links); closeModal('modal-link'); renderLinks();
+}
+
+function saveAlert() {
+  const mod = document.getElementById('alert-mod').value.trim();
+  const msg = document.getElementById('alert-msg').value.trim();
+  const date = document.getElementById('alert-date').value;
+  if (!msg) return;
+  alerts.push({ id:'a'+Date.now(), mod:mod||'General', msg, date, color:selectedColors['modal-alert']||'amber' });
+  save('sit_alerts', alerts); closeModal('modal-alert'); renderAlerts();
+}
+
+function saveCountdown() {
+  const label = document.getElementById('cd-label-in').value.trim();
+  const date  = document.getElementById('cd-date-in').value;
+  if (!label || !date) return;
+  countdowns.push({ id:'c'+Date.now(), label, date, color:selectedColors['modal-countdown']||'none' });
+  save('sit_cds', countdowns); closeModal('modal-countdown'); renderCountdowns(); renderCalendar();
+}
+
+document.getElementById('date-display').textContent = new Date().toLocaleDateString('en-SG', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+renderAll();
+</script>
+</body>
+</html>
