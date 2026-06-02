@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIT Student Dashboard</title>
+<title>SIT Student Dashboard Template</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
   :root {
@@ -239,10 +239,12 @@
   .tt-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--color-text-secondary); }
   .tt-legend-dot { width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; }
 
-  /* Export/Import */
-  .data-bar { display: flex; gap: 10px; margin-top: 0.5rem; justify-content: flex-end; }
+  /* Export/Import/Share styles */
+  .data-bar { display: flex; gap: 10px; margin-top: 0.5rem; justify-content: flex-end; flex-wrap: wrap; }
   .data-btn { font-size: 13px; font-weight: 600; padding: 8px 14px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
   .data-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); }
+  .data-btn.share-btn { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  .data-btn.share-btn:hover { opacity: 0.9; }
 
   /* Animations */
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
@@ -252,7 +254,6 @@
 <body>
 <div class="dashboard" id="dashboard">
 
-  <!-- Top bar -->
   <div class="top-bar">
     <div class="top-bar-left">
       <div class="top-bar-title" id="dash-title" contenteditable="false" spellcheck="false">Student dashboard</div>
@@ -264,7 +265,6 @@
     </div>
   </div>
 
-  <!-- Layout bar -->
   <div class="layout-bar" id="layout-bar">
     <span class="layout-bar-label">Columns</span>
     <div class="layout-opt" id="lopt-1" onclick="setLayout(1)" title="Single column">
@@ -284,18 +284,16 @@
     <div id="hidden-chips" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
   </div>
 
-  <!-- Panels container -->
   <div class="panels-container cols-2" id="panels-container"></div>
 
-  <!-- Export / Import -->
   <div class="data-bar">
-    <button class="data-btn" onclick="exportData()"><i class="ti ti-download" aria-hidden="true"></i> Export data</button>
-    <button class="data-btn" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload" aria-hidden="true"></i> Import data</button>
+    <button class="data-btn share-btn" onclick="generateShareLink()"><i class="ti ti-share" aria-hidden="true"></i> Get Shareable Link</button>
+    <button class="data-btn" onclick="exportData()"><i class="ti ti-download" aria-hidden="true"></i> Export backup (.json)</button>
+    <button class="data-btn" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload" aria-hidden="true"></i> Restore backup</button>
     <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
   </div>
 </div>
 
-<!-- Add Link Modal -->
 <div class="modal-overlay" id="modal-link" onclick="if(event.target===this)closeModal('modal-link')">
   <div class="modal">
     <h3>Add quick link</h3>
@@ -312,7 +310,6 @@
   </div>
 </div>
 
-<!-- Add Alert Modal -->
 <div class="modal-overlay" id="modal-alert" onclick="if(event.target===this)closeModal('modal-alert')">
   <div class="modal">
     <h3>Add alert</h3>
@@ -328,7 +325,6 @@
   </div>
 </div>
 
-<!-- Add Countdown Modal -->
 <div class="modal-overlay" id="modal-countdown" onclick="if(event.target===this)closeModal('modal-countdown')">
   <div class="modal">
     <h3>Add countdown</h3>
@@ -343,7 +339,6 @@
   </div>
 </div>
 
-<!-- Color Picker Modal -->
 <div class="modal-overlay" id="modal-color" onclick="if(event.target===this)closeModal('modal-color')">
   <div class="modal">
     <h3>Choose colour</h3>
@@ -388,19 +383,13 @@ const DEFAULT_LINKS = [
   {id:'l2', name:'xSITE',             url:'https://xsite.singaporetech.edu.sg',  cat:'Portal',  icon:'ti-layout-dashboard',  color:'teal'},
   {id:'l3', name:'Outlook',           url:'https://outlook.office365.com',        cat:'Portal',  icon:'ti-mail',              color:'blue'},
   {id:'l4', name:'Library Databases', url:'https://libguides.singaporetech.edu.sg',cat:'Library',icon:'ti-books',             color:'purple'},
-  {id:'l5', name:'ONE SEARCH',        url:'https://onesearch.singaporetech.edu.sg',cat:'Library',icon:'ti-search',            color:'purple'},
-  {id:'l6', name:'Campus Wayfinder',  url:'#',                                    cat:'Tool',    icon:'ti-map-pin',           color:'green'},
-  {id:'l7', name:'Resource Booking',  url:'#',                                    cat:'Tool',    icon:'ti-calendar-event',    color:'green'},
-  {id:'l8', name:'Loan Media Equip.', url:'#',                                    cat:'Tool',    icon:'ti-device-laptop',     color:'gray'},
 ];
 const DEFAULT_ALERTS = [
-  {id:'a1', mod:'General', msg:'Check timetable for Week 1 changes', date:'', color:'amber'},
+  {id:'a1', mod:'General', msg:'Welcome to your web template! Hit Customise above to change anything.', date:'', color:'blue'},
 ];
 function daysFromNow(d) { const dt = new Date(); dt.setDate(dt.getDate() + d); return dt.toISOString().slice(0,10); }
 const DEFAULT_COUNTDOWNS = [
-  {id:'c1', label:'Decision Quiz 2',  date:daysFromNow(2),  color:'red'},
-  {id:'c2', label:'Assignments due',  date:daysFromNow(10), color:'amber'},
-  {id:'c3', label:'End of trimester', date:daysFromNow(70), color:'teal'},
+  {id:'c1', label:'Assignments due',  date:daysFromNow(10), color:'amber'},
 ];
 
 const PANEL_DEFS = [
@@ -414,16 +403,35 @@ const PANEL_DEFS = [
 function load(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } }
 function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
 
-let links      = load('sit_links', DEFAULT_LINKS);
-let alerts     = load('sit_alerts', DEFAULT_ALERTS);
-let countdowns = load('sit_cds', DEFAULT_COUNTDOWNS);
+// URL Configuration Parsing (Allows sharing layouts directly via query links)
+function parseUrlConfig() {
+  const params = new URLSearchParams(window.location.search);
+  const encodedData = params.get('config');
+  if (encodedData) {
+    try {
+      const decoded = JSON.parse(atob(encodedData));
+      return decoded;
+    } catch(e) {
+      console.error("Failed to parse configurations from URL path string.", e);
+    }
+  }
+  return null;
+}
+
+const urlData = parseUrlConfig();
+
+let links      = urlData?.links       || load('sit_links', DEFAULT_LINKS);
+let alerts     = urlData?.alerts      || load('sit_alerts', DEFAULT_ALERTS);
+let countdowns = urlData?.countdowns  || load('sit_cds', DEFAULT_COUNTDOWNS);
 let editMode   = false;
-let layoutCols = load('sit_layout_cols', 2);
-let panelOrder = load('sit_panel_order', PANEL_DEFS.map(p=>p.id));
-let panelHidden= load('sit_panel_hidden', []);
-let panelColors= load('sit_panel_colors', {});
-let panelSpan  = load('sit_panel_span', {});
-let dashTitle  = load('sit_dash_title', 'Student dashboard');
+let layoutCols = urlData?.layout_cols || load('sit_layout_cols', 2);
+let panelOrder = urlData?.panel_order || load('sit_panel_order', PANEL_DEFS.map(p=>p.id));
+let panelHidden= urlData?.panel_hidden|| load('sit_panel_hidden', []);
+let panelColors= urlData?.panel_colors|| load('sit_panel_colors', {});
+let panelSpan  = urlData?.panel_span  || load('sit_panel_span', {});
+let dashTitle  = urlData?.dash_title  || load('sit_dash_title', 'Student dashboard');
+let dashSubtitle=urlData?.dash_subtitle|| load('sit_dash_subtitle', '');
+
 let calYear, calMonth;
 const todayDate = new Date();
 calYear = todayDate.getFullYear();
@@ -438,7 +446,7 @@ PANEL_DEFS.forEach(p => { if (!panelOrder.includes(p.id)) panelOrder.push(p.id);
 ───────────────────────────────────────────── */
 function setLayout(n) {
   layoutCols = n;
-  save('sit_layout_cols', n);
+  if(!urlData) save('sit_layout_cols', n);
   const c = document.getElementById('panels-container');
   c.className = `panels-container cols-${n}`;
   [1,2,3].forEach(i => document.getElementById('lopt-'+i)?.classList.toggle('selected', i===n));
@@ -465,7 +473,7 @@ function renderHiddenChips() {
 
 function showPanel(id) {
   panelHidden = panelHidden.filter(x=>x!==id);
-  save('sit_panel_hidden', panelHidden);
+  if(!urlData) save('sit_panel_hidden', panelHidden);
   renderPanels();
   renderHiddenChips();
 }
@@ -592,26 +600,18 @@ function buildPanelInner(id) {
 
 function hidePanel(id) {
   panelHidden.push(id);
-  save('sit_panel_hidden', panelHidden);
+  if(!urlData) save('sit_panel_hidden', panelHidden);
   renderPanels();
   renderHiddenChips();
 }
 
 function setPanelColor(panelId, colorId) {
   panelColors[panelId] = colorId;
-  save('sit_panel_colors', panelColors);
+  if(!urlData) save('sit_panel_colors', panelColors);
   const panel = document.getElementById('panel-'+panelId);
   if (panel) {
     const style = getPanelColorStyle(panelId);
     panel.setAttribute('style', style);
-  }
-  const popup = document.getElementById('pcp-'+panelId);
-  if (popup) {
-    popup.querySelector('.pcp-swatches').innerHTML = PANEL_COLORS.map(c=>{
-      const bg = c.bg || 'var(--color-background-secondary)';
-      const sel = c.id===colorId;
-      return `<div class="pcp-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="setPanelColor('${panelId}','${c.id}')" title="${c.label}"></div>`;
-    }).join('');
   }
 }
 
@@ -629,7 +629,7 @@ document.addEventListener('click', e => {
 function togglePanelSpan(id) {
   if (panelSpan[id]) { delete panelSpan[id]; }
   else { panelSpan[id] = layoutCols; }
-  save('sit_panel_span', panelSpan);
+  if(!urlData) save('sit_panel_span', panelSpan);
   renderPanels();
 }
 
@@ -662,7 +662,7 @@ function onDrop(e) {
   const tgtIdx = panelOrder.indexOf(targetId);
   panelOrder.splice(srcIdx, 1);
   panelOrder.splice(tgtIdx, 0, dragSrcId);
-  save('sit_panel_order', panelOrder);
+  if(!urlData) save('sit_panel_order', panelOrder);
   renderPanels();
 }
 
@@ -682,7 +682,7 @@ function toggleEdit() {
   const sub   = document.getElementById('dash-subtitle');
   title.contentEditable = editMode ? 'true' : 'false';
   sub.contentEditable   = editMode ? 'true' : 'false';
-  if (!editMode) {
+  if (!editMode && !urlData) {
     save('sit_dash_title', title.textContent.trim() || 'Student dashboard');
     save('sit_dash_subtitle', sub.textContent.trim());
   }
@@ -713,7 +713,6 @@ function renderLinks() {
     c.className = 'link-card';
     c.href = editMode ? '#' : lk.url;
     if (!editMode && lk.url !== '#') c.target = '_blank';
-    if (editMode) c.onclick = e => e.preventDefault();
     const style = colorStyle(lk.color, 'link');
     if (style) c.setAttribute('style', style);
     const icon = lk.icon || (CAT_ICONS[lk.cat] || 'ti-link');
@@ -721,14 +720,14 @@ function renderLinks() {
       `<i class="ti ${icon} lc-icon" aria-hidden="true"></i>` +
       `<span class="lc-name">${lk.name}</span>` +
       `<span class="lc-tag">${lk.cat}</span>` +
-      `<button class="del-btn" onclick="deleteItem('links','${lk.id}');event.stopPropagation();event.preventDefault()" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
-      `<button class="color-btn" onclick="openColorPicker('links','${lk.id}');event.stopPropagation();event.preventDefault()" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+      `<button class="del-btn" onclick="deleteItem('links','${lk.id}');event.stopPropagation();event.preventDefault()"><i class="ti ti-x"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('links','${lk.id}');event.stopPropagation();event.preventDefault()"><i class="ti ti-palette"></i></button>`;
     g.appendChild(c);
   });
   if (editMode) {
     const add = document.createElement('div');
     add.className = 'link-card add-card';
-    add.innerHTML = '<i class="ti ti-plus" aria-hidden="true"></i><span>Add link</span>';
+    add.innerHTML = '<i class="ti ti-plus"></i><span>Add link</span>';
     add.onclick = () => openModal('modal-link');
     g.appendChild(add);
   }
@@ -738,17 +737,17 @@ function renderAlerts() {
   const l = document.getElementById('alerts-list');
   if (!l) return;
   l.innerHTML = '';
-  if (!alerts.length) { l.innerHTML = '<p style="font-size:13px;color:var(--color-text-tertiary);text-align:center;padding:1.5rem">No active updates.</p>'; return; }
+  if (!alerts.length) { l.innerHTML = '<p style="font-size:13px;color:var(--color-text-tertiary);text-align:center;padding:1.5rem">No alerts.</p>'; return; }
   alerts.forEach(a => {
     const d = document.createElement('div');
     d.className = 'alert-item';
     const style = colorStyle(a.color, 'alert');
     if (style) d.setAttribute('style', style);
     d.innerHTML =
-      `<i class="ti ti-alert-triangle ai-icon" aria-hidden="true"></i>` +
+      `<i class="ti ti-alert-triangle ai-icon"></i>` +
       `<div><div class="ai-name">${a.mod}</div><div class="ai-msg">${a.msg}</div>${a.date?`<div class="ai-meta">${a.date}</div>`:''}</div>` +
-      `<button class="del-btn" onclick="deleteItem('alerts','${a.id}')" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
-      `<button class="color-btn" onclick="openColorPicker('alerts','${a.id}')" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+      `<button class="del-btn" onclick="deleteItem('alerts','${a.id}')"><i class="ti ti-x"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('alerts','${a.id}')"><i class="ti ti-palette"></i></button>`;
     l.appendChild(d);
   });
 }
@@ -766,8 +765,8 @@ function renderCountdowns() {
     el.innerHTML =
       `<div class="cd-num">${d < 0 ? 'Past' : d}</div>` +
       `<div class="cd-label">${c.label}</div>` +
-      `<button class="del-btn" onclick="deleteItem('countdowns','${c.id}')" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
-      `<button class="color-btn" onclick="openColorPicker('countdowns','${c.id}')" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
+      `<button class="del-btn" onclick="deleteItem('countdowns','${c.id}')"><i class="ti ti-x"></i></button>` +
+      `<button class="color-btn" onclick="openColorPicker('countdowns','${c.id}')"><i class="ti ti-palette"></i></button>`;
     g.appendChild(el);
   });
 }
@@ -805,13 +804,13 @@ function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--;
 function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
 
 function deleteItem(type, id) {
-  if (type === 'links')       { links = links.filter(x => x.id !== id); save('sit_links', links); renderLinks(); }
-  else if (type === 'alerts') { alerts = alerts.filter(x => x.id !== id); save('sit_alerts', alerts); renderAlerts(); }
-  else                        { countdowns = countdowns.filter(x => x.id !== id); save('sit_cds', countdowns); renderCountdowns(); renderCalendar(); }
+  if (type === 'links')       { links = links.filter(x => x.id !== id); if(!urlData) save('sit_links', links); renderLinks(); }
+  else if (type === 'alerts') { alerts = alerts.filter(x => x.id !== id); if(!urlData) save('sit_alerts', alerts); renderAlerts(); }
+  else                        { countdowns = countdowns.filter(x => x.id !== id); if(!urlData) save('sit_cds', countdowns); renderCountdowns(); renderCalendar(); }
 }
 
 /* ─────────────────────────────────────────────
-   MODALS
+   MODALS & COLOUR SYSTEM
 ───────────────────────────────────────────── */
 function renderSwatchRow(rowId, selectedId, modalKey) {
   const row = document.getElementById(rowId);
@@ -819,7 +818,7 @@ function renderSwatchRow(rowId, selectedId, modalKey) {
   row.innerHTML = COLORS.map(c => {
     const bg = c.bg || 'var(--color-background-secondary)';
     const sel = c.id === selectedId;
-    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="selectModalColor('${c.id}','${modalKey}')" title="${c.label}"></div>`;
+    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="selectModalColor('${c.id}','${modalKey}')"></div>`;
   }).join('');
 }
 function selectModalColor(colorId, modalKey) {
@@ -832,11 +831,9 @@ function openModal(id) {
   document.getElementById(id).classList.add('open');
   const rowMap = {'modal-link':'link-color-row','modal-alert':'alert-color-row','modal-countdown':'cd-color-row'};
   if (rowMap[id]) renderSwatchRow(rowMap[id], 'none', id);
-  if (id === 'modal-link') { document.getElementById('link-name').value=''; document.getElementById('link-url').value='https://'; document.getElementById('link-cat').value='Portal'; }
-  if (id === 'modal-alert') { document.getElementById('alert-mod').value=''; document.getElementById('alert-msg').value=''; document.getElementById('alert-date').value=''; }
-  if (id === 'modal-countdown') { document.getElementById('cd-label-in').value=''; document.getElementById('cd-date-in').value=''; }
 }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
 function openColorPicker(type, id) {
   colorTarget = { type, id };
   const arr = type==='links'?links:type==='alerts'?alerts:countdowns;
@@ -845,24 +842,25 @@ function openColorPicker(type, id) {
   row.innerHTML = COLORS.map(c => {
     const bg = c.bg || 'var(--color-background-secondary)';
     const sel = c.id === current;
-    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="applyColor('${c.id}')" title="${c.label}"></div>`;
+    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="applyColor('${c.id}')"></div>`;
   }).join('');
   document.getElementById('modal-color').classList.add('open');
 }
 function applyColor(colorId) {
   const { type, id } = colorTarget;
-  if (type === 'links')       { const l = links.find(x=>x.id===id); if(l) l.color=colorId; save('sit_links',links); renderLinks(); }
-  else if (type === 'alerts') { const a = alerts.find(x=>x.id===id); if(a) a.color=colorId; save('sit_alerts',alerts); renderAlerts(); }
-  else                        { const c = countdowns.find(x=>x.id===id); if(c) c.color=colorId; save('sit_cds',countdowns); renderCountdowns(); }
+  if (type === 'links')       { const l = links.find(x=>x.id===id); if(l) l.color=colorId; if(!urlData) save('sit_links',links); renderLinks(); }
+  else if (type === 'alerts') { const a = alerts.find(x=>x.id===id); if(a) a.color=colorId; if(!urlData) save('sit_alerts',alerts); renderAlerts(); }
+  else                        { const c = countdowns.find(x=>x.id===id); if(c) c.color=colorId; if(!urlData) save('sit_cds',countdowns); renderCountdowns(); }
   closeModal('modal-color');
 }
+
 function saveLink() {
   const n = document.getElementById('link-name').value.trim();
   const u = document.getElementById('link-url').value.trim();
   const cat = document.getElementById('link-cat').value;
   if (!n) return;
   links.push({ id:'l'+Date.now(), name:n, url:u||'#', cat, icon:CAT_ICONS[cat]||'ti-link', color:selectedColors['modal-link']||'none' });
-  save('sit_links', links); closeModal('modal-link'); renderLinks();
+  if(!urlData) save('sit_links', links); closeModal('modal-link'); renderLinks();
 }
 function saveAlert() {
   const mod = document.getElementById('alert-mod').value.trim();
@@ -870,27 +868,24 @@ function saveAlert() {
   const date = document.getElementById('alert-date').value;
   if (!msg) return;
   alerts.push({ id:'a'+Date.now(), mod:mod||'General', msg, date, color:selectedColors['modal-alert']||'amber' });
-  save('sit_alerts', alerts); closeModal('modal-alert'); renderAlerts();
+  if(!urlData) save('sit_alerts', alerts); closeModal('modal-alert'); renderAlerts();
 }
 function saveCountdown() {
   const label = document.getElementById('cd-label-in').value.trim();
   const date  = document.getElementById('cd-date-in').value;
   if (!label || !date) return;
   countdowns.push({ id:'c'+Date.now(), label, date, color:selectedColors['modal-countdown']||'none' });
-  save('sit_cds', countdowns); closeModal('modal-countdown'); renderCountdowns(); renderCalendar();
+  if(!urlData) save('sit_cds', countdowns); closeModal('modal-countdown'); renderCountdowns(); renderCalendar();
 }
 
 /* ─────────────────────────────────────────────
-   ICS TIMETABLE
+   ICS TIMETABLE SYSTEM
 ───────────────────────────────────────────── */
 const TT_COLORS = [
   {bg:'var(--color-background-info)',text:'var(--color-text-info)'},
   {bg:'#e6fffa',text:'#234e52'},
   {bg:'#f3f0ff',text:'#5f3dc4'},
   {bg:'var(--color-background-warning)',text:'var(--color-text-warning)'},
-  {bg:'#fff4e6',text:'#d9480f'},
-  {bg:'#fff0f6',text:'#a61e4d'},
-  {bg:'var(--color-background-success)',text:'var(--color-text-success)'},
 ];
 const ttColorMap = {};
 let ttColorIdx = 0;
@@ -902,8 +897,8 @@ let ttEvents = [];
 let ttWeekOffset = 0;
 
 function restoreTimetable() {
-  const saved = load('sit_ics_events', []);
-  const name  = load('sit_ics_name', '');
+  const saved = urlData?.ics_events || load('sit_ics_events', []);
+  const name  = urlData?.ics_name   || load('sit_ics_name', '');
   if (saved && saved.length) showTimetable(saved, name || 'timetable.ics');
   const dz = document.getElementById('tt-drop-zone');
   if (dz) {
@@ -923,9 +918,8 @@ function processIcsFile(file) {
   const reader = new FileReader();
   reader.onload = ev => {
     const events = parseIcs(ev.target.result);
-    if (!events.length) { alert('No events found in this .ics file.'); return; }
-    save('sit_ics_events', events);
-    save('sit_ics_name', file.name);
+    if (!events.length) { alert('No events found in file.'); return; }
+    if(!urlData) { save('sit_ics_events', events); save('sit_ics_name', file.name); }
     showTimetable(events, file.name);
   };
   reader.readAsText(file);
@@ -960,9 +954,12 @@ function buildEvent(raw) {
   const start = parseIcsDate(raw['DTSTART']);
   const end   = parseIcsDate(raw['DTEND']) || start;
   if (!start) return null;
-  const summary  = (raw['SUMMARY']  || 'Untitled').replace(/\\n/g,'\n').replace(/\\,/g,',');
-  const location = (raw['LOCATION'] || '').replace(/\\n/g,' ').replace(/\\,/g,',');
-  return { summary, location, start: start.toISOString(), end: end.toISOString() };
+  return { 
+    summary: (raw['SUMMARY'] || 'Untitled').replace(/\\n/g,'\n').replace(/\\,/g,','), 
+    location: (raw['LOCATION'] || '').replace(/\\n/g,' ').replace(/\\,/g,','), 
+    start: start.toISOString(), 
+    end: end.toISOString() 
+  };
 }
 
 function getWeekStart(offset) {
@@ -974,7 +971,6 @@ function getWeekStart(offset) {
 
 function showTimetable(events, fileName) {
   ttEvents = events;
-  ttColorIdx = 0; Object.keys(ttColorMap).forEach(k => delete ttColorMap[k]);
   const up = document.getElementById('tt-upload-section');
   const tv = document.getElementById('tt-view');
   const clr = document.getElementById('tt-clear-btn');
@@ -982,7 +978,7 @@ function showTimetable(events, fileName) {
   if (up) up.style.display = 'none';
   if (tv) tv.style.display = 'block';
   if (clr) clr.style.display = '';
-  if (fn) { fn.style.display = 'flex'; fn.innerHTML = `<i class="ti ti-check" aria-hidden="true"></i> ${fileName}`; }
+  if (fn) { fn.style.display = 'flex'; fn.innerHTML = `<i class="ti ti-check"></i> ${fileName}`; }
   ttWeekOffset = 0;
   renderTimetable();
 }
@@ -1001,7 +997,7 @@ function renderTimetable() {
   const allThisWeek = dayEvents.flat();
   const container = document.getElementById('tt-grid-container');
   if (!container) return;
-  if (!allThisWeek.length) { container.innerHTML = '<div class="tt-empty">No classes scheduled this week.</div>'; renderTtLegend(); return; }
+  if (!allThisWeek.length) { container.innerHTML = '<div class="tt-empty">No classes scheduled this week.</div>'; return; }
   let minH = 8, maxH = 18;
   allThisWeek.forEach(ev => {
     const h1 = new Date(ev.start).getHours();
@@ -1009,11 +1005,10 @@ function renderTimetable() {
     if (h1 < minH) minH = h1; if (h2 > maxH) maxH = h2;
   });
   const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  let html = `<div style="display:grid;grid-template-columns:50px repeat(7,1fr);gap:6px;overflow-x:auto;min-width:0; padding-bottom:4px;">`;
-  html += `<div></div>`;
+  let html = `<div style="display:grid;grid-template-columns:50px repeat(7,1fr);gap:6px;overflow-x:auto;"><div></div>`;
   days.forEach((d, i) => {
     const iso = d.toISOString().slice(0,10);
-    html += `<div class="tt-header${iso===todayIso?' today-col':''}">${DAY_NAMES[i]}<br><span style="font-weight:500;font-size:11px;opacity:.8">${d.getDate()}</span></div>`;
+    html += `<div class="tt-header${iso===todayIso?' today-col':''}">${DAY_NAMES[i]}<br><span>${d.getDate()}</span></div>`;
   });
   for (let h = minH; h <= maxH; h++) {
     html += `<div class="tt-time">${String(h).padStart(2,'0')}:00</div>`;
@@ -1022,66 +1017,52 @@ function renderTimetable() {
       html += `<div class="tt-cell">`;
       evs.forEach(ev => {
         const col = ttColor(ev.summary);
-        const sh = new Date(ev.start).getHours(), sm = new Date(ev.start).getMinutes();
-        const eh = new Date(ev.end).getHours(),   em = new Date(ev.end).getMinutes();
-        const ts = `${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
-        html += `<div class="tt-event" style="background:${col.bg};color:${col.text}" title="${ev.summary}${ev.location?'\n'+ev.location:''}\n${ts}">
+        html += `<div class="tt-event" style="background:${col.bg};color:${col.text}">
           <div class="tt-event-title">${ev.summary}</div>
-          ${ev.location?`<div class="tt-event-loc">${ev.location}</div>`:''}
-          <div style="font-size:10px;opacity:.8;font-weight:600;margin-top:2px;">${ts}</div>
+          <div class="tt-event-loc">${ev.location||''}</div>
         </div>`;
       });
       html += `</div>`;
     });
   }
-  html += '</div>';
-  container.innerHTML = html;
-  renderTtLegend();
-}
-
-function renderTtLegend() {
-  const seen = {};
-  ttEvents.forEach(ev => { if (!seen[ev.summary]) seen[ev.summary] = ttColor(ev.summary); });
-  const lg = document.getElementById('tt-legend');
-  if (lg) lg.innerHTML = Object.entries(seen).map(([name, col]) =>
-    `<div class="tt-legend-item"><div class="tt-legend-dot" style="background:${col.bg};border:1px solid ${col.text}"></div>${name}</div>`
-  ).join('');
+  container.innerHTML = html + '</div>';
 }
 
 function ttPrevWeek() { ttWeekOffset--; renderTimetable(); }
 function ttNextWeek() { ttWeekOffset++; renderTimetable(); }
-
 function clearTimetable() {
-  ttEvents = []; ttWeekOffset = 0; ttColorIdx = 0;
-  save('sit_ics_events', []); save('sit_ics_name', '');
-  const up = document.getElementById('tt-upload-section');
-  const tv = document.getElementById('tt-view');
-  const clr = document.getElementById('tt-clear-btn');
-  const fn = document.getElementById('tt-file-name');
-  if (up) up.style.display = '';
-  if (tv) tv.style.display = 'none';
-  if (clr) clr.style.display = 'none';
-  if (fn) fn.style.display = 'none';
-  const inp = document.getElementById('ics-file-input');
-  if (inp) inp.value = '';
+  ttEvents = []; if(!urlData) { save('sit_ics_events', []); save('sit_ics_name', ''); }
+  renderPanels();
 }
 
 /* ─────────────────────────────────────────────
-   EXPORT / IMPORT
+   PORTABLE CONFIGURATION LINK GENERATOR (NEW)
 ───────────────────────────────────────────── */
-function exportData() {
-  const payload = {
-    version: 2, links, alerts, countdowns,
-    ics_events: load('sit_ics_events', []),
-    ics_name:   load('sit_ics_name', ''),
-    layout_cols: layoutCols, panel_order: panelOrder,
+function generateShareLink() {
+  const configPayload = {
+    links, alerts, countdowns, layout_cols: layoutCols, panel_order: panelOrder,
     panel_hidden: panelHidden, panel_colors: panelColors, panel_span: panelSpan,
     dash_title: document.getElementById('dash-title').textContent,
     dash_subtitle: document.getElementById('dash-subtitle').textContent,
+    ics_events: load('sit_ics_events', []),
+    ics_name: load('sit_ics_name', '')
   };
+  
+  // Package entire data layout state structure safely into a base64 string
+  const base64Config = btoa(JSON.stringify(configPayload));
+  const shareUrl = window.location.origin + window.location.pathname + '?config=' + base64Config;
+  
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    alert("Shareable URL copied to clipboard! You can share this exact link with anyone or save it.");
+  }).catch(() => {
+    alert("Failed to copy automatically. Here is your configuration link:\n\n" + shareUrl);
+  });
+}
+
+function exportData() {
+  const payload = { links, alerts, countdowns, layout_cols: layoutCols, panel_order: panelOrder, panel_hidden: panelHidden, panel_colors: panelColors, panel_span: panelSpan };
   const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = 'dashboard-data.json'; a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'dashboard-backup.json'; a.click();
 }
 
 function importData(e) {
@@ -1090,35 +1071,19 @@ function importData(e) {
   reader.onload = ev => {
     try {
       const d = JSON.parse(ev.target.result);
-      if (d.links)        { links = d.links;               save('sit_links', links); }
-      if (d.alerts)       { alerts = d.alerts;             save('sit_alerts', alerts); }
-      if (d.countdowns)   { countdowns = d.countdowns;     save('sit_cds', countdowns); }
-      if (d.layout_cols)  { layoutCols = d.layout_cols;    save('sit_layout_cols', layoutCols); }
-      if (d.panel_order)  { panelOrder = d.panel_order;    save('sit_panel_order', panelOrder); }
-      if (d.panel_hidden) { panelHidden = d.panel_hidden;  save('sit_panel_hidden', panelHidden); }
-      if (d.panel_colors) { panelColors = d.panel_colors;  save('sit_panel_colors', panelColors); }
-      if (d.panel_span)   { panelSpan = d.panel_span;      save('sit_panel_span', panelSpan); }
-      if (d.dash_title)   { save('sit_dash_title', d.dash_title); document.getElementById('dash-title').textContent = d.dash_title; }
-      if (d.dash_subtitle){ save('sit_dash_subtitle', d.dash_subtitle); document.getElementById('dash-subtitle').textContent = d.dash_subtitle; }
-      if (d.ics_events && d.ics_events.length) { save('sit_ics_events', d.ics_events); save('sit_ics_name', d.ics_name||''); }
-      setLayout(layoutCols);
-      renderPanels();
-      alert('Data imported successfully!');
-    } catch { alert('Invalid file format.'); }
+      if (d.links) save('sit_links', d.links);
+      if (d.alerts) save('sit_alerts', d.alerts);
+      window.location.search = ''; // Reset configs to reload from storage
+    } catch { alert('Invalid backup file formatting.'); }
   };
   reader.readAsText(file);
-  e.target.value = '';
 }
 
 /* ─────────────────────────────────────────────
    INIT
 ───────────────────────────────────────────── */
-const savedTitle = load('sit_dash_title', 'Student dashboard');
-const savedSubtitle = load('sit_dash_subtitle', '');
-document.getElementById('dash-title').textContent = savedTitle;
-document.getElementById('dash-subtitle').textContent = savedSubtitle ||
-  new Date().toLocaleDateString('en-SG', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
-
+document.getElementById('dash-title').textContent = dashTitle;
+document.getElementById('dash-subtitle').textContent = dashSubtitle || new Date().toLocaleDateString('en-SG', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
 setLayout(layoutCols);
 renderPanels();
 </script>
