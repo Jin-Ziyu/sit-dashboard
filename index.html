@@ -68,268 +68,9 @@
   }
   
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  ```css
-body{
-    margin:0;
-    font-family:Arial;
-    background:#F1F5F9;
-}
+  body { font-family: var(--font-sans); background: var(--color-background-tertiary); min-height: 100vh; padding: 2rem 1.5rem; color: var(--color-text-primary); -webkit-font-smoothing: antialiased; }
+  .dashboard { max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
 
-/* LOGIN */
-
-.login-screen{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:
-    linear-gradient(
-        135deg,
-        #C8102E,
-        #7F1D1D
-    );
-}
-
-.login-card{
-    background:white;
-    width:380px;
-    padding:40px;
-    border-radius:24px;
-
-    box-shadow:
-    0 10px 40px rgba(0,0,0,0.2);
-}
-
-.login-card h1{
-    margin-bottom:10px;
-}
-
-.login-card p{
-    color:gray;
-    margin-bottom:30px;
-}
-
-.login-card input{
-    width:100%;
-    padding:14px;
-    margin-bottom:16px;
-
-    border-radius:12px;
-    border:1px solid #CBD5E1;
-}
-
-.login-card button{
-    width:100%;
-    padding:14px;
-    border:none;
-
-    border-radius:12px;
-
-    background:#C8102E;
-    color:white;
-
-    font-weight:bold;
-    cursor:pointer;
-
-    margin-top:10px;
-}
-
-.guest-btn{
-    background:#E2E8F0 !important;
-    color:#1E293B !important;
-}
-
-/* LAYOUT */
-
-.layout{
-    display:flex;
-    min-height:100vh;
-}
-
-.sidebar{
-    width:250px;
-    background:#0F172A;
-    color:white;
-    padding:30px 20px;
-}
-
-.logo{
-    font-size:24px;
-    font-weight:bold;
-    margin-bottom:40px;
-}
-
-.sidebar nav{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-
-.sidebar a{
-    padding:14px;
-    border-radius:14px;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-.sidebar a:hover,
-.sidebar .active{
-    background:#C8102E;
-}
-
-.main{
-    flex:1;
-    padding:30px;
-}
-
-/* HERO */
-
-.hero{
-    background:
-    linear-gradient(
-        135deg,
-        #C8102E,
-        #EF4444
-    );
-
-    color:white;
-
-    padding:40px;
-
-    border-radius:24px;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    margin-bottom:30px;
-}
-
-.hero h1{
-    font-size:42px;
-    margin-bottom:10px;
-}
-
-/* CARD */
-
-.card{
-    background:white;
-    border-radius:24px;
-
-    padding:24px;
-
-    margin-bottom:24px;
-
-    box-shadow:
-    0 4px 14px rgba(0,0,0,0.06);
-}
-
-.card-title{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:20px;
-}
-
-/* NOTIFICATION */
-
-.notification{
-    background:#F8FAFC;
-    padding:18px;
-    border-radius:14px;
-    margin-bottom:12px;
-}
-
-/* CLASS */
-
-.class-card{
-    padding:20px;
-    border-radius:18px;
-    color:white;
-    margin-bottom:16px;
-}
-
-.red{
-    background:#C8102E;
-}
-
-.blue{
-    background:#2563EB;
-}
-
-/* NOTES */
-
-textarea{
-    width:100%;
-    height:180px;
-
-    border-radius:16px;
-    border:1px solid #CBD5E1;
-
-    padding:16px;
-
-    resize:none;
-
-    margin-bottom:16px;
-}
-
-textarea + button{
-    padding:14px 20px;
-    border:none;
-
-    border-radius:14px;
-
-    background:#C8102E;
-    color:white;
-
-    font-weight:bold;
-}
-
-/* NOTIFICATION ICON */
-
-.notif-icon{
-    position:relative;
-    font-size:30px;
-}
-
-.notif-icon span{
-    position:absolute;
-    top:-8px;
-    right:-10px;
-
-    width:22px;
-    height:22px;
-
-    background:white;
-    color:#C8102E;
-
-    border-radius:50%;
-
-    font-size:12px;
-    font-weight:bold;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-    .layout{
-        flex-direction:column;
-    }
-
-    .sidebar{
-        width:100%;
-    }
-
-    .hero{
-        flex-direction:column;
-        gap:20px;
-        text-align:center;
-    }
-}
   /* Top bar */
   .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.75rem; background: var(--color-background-primary); border-radius: var(--border-radius-lg); border: 1px solid var(--color-border-tertiary); shadow: var(--shadow-sm); gap: 1rem; }
   .top-bar-left { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -509,317 +250,111 @@ textarea + button{
 </style>
 </head>
 <body>
-```html
-<body>
+<div class="dashboard" id="dashboard">
 
-<!-- LOGIN SCREEN -->
-<div id="login-screen" class="login-screen">
-
-    <div class="login-card">
-
-        <h1>SIT Student Portal</h1>
-        <p>Login to access your personal dashboard</p>
-
-        <input type="text" id="student-id"
-        placeholder="Student ID">
-
-        <input type="password" id="student-pass"
-        placeholder="Password">
-
-        <button onclick="loginStudent()">
-            Login
-        </button>
-
-        <button class="guest-btn"
-        onclick="continueGuest()">
-            Continue as Guest
-        </button>
-
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-bar-title" id="dash-title" contenteditable="false" spellcheck="false">Student dashboard</div>
+      <div class="top-bar-subtitle" id="dash-subtitle" contenteditable="false" spellcheck="false"></div>
     </div>
+    <div class="top-bar-right">
+      <button class="icon-btn" id="layout-toggle" onclick="toggleLayoutBar()" title="Change layout"><i class="ti ti-layout-columns" aria-hidden="true"></i> <span class="btn-label">Layout</span></button>
+      <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit" aria-hidden="true"></i> <span class="btn-label">Customise</span></button>
+    </div>
+  </div>
 
+  <!-- Layout bar -->
+  <div class="layout-bar" id="layout-bar">
+    <span class="layout-bar-label">Columns</span>
+    <div class="layout-opt" id="lopt-1" onclick="setLayout(1)" title="Single column">
+      <svg viewBox="0 0 36 24"><rect x="2" y="2" width="32" height="20" rx="2" fill="currentColor" opacity=".25"/><rect x="4" y="4" width="28" height="16" rx="1" fill="currentColor" opacity=".5"/></svg>
+      <span>1 Col</span>
+    </div>
+    <div class="layout-opt" id="lopt-2" onclick="setLayout(2)" title="Two columns">
+      <svg viewBox="0 0 36 24"><rect x="2" y="2" width="15" height="20" rx="2" fill="currentColor" opacity=".4"/><rect x="19" y="2" width="15" height="20" rx="2" fill="currentColor" opacity=".25"/></svg>
+      <span>2 Col</span>
+    </div>
+    <div class="layout-opt" id="lopt-3" onclick="setLayout(3)" title="Three columns">
+      <svg viewBox="0 0 36 24"><rect x="1" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".4"/><rect x="13" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".3"/><rect x="25" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".2"/></svg>
+      <span>3 Col</span>
+    </div>
+    <div class="layout-divider"></div>
+    <span class="layout-bar-label">Hidden Panels</span>
+    <div id="hidden-chips" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+  </div>
+
+  <!-- Panels container -->
+  <div class="panels-container cols-2" id="panels-container"></div>
+
+  <!-- Export / Import -->
+  <div class="data-bar">
+    <button class="data-btn" onclick="exportData()"><i class="ti ti-download" aria-hidden="true"></i> Export data</button>
+    <button class="data-btn" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload" aria-hidden="true"></i> Import data</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="app" style="display:none;">
-
-    <div class="layout">
-
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-
-            <div class="logo">
-                SIT Portal
-            </div>
-
-            <nav>
-
-                <a class="active">
-                    <i class="ti ti-home"></i>
-                    Dashboard
-                </a>
-
-                <a>
-                    <i class="ti ti-calendar"></i>
-                    Timetable
-                </a>
-
-                <a>
-                    <i class="ti ti-bell"></i>
-                    Notifications
-                </a>
-
-                <a>
-                    <i class="ti ti-clock"></i>
-                    Deadlines
-                </a>
-
-                <a onclick="logoutStudent()">
-                    <i class="ti ti-logout"></i>
-                    Logout
-                </a>
-
-            </nav>
-
-        </aside>
-
-        <!-- MAIN -->
-        <main class="main">
-
-            <!-- HERO -->
-            <section class="hero">
-
-                <div>
-                    <h1 id="welcome-title">
-                        Welcome Back
-                    </h1>
-
-                    <p>
-                        Your student dashboard
-                    </p>
-                </div>
-
-                <div class="hero-right">
-
-                    <div class="notif-icon">
-                        <i class="ti ti-bell"></i>
-                        <span>3</span>
-                    </div>
-
-                </div>
-
-            </section>
-
-            <!-- XSITE NOTIFICATIONS -->
-            <section class="card">
-
-                <div class="card-title">
-
-                    <span>
-                        <i class="ti ti-bell"></i>
-                        xSite Notifications
-                    </span>
-
-                </div>
-
-                <div id="notification-list">
-
-                    <div class="notification">
-                        <strong>RSE3204</strong>
-                        Quiz 2 released
-                    </div>
-
-                    <div class="notification">
-                        <strong>ENGR2001</strong>
-                        Assignment deadline updated
-                    </div>
-
-                    <div class="notification">
-                        <strong>Campus</strong>
-                        Library closed on Friday
-                    </div>
-
-                </div>
-
-            </section>
-
-            <!-- TIMETABLE -->
-            <section class="card">
-
-                <div class="card-title">
-                    Today's Classes
-                </div>
-
-                <div class="class-card red">
-                    <h3>RSE3204</h3>
-                    <p>9:00 AM - 11:00 AM</p>
-                </div>
-
-                <div class="class-card blue">
-                    <h3>ENGR2001</h3>
-                    <p>1:00 PM - 3:00 PM</p>
-                </div>
-
-            </section>
-
-            <!-- PERSONAL NOTES -->
-            <section class="card student-only">
-
-                <div class="card-title">
-                    Personal Notes
-                </div>
-
-                <textarea
-                id="notes"
-                placeholder="Write your reminders..."></textarea>
-
-                <button onclick="saveNotes()">
-                    Save Notes
-                </button>
-
-            </section>
-
-        </main>
-
+<!-- Add Link Modal -->
+<div class="modal-overlay" id="modal-link" onclick="if(event.target===this)closeModal('modal-link')">
+  <div class="modal">
+    <h3>Add quick link</h3>
+    <label>Name</label><input type="text" id="link-name" placeholder="e.g. IN4SIT">
+    <label>URL</label><input type="text" id="link-url" placeholder="https://...">
+    <label>Category</label>
+    <select id="link-cat"><option>Portal</option><option>Library</option><option>Tool</option><option>App</option><option>Forum</option><option>Other</option></select>
+    <label>Colour</label>
+    <div class="color-swatch-row" id="link-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-link')">Cancel</button>
+      <button class="btn-primary" onclick="saveLink()">Add link</button>
     </div>
+  </div>
+</div>
 
+<!-- Add Alert Modal -->
+<div class="modal-overlay" id="modal-alert" onclick="if(event.target===this)closeModal('modal-alert')">
+  <div class="modal">
+    <h3>Add alert</h3>
+    <label>Module code</label><input type="text" id="alert-mod" placeholder="e.g. RSE3204">
+    <label>Message</label><input type="text" id="alert-msg" placeholder="e.g. Quiz 2 due Friday">
+    <label>Date (optional)</label><input type="date" id="alert-date">
+    <label>Colour</label>
+    <div class="color-swatch-row" id="alert-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-alert')">Cancel</button>
+      <button class="btn-primary" onclick="saveAlert()">Add alert</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Countdown Modal -->
+<div class="modal-overlay" id="modal-countdown" onclick="if(event.target===this)closeModal('modal-countdown')">
+  <div class="modal">
+    <h3>Add countdown</h3>
+    <label>Label</label><input type="text" id="cd-label-in" placeholder="e.g. Midterm exam">
+    <label>Date</label><input type="date" id="cd-date-in">
+    <label>Colour</label>
+    <div class="color-swatch-row" id="cd-color-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-countdown')">Cancel</button>
+      <button class="btn-primary" onclick="saveCountdown()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Color Picker Modal -->
+<div class="modal-overlay" id="modal-color" onclick="if(event.target===this)closeModal('modal-color')">
+  <div class="modal">
+    <h3>Choose colour</h3>
+    <div class="color-swatch-row" id="color-picker-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-color')">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <script>
-
-function loginStudent(){
-
-    const studentId =
-    document.getElementById(
-        "student-id"
-    ).value;
-
-    if(studentId === ""){
-
-        alert("Enter student ID");
-        return;
-    }
-
-    localStorage.setItem(
-        "studentLoggedIn",
-        "true"
-    );
-
-    localStorage.setItem(
-        "studentName",
-        studentId
-    );
-
-    startApp();
-}
-
-function continueGuest(){
-
-    localStorage.setItem(
-        "studentLoggedIn",
-        "guest"
-    );
-
-    startApp();
-}
-
-function logoutStudent(){
-
-    localStorage.removeItem(
-        "studentLoggedIn"
-    );
-
-    location.reload();
-}
-
-function startApp(){
-
-    document.getElementById(
-        "login-screen"
-    ).style.display = "none";
-
-    document.getElementById(
-        "app"
-    ).style.display = "block";
-
-    const loginState =
-    localStorage.getItem(
-        "studentLoggedIn"
-    );
-
-    const studentName =
-    localStorage.getItem(
-        "studentName"
-    );
-
-    if(loginState === "guest"){
-
-        document.getElementById(
-            "welcome-title"
-        ).innerHTML =
-        "Welcome Guest";
-
-        document.querySelectorAll(
-            ".student-only"
-        ).forEach(el => {
-
-            el.style.display = "none";
-        });
-
-    } else {
-
-        document.getElementById(
-            "welcome-title"
-        ).innerHTML =
-        "Welcome " + studentName;
-
-        loadNotes();
-    }
-}
-
-function saveNotes(){
-
-    const notes =
-    document.getElementById(
-        "notes"
-    ).value;
-
-    localStorage.setItem(
-        "studentNotes",
-        notes
-    );
-
-    alert("Notes saved");
-}
-
-function loadNotes(){
-
-    const notes =
-    localStorage.getItem(
-        "studentNotes"
-    );
-
-    if(notes){
-
-        document.getElementById(
-            "notes"
-        ).value = notes;
-    }
-}
-
-window.onload = function(){
-
-    const loginState =
-    localStorage.getItem(
-        "studentLoggedIn"
-    );
-
-    if(loginState){
-
-        startApp();
-    }
-}
-
-</script>
 /* ─────────────────────────────────────────────
    DATA & DEFAULTS
 ───────────────────────────────────────────── */
