@@ -1,1122 +1,799 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIT Student Dashboard</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>SIT Dashboard UI Redesign</title>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
 <style>
-  :root {
-    --color-background-primary: #ffffff;
-    --color-background-secondary: #f5f5f0;
-    --color-background-tertiary: #eeede8;
-    --color-background-info: #e6f1fb;
-    --color-background-warning: #faeeda;
-    --color-background-danger: #fcebeb;
-    --color-background-success: #eaf3de;
-    --color-text-primary: #1a1a18;
-    --color-text-secondary: #5f5e5a;
-    --color-text-tertiary: #888780;
-    --color-text-info: #0c447c;
-    --color-text-warning: #633806;
-    --color-text-danger: #791f1f;
-    --color-text-success: #27500a;
-    --color-border-tertiary: rgba(0,0,0,0.12);
-    --color-border-secondary: rgba(0,0,0,0.22);
-    --color-border-primary: rgba(0,0,0,0.35);
-    --color-border-info: #85b7eb;
-    --color-border-warning: #ef9f27;
-    --color-border-danger: #f09595;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-    --border-radius-xl: 16px;
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+:root{
+  --accent:#6366f1;
+
+  --bg1:#f8fafc;
+  --bg2:#eef2ff;
+
+  --text:#111827;
+  --text2:#6b7280;
+
+  --white:rgba(255,255,255,0.72);
+
+  --border:rgba(255,255,255,0.25);
+
+  --shadow:
+    0 4px 24px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+
+  --radius-sm:14px;
+  --radius-md:20px;
+  --radius-lg:28px;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  background:
+    radial-gradient(circle at top left,#dbeafe 0%,transparent 30%),
+    radial-gradient(circle at bottom right,#ede9fe 0%,transparent 30%),
+    linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);
+
+  min-height:100vh;
+
+  color:var(--text);
+
+  padding:20px;
+}
+
+/* APP */
+
+.app-layout{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:20px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  background:var(--white);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+
+  border:1px solid var(--border);
+
+  border-radius:var(--radius-lg);
+
+  padding:22px;
+
+  box-shadow:var(--shadow);
+
+  height:calc(100vh - 40px);
+
+  position:sticky;
+  top:20px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  margin-bottom:35px;
+}
+
+.logo-icon{
+  width:48px;
+  height:48px;
+
+  border-radius:18px;
+
+  background:linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:white;
+
+  font-size:22px;
+}
+
+.logo h1{
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:-0.03em;
+}
+
+.logo p{
+  font-size:13px;
+  color:var(--text2);
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  padding:14px 16px;
+
+  border-radius:16px;
+
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.nav-item:hover{
+  background:rgba(99,102,241,0.08);
+}
+
+.nav-item.active{
+  background:var(--accent);
+  color:white;
+}
+
+.nav-item i{
+  font-size:20px;
+}
+
+/* MAIN */
+
+.main{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+/* HEADER */
+
+.topbar{
+  background:var(--white);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+
+  border:1px solid var(--border);
+
+  border-radius:var(--radius-lg);
+
+  padding:24px;
+
+  box-shadow:var(--shadow);
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.header-title h2{
+  font-size:34px;
+  font-weight:800;
+
+  letter-spacing:-0.04em;
+}
+
+.header-title p{
+  margin-top:6px;
+
+  color:var(--text2);
+}
+
+.header-actions{
+  display:flex;
+  gap:12px;
+}
+
+.icon-btn{
+  border:none;
+
+  background:rgba(255,255,255,0.65);
+
+  backdrop-filter:blur(10px);
+
+  padding:12px 18px;
+
+  border-radius:16px;
+
+  font-weight:600;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.icon-btn:hover{
+  transform:translateY(-2px);
+
+  background:white;
+}
+
+/* GRID */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:20px;
+}
+
+.card{
+  background:var(--white);
+
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+
+  border-radius:24px;
+
+  border:1px solid var(--border);
+
+  padding:24px;
+
+  box-shadow:var(--shadow);
+
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 12px 32px rgba(0,0,0,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+.card-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:20px;
+}
+
+.card-title h3{
+  font-size:15px;
+  font-weight:700;
+
+  letter-spacing:0.04em;
+
+  text-transform:uppercase;
+}
+
+.card-title button{
+  border:none;
+  background:none;
+
+  color:var(--text2);
+
+  cursor:pointer;
+}
+
+/* SIZES */
+
+.col-8{
+  grid-column:span 8;
+}
+
+.col-4{
+  grid-column:span 4;
+}
+
+.col-12{
+  grid-column:span 12;
+}
+
+/* QUICK LINKS */
+
+.links-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:16px;
+}
+
+.link-card{
+  min-height:120px;
+
+  border-radius:22px;
+
+  background:white;
+
+  padding:18px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  text-align:center;
+
+  text-decoration:none;
+
+  transition:0.2s;
+
+  border:1px solid rgba(0,0,0,0.05);
+}
+
+.link-card:hover{
+  transform:translateY(-5px);
+
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.10);
+}
+
+.link-card i{
+  font-size:30px;
+
+  margin-bottom:12px;
+
+  color:var(--accent);
+}
+
+.link-card span{
+  font-size:14px;
+  font-weight:600;
+
+  color:var(--text);
+}
+
+/* ALERTS */
+
+.alerts{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.alert{
+  display:flex;
+  gap:14px;
+
+  padding:16px;
+
+  border-radius:18px;
+
+  background:#fff7ed;
+}
+
+.alert i{
+  color:#ea580c;
+  font-size:20px;
+}
+
+.alert h4{
+  font-size:14px;
+  margin-bottom:4px;
+}
+
+.alert p{
+  font-size:13px;
+  color:var(--text2);
+}
+
+/* DEADLINES */
+
+.deadline-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.deadline{
+  background:white;
+
+  border-radius:20px;
+
+  padding:20px;
+
+  text-align:center;
+}
+
+.deadline h2{
+  font-size:36px;
+  color:var(--accent);
+}
+
+.deadline p{
+  margin-top:6px;
+
+  font-size:13px;
+
+  color:var(--text2);
+}
+
+/* TIMETABLE */
+
+.timetable{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  padding:14px;
+
+  text-align:left;
+
+  font-size:13px;
+
+  color:var(--text2);
+}
+
+td{
+  padding:14px;
+}
+
+.class-card{
+  background:#ede9fe;
+
+  border-radius:16px;
+
+  padding:14px;
+}
+
+.class-card h4{
+  font-size:14px;
+  margin-bottom:4px;
+
+  color:#4c1d95;
+}
+
+.class-card p{
+  font-size:12px;
+  color:#6d28d9;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+
+  .app-layout{
+    grid-template-columns:1fr;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-background-primary: #1e1e1c;
-      --color-background-secondary: #2a2a27;
-      --color-background-tertiary: #141412;
-      --color-background-info: #042c53;
-      --color-background-warning: #412402;
-      --color-background-danger: #501313;
-      --color-background-success: #173404;
-      --color-text-primary: #f0efe8;
-      --color-text-secondary: #b4b2a9;
-      --color-text-tertiary: #888780;
-      --color-text-info: #85b7eb;
-      --color-text-warning: #fac775;
-      --color-text-danger: #f09595;
-      --color-text-success: #97c459;
-      --color-border-tertiary: rgba(255,255,255,0.1);
-      --color-border-secondary: rgba(255,255,255,0.2);
-      --color-border-primary: rgba(255,255,255,0.35);
-      --color-border-info: #185fa5;
-      --color-border-warning: #854f0b;
-      --color-border-danger: #a32d2d;
-    }
+
+  .sidebar{
+    height:auto;
+    position:relative;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans); background: var(--color-background-tertiary); min-height: 100vh; padding: 1rem; }
-  .dashboard { max-width: 1200px; margin: 0 auto; }
 
-  /* Top bar */
-  .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding: 0.75rem 1rem; background: var(--color-background-primary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); gap: 1rem; }
-  .top-bar-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .top-bar-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); outline: none; background: transparent; border: none; font-family: var(--font-sans); width: 100%; }
-  .top-bar-title[contenteditable="true"] { border-bottom: 1.5px dashed var(--color-border-secondary); padding-bottom: 1px; }
-  .top-bar-subtitle { font-size: 13px; color: var(--color-text-secondary); outline: none; background: transparent; border: none; font-family: var(--font-sans); }
-  .top-bar-subtitle[contenteditable="true"] { border-bottom: 1.5px dashed var(--color-border-secondary); }
-  .top-bar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .icon-btn { font-size: 13px; padding: 6px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-primary); cursor: pointer; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
-  .icon-btn:hover { background: var(--color-background-secondary); }
-  .icon-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
 
-  /* Layout selector */
-  .layout-bar { display: none; gap: 6px; align-items: center; margin-bottom: 1rem; padding: 0.6rem 1rem; background: var(--color-background-primary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-info); flex-wrap: wrap; }
-  .layout-bar.visible { display: flex; }
-  .layout-bar-label { font-size: 12px; color: var(--color-text-secondary); font-weight: 500; margin-right: 4px; }
-  .layout-opt { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 6px 10px; border-radius: var(--border-radius-md); border: 1.5px solid transparent; transition: border-color 0.15s; }
-  .layout-opt:hover { border-color: var(--color-border-secondary); }
-  .layout-opt.selected { border-color: var(--color-border-info); background: var(--color-background-info); }
-  .layout-opt svg { width: 36px; height: 24px; }
-  .layout-opt span { font-size: 11px; color: var(--color-text-secondary); }
-  .layout-divider { width: 1px; height: 32px; background: var(--color-border-tertiary); margin: 0 4px; }
-  .hidden-panel-chip { font-size: 11px; padding: 3px 8px; border-radius: 20px; background: var(--color-background-secondary); border: 0.5px dashed var(--color-border-secondary); color: var(--color-text-tertiary); cursor: pointer; display: flex; align-items: center; gap: 4px; }
-  .hidden-panel-chip:hover { color: var(--color-text-primary); border-color: var(--color-border-primary); }
+  .col-4,
+  .col-8,
+  .col-12{
+    grid-column:span 1;
+  }
 
-  /* Panel grid */
-  .panels-container { display: grid; gap: 1rem; }
-  .panels-container.cols-1 { grid-template-columns: 1fr; }
-  .panels-container.cols-2 { grid-template-columns: minmax(0,2fr) minmax(0,1fr); }
-  .panels-container.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
-  @media (max-width: 700px) { .panels-container { grid-template-columns: 1fr !important; } }
+  .deadline-grid{
+    grid-template-columns:1fr;
+  }
 
-  /* Panel */
-  .panel-wrapper { display: flex; flex-direction: column; gap: 0; position: relative; }
-  .panel-wrapper.span-2 { grid-column: span 2; }
-  .panel-wrapper.span-3 { grid-column: span 3; }
-  .panel { background: var(--panel-bg, var(--color-background-primary)); border-radius: var(--border-radius-lg); border: 1.5px solid var(--panel-border, var(--color-border-tertiary)); padding: 1rem; transition: box-shadow 0.15s; }
-  .panel-dragging { opacity: 0.5; }
-  .panel-drag-over { box-shadow: 0 0 0 2px var(--color-border-info); }
+}
 
-  /* Panel edit overlay controls */
-  .panel-edit-bar { display: none; align-items: center; gap: 6px; margin-bottom: 6px; padding: 6px 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); }
-  .edit-mode .panel-edit-bar { display: flex; }
-  .panel-drag-handle { cursor: grab; color: var(--color-text-tertiary); font-size: 16px; padding: 2px; touch-action: none; }
-  .panel-drag-handle:active { cursor: grabbing; }
-  .panel-edit-bar-right { display: flex; align-items: center; gap: 4px; margin-left: auto; }
-  .panel-mini-btn { padding: 3px 7px; border-radius: 5px; border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; color: var(--color-text-secondary); font-size: 12px; display: flex; align-items: center; gap: 3px; white-space: nowrap; }
-  .panel-mini-btn:hover { background: var(--color-background-primary); color: var(--color-text-primary); }
-  .panel-mini-btn.hide-btn:hover { color: var(--color-text-danger); border-color: var(--color-border-danger); }
-  .panel-mini-btn.span-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
-  .panel-title { font-size: 13px; font-weight: 500; color: var(--panel-title-color, var(--color-text-secondary)); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; }
+@media (prefers-color-scheme: dark){
 
-  /* Panel colour picker popup */
-  .panel-color-popup { position: absolute; top: 36px; right: 0; z-index: 100; background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); display: none; min-width: 220px; }
-  .panel-color-popup.open { display: block; }
-  .panel-color-popup-title { font-size: 11px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
-  .pcp-swatches { display: flex; flex-wrap: wrap; gap: 6px; }
-  .pcp-swatch { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; }
-  .pcp-swatch:hover { transform: scale(1.15); }
-  .pcp-swatch.selected { border-color: var(--color-text-primary); }
+  body{
+    background:
+      radial-gradient(circle at top left,#1e293b 0%,transparent 30%),
+      linear-gradient(180deg,#0f172a 0%,#111827 100%);
 
-  /* Links */
-  .links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
-  .link-card { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); text-decoration: none; cursor: pointer; position: relative; transition: border-color 0.15s; background: var(--lc-bg, var(--color-background-secondary)); }
-  .link-card:hover { border-color: var(--color-border-primary); }
-  .link-card .lc-icon { font-size: 18px; color: var(--lc-text, var(--color-text-secondary)); }
-  .link-card .lc-name { font-size: 13px; font-weight: 500; color: var(--lc-text, var(--color-text-primary)); line-height: 1.3; }
-  .link-card .lc-tag { font-size: 11px; color: var(--lc-sub, var(--color-text-tertiary)); }
-  .link-card .del-btn { position: absolute; top: 6px; right: 6px; background: var(--color-background-danger); border: none; border-radius: 4px; cursor: pointer; color: var(--color-text-danger); width: 20px; height: 20px; display: none; align-items: center; justify-content: center; font-size: 12px; }
-  .link-card .color-btn { position: absolute; bottom: 6px; right: 6px; background: none; border: none; cursor: pointer; color: var(--lc-text, var(--color-text-tertiary)); width: 18px; height: 18px; display: none; align-items: center; justify-content: center; font-size: 13px; }
-  .edit-mode .link-card .del-btn { display: flex; }
-  .edit-mode .link-card .color-btn { display: flex; }
-  .link-card.add-card { border-style: dashed; justify-content: center; align-items: center; min-height: 72px; color: var(--color-text-tertiary); font-size: 13px; gap: 6px; background: transparent; }
-  .link-card.add-card:hover { color: var(--color-text-primary); border-color: var(--color-border-primary); }
+    color:#f3f4f6;
+  }
 
-  /* Alerts */
-  .alert-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--ai-border, var(--color-border-warning)); background: var(--ai-bg, var(--color-background-warning)); margin-bottom: 8px; position: relative; }
-  .alert-item .ai-icon { font-size: 16px; color: var(--ai-text, var(--color-text-warning)); flex-shrink: 0; margin-top: 1px; }
-  .alert-item .ai-name { font-size: 13px; color: var(--ai-text, var(--color-text-primary)); font-weight: 500; }
-  .alert-item .ai-msg { font-size: 13px; color: var(--ai-text, var(--color-text-primary)); line-height: 1.5; }
-  .alert-item .ai-meta { font-size: 11px; color: var(--ai-sub, var(--color-text-secondary)); margin-top: 2px; }
-  .alert-item .del-btn { position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; color: var(--color-text-tertiary); display: none; font-size: 14px; }
-  .alert-item .color-btn { position: absolute; bottom: 8px; right: 8px; background: none; border: none; cursor: pointer; color: var(--ai-text, var(--color-text-tertiary)); display: none; font-size: 13px; }
-  .edit-mode .alert-item .del-btn { display: block; }
-  .edit-mode .alert-item .color-btn { display: block; }
+  .sidebar,
+  .card,
+  .topbar{
+    background:rgba(30,41,59,0.72);
 
-  /* Countdown */
-  .countdown-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1rem; }
-  .cd-card { border-radius: var(--border-radius-md); padding: 10px; text-align: center; border: 0.5px solid var(--cd-border, var(--color-border-tertiary)); background: var(--cd-bg, var(--color-background-secondary)); position: relative; }
-  .cd-num { font-size: 24px; font-weight: 500; color: var(--cd-text, var(--color-text-primary)); }
-  .cd-label { font-size: 11px; color: var(--cd-sub, var(--color-text-secondary)); margin-top: 2px; }
-  .cd-card.urgent .cd-num { color: var(--color-text-danger); }
-  .cd-card .del-btn { position: absolute; top: 4px; right: 4px; background: none; border: none; cursor: pointer; color: var(--color-text-tertiary); display: none; font-size: 12px; }
-  .cd-card .color-btn { position: absolute; bottom: 4px; right: 4px; background: none; border: none; cursor: pointer; color: var(--cd-text, var(--color-text-tertiary)); display: none; font-size: 12px; }
-  .edit-mode .cd-card .del-btn { display: block; }
-  .edit-mode .cd-card .color-btn { display: block; }
+    border:1px solid rgba(255,255,255,0.06);
 
-  /* Calendar */
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-top: 6px; }
-  .cal-day-name { font-size: 11px; color: var(--color-text-tertiary); text-align: center; padding: 2px 0; }
-  .cal-day { font-size: 12px; text-align: center; padding: 5px 2px; border-radius: 4px; color: var(--color-text-secondary); }
-  .cal-day.today { background: var(--color-background-info); color: var(--color-text-info); font-weight: 500; border-radius: 50%; }
-  .cal-day.has-event { position: relative; }
-  .cal-day.has-event::after { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--color-text-warning); position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%); }
-  .cal-month { font-size: 13px; font-weight: 500; color: var(--color-text-primary); display: flex; align-items: center; justify-content: space-between; }
-  .cal-nav { background: none; border: none; cursor: pointer; color: var(--color-text-secondary); font-size: 16px; padding: 2px 6px; border-radius: 4px; }
-  .cal-nav:hover { background: var(--color-background-secondary); }
+    box-shadow:
+      0 8px 30px rgba(0,0,0,0.35);
+  }
 
-  /* Section add button */
-  .section-add-btn { font-size: 12px; padding: 4px 10px; border: 0.5px dashed var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-tertiary); cursor: pointer; display: none; align-items: center; gap: 4px; }
-  .section-add-btn:hover { color: var(--color-text-primary); }
-  .edit-mode .section-add-btn { display: flex; }
+  .link-card,
+  .deadline{
+    background:rgba(255,255,255,0.05);
+  }
 
-  /* Modal */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.25rem; width: 360px; max-width: 95vw; border: 0.5px solid var(--color-border-tertiary); }
-  .modal h3 { font-size: 16px; font-weight: 500; margin-bottom: 1rem; color: var(--color-text-primary); }
-  .modal label { display: block; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; }
-  .modal input, .modal select { width: 100%; margin-bottom: 12px; font-size: 14px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); outline: none; }
-  .modal input:focus, .modal select:focus { border-color: var(--color-border-primary); }
-  .modal-actions { display: flex; gap: 8px; margin-top: 4px; justify-content: flex-end; }
-  .btn-primary { padding: 7px 16px; border-radius: var(--border-radius-md); background: var(--color-text-primary); color: var(--color-background-primary); border: none; cursor: pointer; font-size: 13px; }
-  .btn-primary:hover { opacity: 0.85; }
-  .btn-cancel { padding: 7px 16px; border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); cursor: pointer; font-size: 13px; }
-  .btn-cancel:hover { background: var(--color-background-secondary); }
-  .color-swatch-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-  .color-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; }
-  .color-swatch:hover { transform: scale(1.15); }
-  .color-swatch.selected { border-color: var(--color-text-primary); }
+  .header-title p,
+  .alert p,
+  .deadline p,
+  th{
+    color:#cbd5e1;
+  }
 
-  /* Timetable */
-  .tt-upload-area { border: 1.5px dashed var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 1.25rem; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; position: relative; }
-  .tt-upload-area:hover, .tt-upload-area.drag-over { border-color: var(--color-border-primary); background: var(--color-background-secondary); }
-  .tt-upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .tt-upload-area .tt-upload-icon { font-size: 28px; color: var(--color-text-tertiary); margin-bottom: 6px; }
-  .tt-upload-area p { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
-  .tt-upload-area small { font-size: 11px; color: var(--color-text-tertiary); }
-  .tt-file-name { font-size: 12px; color: var(--color-text-success); margin-top: 6px; display: flex; align-items: center; gap: 4px; justify-content: center; }
-  .tt-week-nav { display: flex; align-items: center; justify-content: space-between; margin: 0.75rem 0 0.5rem; }
-  .tt-week-label { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
-  .tt-header { background: var(--color-background-secondary); border-radius: 4px; padding: 4px 2px; text-align: center; color: var(--color-text-secondary); font-weight: 500; font-size: 11px; }
-  .tt-header.today-col { background: var(--color-background-info); color: var(--color-text-info); }
-  .tt-time { color: var(--color-text-tertiary); text-align: right; padding-right: 6px; font-size: 11px; display: flex; align-items: flex-start; justify-content: flex-end; padding-top: 3px; }
-  .tt-cell { min-height: 28px; border-radius: 4px; }
-  .tt-event { border-radius: 4px; padding: 3px 5px; margin: 1px 0; overflow: hidden; cursor: default; }
-  .tt-event-title { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; }
-  .tt-event-loc { opacity: 0.75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10px; }
-  .tt-empty { font-size: 13px; color: var(--color-text-tertiary); text-align: center; padding: 1.5rem; }
-  .tt-controls { display: flex; align-items: center; gap: 6px; }
-  .tt-clear-btn { font-size: 11px; padding: 3px 8px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-tertiary); cursor: pointer; }
-  .tt-clear-btn:hover { color: var(--color-text-danger); border-color: var(--color-border-danger); }
-  .tt-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .tt-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--color-text-secondary); }
-  .tt-legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+}
 
-  /* Export/Import */
-  .data-bar { display: flex; gap: 8px; margin-top: 1rem; justify-content: flex-end; }
-  .data-btn { font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 5px; }
-  .data-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
 </style>
 </head>
+
 <body>
-<div class="dashboard" id="dashboard">
 
-  <!-- Top bar -->
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <div class="top-bar-title" id="dash-title" contenteditable="false" spellcheck="false">Student dashboard</div>
-      <div class="top-bar-subtitle" id="dash-subtitle" contenteditable="false" spellcheck="false" id="date-display"></div>
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">
+        <i class="ti ti-school"></i>
+      </div>
+
+      <div>
+        <h1>SIT</h1>
+        <p>Student Dashboard</p>
+      </div>
     </div>
-    <div class="top-bar-right">
-      <button class="icon-btn" id="layout-toggle" onclick="toggleLayoutBar()" title="Change layout"><i class="ti ti-layout-columns" aria-hidden="true"></i> <span class="btn-label">Layout</span></button>
-      <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit" aria-hidden="true"></i> <span class="btn-label">Customise</span></button>
+
+    <div class="nav">
+
+      <div class="nav-item active">
+        <i class="ti ti-layout-dashboard"></i>
+        <span>Dashboard</span>
+      </div>
+
+      <div class="nav-item">
+        <i class="ti ti-calendar"></i>
+        <span>Timetable</span>
+      </div>
+
+      <div class="nav-item">
+        <i class="ti ti-clock"></i>
+        <span>Deadlines</span>
+      </div>
+
+      <div class="nav-item">
+        <i class="ti ti-bell"></i>
+        <span>Alerts</span>
+      </div>
+
+      <div class="nav-item">
+        <i class="ti ti-settings"></i>
+        <span>Settings</span>
+      </div>
+
     </div>
-  </div>
 
-  <!-- Layout bar (shown when layout btn clicked) -->
-  <div class="layout-bar" id="layout-bar">
-    <span class="layout-bar-label">Columns</span>
-    <div class="layout-opt" id="lopt-1" onclick="setLayout(1)" title="Single column">
-      <svg viewBox="0 0 36 24"><rect x="2" y="2" width="32" height="20" rx="2" fill="currentColor" opacity=".25"/><rect x="4" y="4" width="28" height="16" rx="1" fill="currentColor" opacity=".5"/></svg>
-      <span>1 col</span>
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+      <div class="header-title">
+        <h2>Good Morning 👋</h2>
+        <p>Welcome back to your student dashboard</p>
+      </div>
+
+      <div class="header-actions">
+
+        <button class="icon-btn">
+          <i class="ti ti-layout-columns"></i>
+          Layout
+        </button>
+
+        <button class="icon-btn">
+          <i class="ti ti-edit"></i>
+          Customize
+        </button>
+
+      </div>
+
     </div>
-    <div class="layout-opt" id="lopt-2" onclick="setLayout(2)" title="Two columns">
-      <svg viewBox="0 0 36 24"><rect x="2" y="2" width="15" height="20" rx="2" fill="currentColor" opacity=".4"/><rect x="19" y="2" width="15" height="20" rx="2" fill="currentColor" opacity=".25"/></svg>
-      <span>2 col</span>
-    </div>
-    <div class="layout-opt" id="lopt-3" onclick="setLayout(3)" title="Three columns">
-      <svg viewBox="0 0 36 24"><rect x="1" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".4"/><rect x="13" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".3"/><rect x="25" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".2"/></svg>
-      <span>3 col</span>
-    </div>
-    <div class="layout-divider"></div>
-    <span class="layout-bar-label">Hidden panels</span>
-    <div id="hidden-chips"></div>
-  </div>
 
-  <!-- Panels container -->
-  <div class="panels-container cols-2" id="panels-container"></div>
+    <!-- GRID -->
 
-  <!-- Export / Import -->
-  <div class="data-bar">
-    <button class="data-btn" onclick="exportData()"><i class="ti ti-download" aria-hidden="true"></i> Export data</button>
-    <button class="data-btn" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload" aria-hidden="true"></i> Import data</button>
-    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
-  </div>
-</div>
+    <div class="dashboard-grid">
 
-<!-- Add Link Modal -->
-<div class="modal-overlay" id="modal-link" onclick="if(event.target===this)closeModal('modal-link')">
-  <div class="modal">
-    <h3>Add quick link</h3>
-    <label>Name</label><input type="text" id="link-name" placeholder="e.g. IN4SIT">
-    <label>URL</label><input type="text" id="link-url" placeholder="https://...">
-    <label>Category</label>
-    <select id="link-cat"><option>Portal</option><option>Library</option><option>Tool</option><option>App</option><option>Forum</option><option>Other</option></select>
-    <label>Colour</label>
-    <div class="color-swatch-row" id="link-color-row"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('modal-link')">Cancel</button>
-      <button class="btn-primary" onclick="saveLink()">Add link</button>
-    </div>
-  </div>
-</div>
+      <!-- QUICK LINKS -->
 
-<!-- Add Alert Modal -->
-<div class="modal-overlay" id="modal-alert" onclick="if(event.target===this)closeModal('modal-alert')">
-  <div class="modal">
-    <h3>Add alert</h3>
-    <label>Module code</label><input type="text" id="alert-mod" placeholder="e.g. RSE3204">
-    <label>Message</label><input type="text" id="alert-msg" placeholder="e.g. Quiz 2 due Friday">
-    <label>Date (optional)</label><input type="date" id="alert-date">
-    <label>Colour</label>
-    <div class="color-swatch-row" id="alert-color-row"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('modal-alert')">Cancel</button>
-      <button class="btn-primary" onclick="saveAlert()">Add alert</button>
-    </div>
-  </div>
-</div>
+      <div class="card col-8">
 
-<!-- Add Countdown Modal -->
-<div class="modal-overlay" id="modal-countdown" onclick="if(event.target===this)closeModal('modal-countdown')">
-  <div class="modal">
-    <h3>Add countdown</h3>
-    <label>Label</label><input type="text" id="cd-label-in" placeholder="e.g. Midterm exam">
-    <label>Date</label><input type="date" id="cd-date-in">
-    <label>Colour</label>
-    <div class="color-swatch-row" id="cd-color-row"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('modal-countdown')">Cancel</button>
-      <button class="btn-primary" onclick="saveCountdown()">Add</button>
-    </div>
-  </div>
-</div>
+        <div class="card-title">
+          <h3>Quick Links</h3>
+          <button>
+            <i class="ti ti-plus"></i>
+          </button>
+        </div>
 
-<!-- Color Picker Modal (for items) -->
-<div class="modal-overlay" id="modal-color" onclick="if(event.target===this)closeModal('modal-color')">
-  <div class="modal">
-    <h3>Choose colour</h3>
-    <div class="color-swatch-row" id="color-picker-row"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('modal-color')">Cancel</button>
-    </div>
-  </div>
-</div>
+        <div class="links-grid">
 
-<script>
-/* ─────────────────────────────────────────────
-   DATA & DEFAULTS
-───────────────────────────────────────────── */
-const COLORS = [
-  {id:'none',   label:'Default', bg:'',        border:'',        text:'',        sub:''},
-  {id:'blue',   label:'Blue',    bg:'#E6F1FB', border:'#85B7EB', text:'#0C447C', sub:'#185FA5'},
-  {id:'teal',   label:'Teal',    bg:'#E1F5EE', border:'#5DCAA5', text:'#085041', sub:'#0F6E56'},
-  {id:'purple', label:'Purple',  bg:'#EEEDFE', border:'#AFA9EC', text:'#3C3489', sub:'#534AB7'},
-  {id:'amber',  label:'Amber',   bg:'#FAEEDA', border:'#EF9F27', text:'#633806', sub:'#854F0B'},
-  {id:'coral',  label:'Coral',   bg:'#FAECE7', border:'#F0997B', text:'#712B13', sub:'#993C1D'},
-  {id:'pink',   label:'Pink',    bg:'#FBEAF0', border:'#ED93B1', text:'#72243E', sub:'#993556'},
-  {id:'green',  label:'Green',   bg:'#EAF3DE', border:'#97C459', text:'#27500A', sub:'#3B6D11'},
-  {id:'red',    label:'Red',     bg:'#FCEBEB', border:'#F09595', text:'#791F1F', sub:'#A32D2D'},
-  {id:'gray',   label:'Gray',    bg:'#F1EFE8', border:'#B4B2A9', text:'#444441', sub:'#5F5E5A'},
-];
+          <a href="#" class="link-card">
+            <i class="ti ti-school"></i>
+            <span>IN4SIT</span>
+          </a>
 
-// Panel accent colours (lighter, for panel backgrounds)
-const PANEL_COLORS = [
-  {id:'none',   label:'Default',  bg:'',        border:'',        title:''},
-  {id:'blue',   label:'Blue',     bg:'#f0f6fd', border:'#85B7EB', title:'#0C447C'},
-  {id:'teal',   label:'Teal',     bg:'#f0faf5', border:'#5DCAA5', title:'#085041'},
-  {id:'purple', label:'Purple',   bg:'#f5f4ff', border:'#AFA9EC', title:'#3C3489'},
-  {id:'amber',  label:'Amber',    bg:'#fdf6e8', border:'#EF9F27', title:'#633806'},
-  {id:'coral',  label:'Coral',    bg:'#fdf3ef', border:'#F0997B', title:'#712B13'},
-  {id:'pink',   label:'Pink',     bg:'#fdf2f6', border:'#ED93B1', title:'#72243E'},
-  {id:'green',  label:'Green',    bg:'#f4fae8', border:'#97C459', title:'#27500A'},
-  {id:'gray',   label:'Gray',     bg:'#f5f4f0', border:'#B4B2A9', title:'#444441'},
-];
+          <a href="#" class="link-card">
+            <i class="ti ti-layout-dashboard"></i>
+            <span>xSITE</span>
+          </a>
 
-const CAT_ICONS = {Portal:'ti-layout-dashboard',Library:'ti-books',Tool:'ti-tool',App:'ti-device-mobile',Forum:'ti-messages',Other:'ti-link'};
+          <a href="#" class="link-card">
+            <i class="ti ti-mail"></i>
+            <span>Outlook</span>
+          </a>
 
-const DEFAULT_LINKS = [
-  {id:'l1', name:'IN4SIT',            url:'https://in4sit.singaporetech.edu.sg', cat:'Portal',  icon:'ti-school',            color:'blue'},
-  {id:'l2', name:'xSITE',             url:'https://xsite.singaporetech.edu.sg',  cat:'Portal',  icon:'ti-layout-dashboard',  color:'teal'},
-  {id:'l3', name:'Outlook',           url:'https://outlook.office365.com',        cat:'Portal',  icon:'ti-mail',              color:'blue'},
-  {id:'l4', name:'Library Databases', url:'https://libguides.singaporetech.edu.sg',cat:'Library',icon:'ti-books',             color:'purple'},
-  {id:'l5', name:'ONE SEARCH',        url:'https://onesearch.singaporetech.edu.sg',cat:'Library',icon:'ti-search',            color:'purple'},
-  {id:'l6', name:'Campus Wayfinder',  url:'#',                                    cat:'Tool',    icon:'ti-map-pin',           color:'green'},
-  {id:'l7', name:'Resource Booking',  url:'#',                                    cat:'Tool',    icon:'ti-calendar-event',    color:'green'},
-  {id:'l8', name:'Loan Media Equip.', url:'#',                                    cat:'Tool',    icon:'ti-device-laptop',     color:'gray'},
-  {id:'l9', name:'SIT 123RF',         url:'#',                                    cat:'Library', icon:'ti-photo',             color:'purple'},
-  {id:'l10',name:'MINDLINE',          url:'https://mindline.sg',                  cat:'Tool',    icon:'ti-heart',             color:'pink'},
-  {id:'l11',name:'Eight Hawker (W)',  url:'#',                                    cat:'Other',   icon:'ti-tools-kitchen-2',   color:'amber'},
-  {id:'l12',name:'Timetable Grabber', url:'#',                                    cat:'App',     icon:'ti-calendar',          color:'coral'},
-  {id:'l13',name:'Pulse',             url:'#',                                    cat:'App',     icon:'ti-activity',          color:'coral'},
-  {id:'l14',name:'CATES',             url:'#',                                    cat:'App',     icon:'ti-file-certificate',  color:'coral'},
-  {id:'l15',name:'SIT Student Forums',url:'#',                                    cat:'Forum',   icon:'ti-messages',          color:'teal'},
-];
-const DEFAULT_ALERTS = [
-  {id:'a1', mod:'General', msg:'Check timetable for Week 1 changes', date:'', color:'amber'},
-];
-function daysFromNow(d) { const dt = new Date(); dt.setDate(dt.getDate() + d); return dt.toISOString().slice(0,10); }
-const DEFAULT_COUNTDOWNS = [
-  {id:'c1', label:'Decision Quiz 2',  date:daysFromNow(2),  color:'red'},
-  {id:'c2', label:'Assignments due',  date:daysFromNow(10), color:'amber'},
-  {id:'c3', label:'End of trimester', date:daysFromNow(70), color:'teal'},
-];
+          <a href="#" class="link-card">
+            <i class="ti ti-books"></i>
+            <span>Library</span>
+          </a>
 
-// Panel layout state
-const PANEL_DEFS = [
-  {id:'links',     title:'Quick links',         icon:'ti-link'},
-  {id:'alerts',    title:'Alerts & reminders',  icon:'ti-bell'},
-  {id:'timetable', title:'Timetable',            icon:'ti-calendar'},
-  {id:'deadlines', title:'Upcoming deadlines',  icon:'ti-clock'},
-  {id:'calendar',  title:'Calendar',            icon:'ti-calendar-month'},
-];
+          <a href="#" class="link-card">
+            <i class="ti ti-calendar"></i>
+            <span>Timetable</span>
+          </a>
 
-function load(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } }
-function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+          <a href="#" class="link-card">
+            <i class="ti ti-heart"></i>
+            <span>Mindline</span>
+          </a>
 
-let links      = load('sit_links', DEFAULT_LINKS);
-let alerts     = load('sit_alerts', DEFAULT_ALERTS);
-let countdowns = load('sit_cds', DEFAULT_COUNTDOWNS);
-let editMode   = false;
-let layoutCols = load('sit_layout_cols', 2);
-let panelOrder = load('sit_panel_order', PANEL_DEFS.map(p=>p.id));
-let panelHidden= load('sit_panel_hidden', []);
-let panelColors= load('sit_panel_colors', {});
-let panelSpan  = load('sit_panel_span', {});
-let dashTitle  = load('sit_dash_title', 'Student dashboard');
-let calYear, calMonth;
-const todayDate = new Date();
-calYear = todayDate.getFullYear();
-calMonth = todayDate.getMonth();
-let colorTarget = null;
-const selectedColors = {};
+        </div>
 
-// Ensure all panels are in the order array
-PANEL_DEFS.forEach(p => { if (!panelOrder.includes(p.id)) panelOrder.push(p.id); });
+      </div>
 
-/* ─────────────────────────────────────────────
-   LAYOUT
-───────────────────────────────────────────── */
-function setLayout(n) {
-  layoutCols = n;
-  save('sit_layout_cols', n);
-  const c = document.getElementById('panels-container');
-  c.className = `panels-container cols-${n}`;
-  [1,2,3].forEach(i => document.getElementById('lopt-'+i)?.classList.toggle('selected', i===n));
-}
+      <!-- ALERTS -->
 
-function toggleLayoutBar() {
-  const bar = document.getElementById('layout-bar');
-  const btn = document.getElementById('layout-toggle');
-  const visible = bar.classList.toggle('visible');
-  btn.classList.toggle('active', visible);
-  renderHiddenChips();
-}
+      <div class="card col-4">
 
-function renderHiddenChips() {
-  const el = document.getElementById('hidden-chips');
-  if (!el) return;
-  const hidden = panelOrder.filter(id => panelHidden.includes(id));
-  if (!hidden.length) { el.innerHTML = '<span style="font-size:12px;color:var(--color-text-tertiary)">None</span>'; return; }
-  el.innerHTML = hidden.map(id => {
-    const def = PANEL_DEFS.find(p=>p.id===id);
-    return `<div class="hidden-panel-chip" onclick="showPanel('${id}')"><i class="ti ti-eye" aria-hidden="true"></i> ${def?.title||id}</div>`;
-  }).join('');
-}
+        <div class="card-title">
+          <h3>Alerts</h3>
 
-function showPanel(id) {
-  panelHidden = panelHidden.filter(x=>x!==id);
-  save('sit_panel_hidden', panelHidden);
-  renderPanels();
-  renderHiddenChips();
-}
+          <button>
+            <i class="ti ti-bell"></i>
+          </button>
+        </div>
 
-/* ─────────────────────────────────────────────
-   PANEL RENDERING
-───────────────────────────────────────────── */
-function getPanelColorStyle(panelId) {
-  const colorId = panelColors[panelId] || 'none';
-  const c = PANEL_COLORS.find(x=>x.id===colorId) || PANEL_COLORS[0];
-  if (!c.bg) return '';
-  return `--panel-bg:${c.bg};--panel-border:${c.border};--panel-title-color:${c.title}`;
-}
+        <div class="alerts">
 
-function renderPanels() {
-  const container = document.getElementById('panels-container');
-  container.innerHTML = '';
-  panelOrder.filter(id => !panelHidden.includes(id)).forEach(id => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'panel-wrapper';
-    wrapper.dataset.panelId = id;
-    if (panelSpan[id]) wrapper.classList.add('span-'+panelSpan[id]);
-    wrapper.draggable = editMode;
+          <div class="alert">
+            <i class="ti ti-alert-triangle"></i>
 
-    // Edit bar
-    const def = PANEL_DEFS.find(p=>p.id===id);
-    const colorId = panelColors[id] || 'none';
-    const spanActive = !!panelSpan[id];
-    wrapper.innerHTML = `
-      <div class="panel-edit-bar">
-        <span class="panel-drag-handle" title="Drag to reorder"><i class="ti ti-grip-vertical" aria-hidden="true"></i></span>
-        <span style="font-size:12px;font-weight:500;color:var(--color-text-primary)">${def?.title||id}</span>
-        <div class="panel-edit-bar-right">
-          <button class="panel-mini-btn span-btn${spanActive?' active':''}" onclick="togglePanelSpan('${id}')" title="Stretch across columns"><i class="ti ti-arrows-horizontal" aria-hidden="true"></i> Wide</button>
-          <div style="position:relative">
-            <button class="panel-mini-btn" onclick="togglePanelColorPicker('${id}')" title="Panel colour"><i class="ti ti-palette" aria-hidden="true"></i> Colour</button>
-            <div class="panel-color-popup" id="pcp-${id}">
-              <div class="panel-color-popup-title">Panel colour</div>
-              <div class="pcp-swatches">${PANEL_COLORS.map(c=>{
-                const bg = c.bg || 'var(--color-background-secondary)';
-                const sel = c.id===colorId;
-                return `<div class="pcp-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="setPanelColor('${id}','${c.id}')" title="${c.label}"></div>`;
-              }).join('')}</div>
+            <div>
+              <h4>Quiz 2</h4>
+              <p>Submission due Friday 11:59PM</p>
             </div>
           </div>
-          <button class="panel-mini-btn hide-btn" onclick="hidePanel('${id}')" title="Hide panel"><i class="ti ti-eye-off" aria-hidden="true"></i> Hide</button>
+
+          <div class="alert">
+            <i class="ti ti-calendar-event"></i>
+
+            <div>
+              <h4>Class Change</h4>
+              <p>Tomorrow lecture moved online</p>
+            </div>
+          </div>
+
         </div>
+
       </div>
-    `;
 
-    // The actual panel div
-    const panel = document.createElement('div');
-    panel.className = 'panel';
-    const style = getPanelColorStyle(id);
-    if (style) panel.setAttribute('style', style);
-    panel.id = 'panel-'+id;
-    panel.innerHTML = buildPanelInner(id);
-    wrapper.appendChild(panel);
-    container.appendChild(wrapper);
+      <!-- DEADLINES -->
 
-    // Drag events
-    wrapper.addEventListener('dragstart', onDragStart);
-    wrapper.addEventListener('dragend', onDragEnd);
-    wrapper.addEventListener('dragover', onDragOver);
-    wrapper.addEventListener('dragleave', onDragLeave);
-    wrapper.addEventListener('drop', onDrop);
-  });
+      <div class="card col-12">
 
-  // Post-render hooks
-  renderLinks(); renderAlerts(); renderCountdowns(); renderCalendar();
-  restoreTimetable();
-}
-
-function buildPanelInner(id) {
-  switch(id) {
-    case 'links': return `
-      <div class="panel-title">Quick links</div>
-      <div class="links-grid" id="links-grid"></div>`;
-    case 'alerts': return `
-      <div class="panel-title">
-        Alerts &amp; reminders
-        <button class="section-add-btn" onclick="openModal('modal-alert')"><i class="ti ti-plus" aria-hidden="true"></i> Add</button>
-      </div>
-      <div id="alerts-list"></div>`;
-    case 'timetable': return `
-      <div class="panel-title">
-        Timetable
-        <div class="tt-controls">
-          <button class="tt-clear-btn" id="tt-clear-btn" onclick="clearTimetable()" style="display:none"><i class="ti ti-trash" aria-hidden="true"></i> Clear</button>
+        <div class="card-title">
+          <h3>Upcoming Deadlines</h3>
         </div>
-      </div>
-      <div id="tt-upload-section">
-        <div class="tt-upload-area" id="tt-drop-zone">
-          <input type="file" accept=".ics" id="ics-file-input" onchange="handleIcsUpload(event)">
-          <div class="tt-upload-icon"><i class="ti ti-calendar-upload" aria-hidden="true"></i></div>
-          <p>Drop your timetable <strong>.ics</strong> file here</p>
-          <small>or click to browse &mdash; exported from IN4SIT / Google Calendar / Outlook</small>
+
+        <div class="deadline-grid">
+
+          <div class="deadline">
+            <h2>2</h2>
+            <p>Quiz 2</p>
+          </div>
+
+          <div class="deadline">
+            <h2>10</h2>
+            <p>Assignments Due</p>
+          </div>
+
+          <div class="deadline">
+            <h2>70</h2>
+            <p>End of Trimester</p>
+          </div>
+
         </div>
-        <div id="tt-file-name" class="tt-file-name" style="display:none"></div>
+
       </div>
-      <div id="tt-view" style="display:none">
-        <div class="tt-week-nav">
-          <button class="cal-nav" onclick="ttPrevWeek()"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-          <span class="tt-week-label" id="tt-week-label"></span>
-          <button class="cal-nav" onclick="ttNextWeek()"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+
+      <!-- TIMETABLE -->
+
+      <div class="card col-12">
+
+        <div class="card-title">
+          <h3>Today's Timetable</h3>
         </div>
-        <div id="tt-grid-container"></div>
-        <div class="tt-legend" id="tt-legend"></div>
-      </div>`;
-    case 'deadlines': return `
-      <div class="panel-title">
-        Upcoming deadlines
-        <button class="section-add-btn" onclick="openModal('modal-countdown')"><i class="ti ti-plus" aria-hidden="true"></i> Add</button>
+
+        <div class="timetable">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Module</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>9:00 AM</td>
+
+                <td>
+                  <div class="class-card">
+                    <h4>Embedded Systems</h4>
+                    <p>Lecture</p>
+                  </div>
+                </td>
+
+                <td>SIT Punggol E5-02</td>
+              </tr>
+
+              <tr>
+                <td>1:00 PM</td>
+
+                <td>
+                  <div class="class-card">
+                    <h4>Robotics</h4>
+                    <p>Lab Session</p>
+                  </div>
+                </td>
+
+                <td>Lab 3A</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
       </div>
-      <div class="countdown-grid" id="countdown-grid"></div>`;
-    case 'calendar': return `
-      <div class="panel-title">Calendar</div>
-      <div class="cal-month">
-        <button class="cal-nav" onclick="prevMonth()"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-        <span id="cal-month-label"></span>
-        <button class="cal-nav" onclick="nextMonth()"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
-      </div>
-      <div class="cal-grid" id="cal-day-names"></div>
-      <div class="cal-grid" id="cal-days"></div>`;
-    default: return `<div class="panel-title">${id}</div>`;
-  }
-}
 
-function hidePanel(id) {
-  panelHidden.push(id);
-  save('sit_panel_hidden', panelHidden);
-  renderPanels();
-  renderHiddenChips();
-}
+    </div>
 
-function setPanelColor(panelId, colorId) {
-  panelColors[panelId] = colorId;
-  save('sit_panel_colors', panelColors);
-  const panel = document.getElementById('panel-'+panelId);
-  if (panel) {
-    const style = getPanelColorStyle(panelId);
-    panel.setAttribute('style', style);
-  }
-  // re-render the swatch picker
-  const popup = document.getElementById('pcp-'+panelId);
-  if (popup) {
-    popup.querySelector('.pcp-swatches').innerHTML = PANEL_COLORS.map(c=>{
-      const bg = c.bg || 'var(--color-background-secondary)';
-      const sel = c.id===colorId;
-      return `<div class="pcp-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="setPanelColor('${panelId}','${c.id}')" title="${c.label}"></div>`;
-    }).join('');
-  }
-}
+  </main>
 
-function togglePanelColorPicker(panelId) {
-  // close all others
-  document.querySelectorAll('.panel-color-popup.open').forEach(el => { if (el.id !== 'pcp-'+panelId) el.classList.remove('open'); });
-  document.getElementById('pcp-'+panelId)?.classList.toggle('open');
-}
+</div>
 
-// Close popups on outside click
-document.addEventListener('click', e => {
-  if (!e.target.closest('.panel-mini-btn') && !e.target.closest('.panel-color-popup')) {
-    document.querySelectorAll('.panel-color-popup.open').forEach(el => el.classList.remove('open'));
-  }
-});
-
-function togglePanelSpan(id) {
-  if (panelSpan[id]) { delete panelSpan[id]; }
-  else { panelSpan[id] = layoutCols; }
-  save('sit_panel_span', panelSpan);
-  renderPanels();
-}
-
-/* ─────────────────────────────────────────────
-   DRAG & DROP PANEL REORDER
-───────────────────────────────────────────── */
-let dragSrcId = null;
-
-function onDragStart(e) {
-  dragSrcId = this.dataset.panelId;
-  this.classList.add('panel-dragging');
-  e.dataTransfer.effectAllowed = 'move';
-}
-function onDragEnd(e) {
-  this.classList.remove('panel-dragging');
-  document.querySelectorAll('.panel-drag-over').forEach(el=>el.classList.remove('panel-drag-over'));
-}
-function onDragOver(e) {
-  e.preventDefault(); e.dataTransfer.dropEffect = 'move';
-  this.querySelector('.panel')?.classList.add('panel-drag-over');
-}
-function onDragLeave(e) {
-  this.querySelector('.panel')?.classList.remove('panel-drag-over');
-}
-function onDrop(e) {
-  e.preventDefault();
-  const targetId = this.dataset.panelId;
-  if (!dragSrcId || dragSrcId === targetId) return;
-  const srcIdx = panelOrder.indexOf(dragSrcId);
-  const tgtIdx = panelOrder.indexOf(targetId);
-  panelOrder.splice(srcIdx, 1);
-  panelOrder.splice(tgtIdx, 0, dragSrcId);
-  save('sit_panel_order', panelOrder);
-  renderPanels();
-}
-
-/* ─────────────────────────────────────────────
-   EDIT MODE
-───────────────────────────────────────────── */
-function toggleEdit() {
-  editMode = !editMode;
-  document.getElementById('dashboard').classList.toggle('edit-mode', editMode);
-  const btn = document.getElementById('edit-toggle');
-  btn.classList.toggle('active', editMode);
-  btn.innerHTML = editMode
-    ? '<i class="ti ti-check" aria-hidden="true"></i> <span class="btn-label">Done</span>'
-    : '<i class="ti ti-edit" aria-hidden="true"></i> <span class="btn-label">Customise</span>';
-
-  // Title editing
-  const title = document.getElementById('dash-title');
-  const sub   = document.getElementById('dash-subtitle');
-  title.contentEditable = editMode ? 'true' : 'false';
-  sub.contentEditable   = editMode ? 'true' : 'false';
-  if (!editMode) {
-    save('sit_dash_title', title.textContent.trim() || 'Student dashboard');
-    save('sit_dash_subtitle', sub.textContent.trim());
-  }
-
-  // Toggle panel draggable
-  document.querySelectorAll('.panel-wrapper').forEach(w => { w.draggable = editMode; });
-  renderLinks();
-}
-
-/* ─────────────────────────────────────────────
-   CONTENT RENDERERS
-───────────────────────────────────────────── */
-function getColor(id) { return COLORS.find(c => c.id === id) || COLORS[0]; }
-function colorStyle(colorId, type) {
-  const c = getColor(colorId);
-  if (!c.bg) return '';
-  if (type === 'link')  return `--lc-bg:${c.bg};--lc-text:${c.text};--lc-sub:${c.sub};border-color:${c.border}`;
-  if (type === 'alert') return `--ai-bg:${c.bg};--ai-text:${c.text};--ai-sub:${c.sub};--ai-border:${c.border}`;
-  if (type === 'cd')    return `--cd-bg:${c.bg};--cd-text:${c.text};--cd-sub:${c.sub};--cd-border:${c.border}`;
-  return '';
-}
-
-function renderLinks() {
-  const g = document.getElementById('links-grid');
-  if (!g) return;
-  g.innerHTML = '';
-  links.forEach(lk => {
-    const c = document.createElement('a');
-    c.className = 'link-card';
-    c.href = editMode ? '#' : lk.url;
-    if (!editMode && lk.url !== '#') c.target = '_blank';
-    if (editMode) c.onclick = e => e.preventDefault();
-    const style = colorStyle(lk.color, 'link');
-    if (style) c.setAttribute('style', style);
-    const icon = lk.icon || (CAT_ICONS[lk.cat] || 'ti-link');
-    c.innerHTML =
-      `<i class="ti ${icon} lc-icon" aria-hidden="true"></i>` +
-      `<span class="lc-name">${lk.name}</span>` +
-      `<span class="lc-tag">${lk.cat}</span>` +
-      `<button class="del-btn" onclick="deleteItem('links','${lk.id}');event.stopPropagation();event.preventDefault()" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
-      `<button class="color-btn" onclick="openColorPicker('links','${lk.id}');event.stopPropagation();event.preventDefault()" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
-    g.appendChild(c);
-  });
-  if (editMode) {
-    const add = document.createElement('div');
-    add.className = 'link-card add-card';
-    add.innerHTML = '<i class="ti ti-plus" aria-hidden="true"></i><span>Add link</span>';
-    add.onclick = () => openModal('modal-link');
-    g.appendChild(add);
-  }
-}
-
-function renderAlerts() {
-  const l = document.getElementById('alerts-list');
-  if (!l) return;
-  l.innerHTML = '';
-  if (!alerts.length) { l.innerHTML = '<p style="font-size:13px;color:var(--color-text-tertiary);text-align:center;padding:1rem">No alerts</p>'; return; }
-  alerts.forEach(a => {
-    const d = document.createElement('div');
-    d.className = 'alert-item';
-    const style = colorStyle(a.color, 'alert');
-    if (style) d.setAttribute('style', style);
-    d.innerHTML =
-      `<i class="ti ti-alert-triangle ai-icon" aria-hidden="true"></i>` +
-      `<div><div class="ai-name">${a.mod}</div><div class="ai-msg">${a.msg}</div>${a.date?`<div class="ai-meta">${a.date}</div>`:''}</div>` +
-      `<button class="del-btn" onclick="deleteItem('alerts','${a.id}')" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
-      `<button class="color-btn" onclick="openColorPicker('alerts','${a.id}')" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
-    l.appendChild(d);
-  });
-}
-
-function renderCountdowns() {
-  const g = document.getElementById('countdown-grid');
-  if (!g) return;
-  g.innerHTML = '';
-  countdowns.forEach(c => {
-    const d = daysUntil(c.date);
-    const el = document.createElement('div');
-    el.className = 'cd-card' + (d <= 3 && !c.color ? ' urgent' : '');
-    const style = colorStyle(c.color, 'cd');
-    if (style) el.setAttribute('style', style);
-    el.innerHTML =
-      `<div class="cd-num">${d < 0 ? 'Past' : d}</div>` +
-      `<div class="cd-label">${c.label}</div>` +
-      `<button class="del-btn" onclick="deleteItem('countdowns','${c.id}')" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button>` +
-      `<button class="color-btn" onclick="openColorPicker('countdowns','${c.id}')" aria-label="Change colour"><i class="ti ti-palette" aria-hidden="true"></i></button>`;
-    g.appendChild(el);
-  });
-}
-
-function daysUntil(iso) {
-  const now = new Date(); now.setHours(0,0,0,0);
-  const t = new Date(iso); t.setHours(0,0,0,0);
-  return Math.round((t - now) / 86400000);
-}
-
-function renderCalendar() {
-  const lbl = document.getElementById('cal-month-label');
-  if (!lbl) return;
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  lbl.textContent = months[calMonth] + ' ' + calYear;
-  document.getElementById('cal-day-names').innerHTML = 'MTWTFSS'.split('').map(d => `<div class="cal-day-name">${d}</div>`).join('');
-  const daysEl = document.getElementById('cal-days');
-  daysEl.innerHTML = '';
-  const first = new Date(calYear, calMonth, 1).getDay();
-  const offset = first === 0 ? 6 : first - 1;
-  const total = new Date(calYear, calMonth + 1, 0).getDate();
-  const eventDates = countdowns.map(c => c.date);
-  for (let i = 0; i < offset; i++) daysEl.appendChild(document.createElement('div'));
-  for (let d = 1; d <= total; d++) {
-    const el = document.createElement('div');
-    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = todayDate.getFullYear()===calYear && todayDate.getMonth()===calMonth && todayDate.getDate()===d;
-    el.className = 'cal-day' + (isToday ? ' today' : '') + (eventDates.includes(iso) ? ' has-event' : '');
-    el.textContent = d;
-    daysEl.appendChild(el);
-  }
-}
-
-function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
-function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
-
-function deleteItem(type, id) {
-  if (type === 'links')       { links = links.filter(x => x.id !== id); save('sit_links', links); renderLinks(); }
-  else if (type === 'alerts') { alerts = alerts.filter(x => x.id !== id); save('sit_alerts', alerts); renderAlerts(); }
-  else                        { countdowns = countdowns.filter(x => x.id !== id); save('sit_cds', countdowns); renderCountdowns(); renderCalendar(); }
-}
-
-/* ─────────────────────────────────────────────
-   MODALS
-───────────────────────────────────────────── */
-function renderSwatchRow(rowId, selectedId, modalKey) {
-  const row = document.getElementById(rowId);
-  if (!row) return;
-  row.innerHTML = COLORS.map(c => {
-    const bg = c.bg || 'var(--color-background-secondary)';
-    const sel = c.id === selectedId;
-    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="selectModalColor('${c.id}','${modalKey}')" title="${c.label}"></div>`;
-  }).join('');
-}
-function selectModalColor(colorId, modalKey) {
-  selectedColors[modalKey] = colorId;
-  const rowMap = {'modal-link':'link-color-row','modal-alert':'alert-color-row','modal-countdown':'cd-color-row'};
-  renderSwatchRow(rowMap[modalKey], colorId, modalKey);
-}
-function openModal(id) {
-  selectedColors[id] = 'none';
-  document.getElementById(id).classList.add('open');
-  const rowMap = {'modal-link':'link-color-row','modal-alert':'alert-color-row','modal-countdown':'cd-color-row'};
-  if (rowMap[id]) renderSwatchRow(rowMap[id], 'none', id);
-  if (id === 'modal-link') { document.getElementById('link-name').value=''; document.getElementById('link-url').value='https://'; document.getElementById('link-cat').value='Portal'; }
-  if (id === 'modal-alert') { document.getElementById('alert-mod').value=''; document.getElementById('alert-msg').value=''; document.getElementById('alert-date').value=''; }
-  if (id === 'modal-countdown') { document.getElementById('cd-label-in').value=''; document.getElementById('cd-date-in').value=''; }
-}
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function openColorPicker(type, id) {
-  colorTarget = { type, id };
-  const arr = type==='links'?links:type==='alerts'?alerts:countdowns;
-  const current = arr.find(x=>x.id===id)?.color || 'none';
-  const row = document.getElementById('color-picker-row');
-  row.innerHTML = COLORS.map(c => {
-    const bg = c.bg || 'var(--color-background-secondary)';
-    const sel = c.id === current;
-    return `<div class="color-swatch${sel?' selected':''}" style="background:${bg};border:2px solid ${sel?'var(--color-text-primary)':'transparent'}" onclick="applyColor('${c.id}')" title="${c.label}"></div>`;
-  }).join('');
-  document.getElementById('modal-color').classList.add('open');
-}
-function applyColor(colorId) {
-  const { type, id } = colorTarget;
-  if (type === 'links')       { const l = links.find(x=>x.id===id); if(l) l.color=colorId; save('sit_links',links); renderLinks(); }
-  else if (type === 'alerts') { const a = alerts.find(x=>x.id===id); if(a) a.color=colorId; save('sit_alerts',alerts); renderAlerts(); }
-  else                        { const c = countdowns.find(x=>x.id===id); if(c) c.color=colorId; save('sit_cds',countdowns); renderCountdowns(); }
-  closeModal('modal-color');
-}
-function saveLink() {
-  const n = document.getElementById('link-name').value.trim();
-  const u = document.getElementById('link-url').value.trim();
-  const cat = document.getElementById('link-cat').value;
-  if (!n) return;
-  links.push({ id:'l'+Date.now(), name:n, url:u||'#', cat, icon:CAT_ICONS[cat]||'ti-link', color:selectedColors['modal-link']||'none' });
-  save('sit_links', links); closeModal('modal-link'); renderLinks();
-}
-function saveAlert() {
-  const mod = document.getElementById('alert-mod').value.trim();
-  const msg = document.getElementById('alert-msg').value.trim();
-  const date = document.getElementById('alert-date').value;
-  if (!msg) return;
-  alerts.push({ id:'a'+Date.now(), mod:mod||'General', msg, date, color:selectedColors['modal-alert']||'amber' });
-  save('sit_alerts', alerts); closeModal('modal-alert'); renderAlerts();
-}
-function saveCountdown() {
-  const label = document.getElementById('cd-label-in').value.trim();
-  const date  = document.getElementById('cd-date-in').value;
-  if (!label || !date) return;
-  countdowns.push({ id:'c'+Date.now(), label, date, color:selectedColors['modal-countdown']||'none' });
-  save('sit_cds', countdowns); closeModal('modal-countdown'); renderCountdowns(); renderCalendar();
-}
-
-/* ─────────────────────────────────────────────
-   ICS TIMETABLE
-───────────────────────────────────────────── */
-const TT_COLORS = [
-  {bg:'#E6F1FB',text:'#0C447C'},{bg:'#E1F5EE',text:'#085041'},{bg:'#EEEDFE',text:'#3C3489'},
-  {bg:'#FAEEDA',text:'#633806'},{bg:'#FAECE7',text:'#712B13'},{bg:'#FBEAF0',text:'#72243E'},
-  {bg:'#EAF3DE',text:'#27500A'},{bg:'#FCF0E6',text:'#7A3E00'},
-];
-const ttColorMap = {};
-let ttColorIdx = 0;
-function ttColor(key) {
-  if (!ttColorMap[key]) { ttColorMap[key] = TT_COLORS[ttColorIdx % TT_COLORS.length]; ttColorIdx++; }
-  return ttColorMap[key];
-}
-let ttEvents = [];
-let ttWeekOffset = 0;
-
-function restoreTimetable() {
-  const saved = load('sit_ics_events', []);
-  const name  = load('sit_ics_name', '');
-  if (saved && saved.length) showTimetable(saved, name || 'timetable.ics');
-  // Re-attach drop zone
-  const dz = document.getElementById('tt-drop-zone');
-  if (dz) {
-    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
-    dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
-    dz.addEventListener('drop', e => {
-      e.preventDefault(); dz.classList.remove('drag-over');
-      const file = e.dataTransfer.files[0];
-      if (file && file.name.endsWith('.ics')) processIcsFile(file);
-    });
-  }
-}
-
-function handleIcsUpload(e) { const f = e.target.files[0]; if (f) processIcsFile(f); }
-
-function processIcsFile(file) {
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const events = parseIcs(ev.target.result);
-    if (!events.length) { alert('No events found in this .ics file.'); return; }
-    save('sit_ics_events', events);
-    save('sit_ics_name', file.name);
-    showTimetable(events, file.name);
-  };
-  reader.readAsText(file);
-}
-
-function parseIcs(text) {
-  const unfolded = text.replace(/\r\n[ \t]/g, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = unfolded.split('\n');
-  const events = [];
-  let cur = null;
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (line === 'BEGIN:VEVENT') { cur = {}; continue; }
-    if (line === 'END:VEVENT')   { if (cur) { const ev = buildEvent(cur); if (ev) events.push(ev); } cur = null; continue; }
-    if (!cur) continue;
-    const idx = line.indexOf(':');
-    if (idx < 0) continue;
-    const baseKey = line.slice(0, idx).toUpperCase().split(';')[0];
-    cur[baseKey] = line.slice(idx + 1);
-  }
-  return events;
-}
-
-function parseIcsDate(str) {
-  if (!str) return null;
-  str = str.replace('Z','');
-  if (str.length === 8) return new Date(+str.slice(0,4), +str.slice(4,6)-1, +str.slice(6,8), 0, 0);
-  return new Date(+str.slice(0,4), +str.slice(4,6)-1, +str.slice(6,8), +str.slice(9,11), +str.slice(11,13));
-}
-
-function buildEvent(raw) {
-  const start = parseIcsDate(raw['DTSTART']);
-  const end   = parseIcsDate(raw['DTEND']) || start;
-  if (!start) return null;
-  const summary  = (raw['SUMMARY']  || 'Untitled').replace(/\\n/g,'\n').replace(/\\,/g,',');
-  const location = (raw['LOCATION'] || '').replace(/\\n/g,' ').replace(/\\,/g,',');
-  return { summary, location, start: start.toISOString(), end: end.toISOString() };
-}
-
-function getWeekStart(offset) {
-  const d = new Date(); d.setHours(0,0,0,0);
-  const day = d.getDay();
-  const mon = new Date(d); mon.setDate(d.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
-  return mon;
-}
-
-function showTimetable(events, fileName) {
-  ttEvents = events;
-  ttColorIdx = 0; Object.keys(ttColorMap).forEach(k => delete ttColorMap[k]);
-  const up = document.getElementById('tt-upload-section');
-  const tv = document.getElementById('tt-view');
-  const clr = document.getElementById('tt-clear-btn');
-  const fn = document.getElementById('tt-file-name');
-  if (up) up.style.display = 'none';
-  if (tv) tv.style.display = 'block';
-  if (clr) clr.style.display = '';
-  if (fn) { fn.style.display = 'flex'; fn.innerHTML = `<i class="ti ti-check" aria-hidden="true"></i> ${fileName}`; }
-  ttWeekOffset = 0;
-  renderTimetable();
-}
-
-function renderTimetable() {
-  const weekStart = getWeekStart(ttWeekOffset);
-  const fmt = d => d.toLocaleDateString('en-SG', {day:'numeric', month:'short'});
-  const lbl = document.getElementById('tt-week-label');
-  if (lbl) lbl.textContent = fmt(weekStart) + ' – ' + fmt(new Date(+weekStart + 6*86400000));
-  const days = Array.from({length:7}, (_,i) => { const d = new Date(weekStart); d.setDate(weekStart.getDate()+i); return d; });
-  const todayIso = new Date().toISOString().slice(0,10);
-  const dayEvents = days.map(d => {
-    const iso = d.toISOString().slice(0,10);
-    return ttEvents.filter(ev => ev.start.slice(0,10) === iso).sort((a,b) => a.start.localeCompare(b.start));
-  });
-  const allThisWeek = dayEvents.flat();
-  const container = document.getElementById('tt-grid-container');
-  if (!container) return;
-  if (!allThisWeek.length) { container.innerHTML = '<div class="tt-empty">No classes this week</div>'; renderTtLegend(); return; }
-  let minH = 8, maxH = 18;
-  allThisWeek.forEach(ev => {
-    const h1 = new Date(ev.start).getHours();
-    const h2 = new Date(ev.end).getHours() + (new Date(ev.end).getMinutes() > 0 ? 1 : 0);
-    if (h1 < minH) minH = h1; if (h2 > maxH) maxH = h2;
-  });
-  const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  let html = `<div style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:2px;overflow-x:auto;min-width:0">`;
-  html += `<div></div>`;
-  days.forEach((d, i) => {
-    const iso = d.toISOString().slice(0,10);
-    html += `<div class="tt-header${iso===todayIso?' today-col':''}">${DAY_NAMES[i]}<br><span style="font-weight:400;opacity:.75">${d.getDate()}</span></div>`;
-  });
-  for (let h = minH; h <= maxH; h++) {
-    html += `<div class="tt-time">${String(h).padStart(2,'0')}:00</div>`;
-    days.forEach((d, di) => {
-      const evs = dayEvents[di].filter(ev => new Date(ev.start).getHours() === h);
-      html += `<div class="tt-cell">`;
-      evs.forEach(ev => {
-        const col = ttColor(ev.summary);
-        const sh = new Date(ev.start).getHours(), sm = new Date(ev.start).getMinutes();
-        const eh = new Date(ev.end).getHours(),   em = new Date(ev.end).getMinutes();
-        const ts = `${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
-        html += `<div class="tt-event" style="background:${col.bg};color:${col.text}" title="${ev.summary}${ev.location?'\n'+ev.location:''}\n${ts}">
-          <div class="tt-event-title">${ev.summary}</div>
-          ${ev.location?`<div class="tt-event-loc">${ev.location}</div>`:''}
-          <div style="font-size:10px;opacity:.7">${ts}</div>
-        </div>`;
-      });
-      html += `</div>`;
-    });
-  }
-  html += '</div>';
-  container.innerHTML = html;
-  renderTtLegend();
-}
-
-function renderTtLegend() {
-  const seen = {};
-  ttEvents.forEach(ev => { if (!seen[ev.summary]) seen[ev.summary] = ttColor(ev.summary); });
-  const lg = document.getElementById('tt-legend');
-  if (lg) lg.innerHTML = Object.entries(seen).map(([name, col]) =>
-    `<div class="tt-legend-item"><div class="tt-legend-dot" style="background:${col.bg};border:1px solid ${col.text}"></div>${name}</div>`
-  ).join('');
-}
-
-function ttPrevWeek() { ttWeekOffset--; renderTimetable(); }
-function ttNextWeek() { ttWeekOffset++; renderTimetable(); }
-
-function clearTimetable() {
-  ttEvents = []; ttWeekOffset = 0; ttColorIdx = 0;
-  save('sit_ics_events', []); save('sit_ics_name', '');
-  const up = document.getElementById('tt-upload-section');
-  const tv = document.getElementById('tt-view');
-  const clr = document.getElementById('tt-clear-btn');
-  const fn = document.getElementById('tt-file-name');
-  if (up) up.style.display = '';
-  if (tv) tv.style.display = 'none';
-  if (clr) clr.style.display = 'none';
-  if (fn) fn.style.display = 'none';
-  const inp = document.getElementById('ics-file-input');
-  if (inp) inp.value = '';
-}
-
-/* ─────────────────────────────────────────────
-   EXPORT / IMPORT
-───────────────────────────────────────────── */
-function exportData() {
-  const payload = {
-    version: 2,
-    links, alerts, countdowns,
-    ics_events: load('sit_ics_events', []),
-    ics_name:   load('sit_ics_name', ''),
-    layout_cols: layoutCols,
-    panel_order: panelOrder,
-    panel_hidden: panelHidden,
-    panel_colors: panelColors,
-    panel_span: panelSpan,
-    dash_title: document.getElementById('dash-title').textContent,
-    dash_subtitle: document.getElementById('dash-subtitle').textContent,
-  };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = 'dashboard-data.json'; a.click();
-}
-
-function importData(e) {
-  const file = e.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const d = JSON.parse(ev.target.result);
-      if (d.links)        { links = d.links;               save('sit_links', links); }
-      if (d.alerts)       { alerts = d.alerts;             save('sit_alerts', alerts); }
-      if (d.countdowns)   { countdowns = d.countdowns;     save('sit_cds', countdowns); }
-      if (d.layout_cols)  { layoutCols = d.layout_cols;    save('sit_layout_cols', layoutCols); }
-      if (d.panel_order)  { panelOrder = d.panel_order;    save('sit_panel_order', panelOrder); }
-      if (d.panel_hidden) { panelHidden = d.panel_hidden;  save('sit_panel_hidden', panelHidden); }
-      if (d.panel_colors) { panelColors = d.panel_colors;  save('sit_panel_colors', panelColors); }
-      if (d.panel_span)   { panelSpan = d.panel_span;      save('sit_panel_span', panelSpan); }
-      if (d.dash_title)   { save('sit_dash_title', d.dash_title); document.getElementById('dash-title').textContent = d.dash_title; }
-      if (d.dash_subtitle){ save('sit_dash_subtitle', d.dash_subtitle); document.getElementById('dash-subtitle').textContent = d.dash_subtitle; }
-      if (d.ics_events && d.ics_events.length) { save('sit_ics_events', d.ics_events); save('sit_ics_name', d.ics_name||''); }
-      setLayout(layoutCols);
-      renderPanels();
-      alert('Data imported!');
-    } catch { alert('Invalid file.'); }
-  };
-  reader.readAsText(file);
-  e.target.value = '';
-}
-
-/* ─────────────────────────────────────────────
-   INIT
-───────────────────────────────────────────── */
-// Restore title
-const savedTitle = load('sit_dash_title', 'Student dashboard');
-const savedSubtitle = load('sit_dash_subtitle', '');
-document.getElementById('dash-title').textContent = savedTitle;
-document.getElementById('dash-subtitle').textContent = savedSubtitle ||
-  new Date().toLocaleDateString('en-SG', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
-
-setLayout(layoutCols);
-renderPanels();
-</script>
 </body>
 </html>
