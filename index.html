@@ -250,6 +250,22 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   .dash-wrap{padding:1rem .75rem;}
   .support-grid{grid-template-columns:repeat(2,1fr);}
 }
+/* Todo */
+.todo-item{display:flex;align-items:center;gap:8px;padding:8px 6px;border-radius:var(--radius-sm);transition:background .15s;}
+.todo-item:hover{background:var(--bg-3);}
+.todo-item.done .todo-text{text-decoration:line-through;opacity:.5;}
+.todo-check{background:none;border:none;cursor:pointer;padding:2px;display:flex;align-items:center;font-size:18px;flex-shrink:0;}
+.todo-text{flex:1;font-size:13px;font-weight:500;color:var(--text);word-break:break-word;}
+.todo-del{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:13px;padding:3px;opacity:0;transition:opacity .15s;display:flex;align-items:center;}
+.todo-item:hover .todo-del{opacity:1;}
+/* Dark mode */
+body.dark{--bg:#0f0d1a;--bg-2:#1a1630;--bg-3:#201c35;--bg-4:#27224a;--bg-5:#2e2855;--text:#e8e0ff;--text-mid:#b8a8e8;--text-muted:#7060a8;--border:rgba(108,71,255,0.2);--border-strong:rgba(108,71,255,0.45);}
+/* Accent theme overrides */
+body.accent-red{--primary:#e01c2e;--primary-light:rgba(224,28,46,0.12);--primary-mid:#ff6b6b;--bg:#fff5f5;}
+body.accent-teal{--primary:#14b8a6;--primary-light:rgba(20,184,166,0.1);--primary-mid:#2dd4bf;--bg:#f0fdfc;}
+body.accent-amber{--primary:#d97706;--primary-light:rgba(245,158,11,0.1);--primary-mid:#f59e0b;--bg:#fffbeb;}
+/* Font size */
+body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 @keyframes scaleUp{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
 </style>
@@ -385,6 +401,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       </div>
       <button class="icon-btn" id="layout-toggle" onclick="toggleLayoutBar()"><i class="ti ti-layout-columns"></i> <span>Layout</span></button>
       <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit"></i> <span>Customise</span></button>
+      <button class="icon-btn" id="theme-toggle" onclick="cycleTheme()" title="Toggle dark/light mode"><i class="ti ti-moon"></i></button>
+      <button class="icon-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable push alerts for deadlines"><i class="ti ti-bell-ringing"></i> <span>Alerts</span></button>
       <button class="logout-btn" onclick="doLogout()"><i class="ti ti-logout"></i> Sign out</button>
     </div>
   </div>
@@ -408,6 +426,21 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     </div>
     <div class="layout-opt" id="lopt-3" onclick="setLayout(3)">
       <svg viewBox="0 0 36 24"><rect x="1" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".4"/><rect x="13" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".3"/><rect x="25" y="2" width="10" height="20" rx="1" fill="currentColor" opacity=".2"/></svg><span>3 Col</span>
+    </div>
+    <div class="layout-divider"></div>
+    <span class="layout-bar-label">Accent</span>
+    <div style="display:flex;gap:6px;align-items:center">
+      <div class="pcp-swatch" style="background:#6c47ff;width:22px;height:22px" title="Purple (default)" onclick="setAccent('purple')" id="acc-purple"></div>
+      <div class="pcp-swatch" style="background:#e01c2e;width:22px;height:22px" title="Red" onclick="setAccent('red')" id="acc-red"></div>
+      <div class="pcp-swatch" style="background:#14b8a6;width:22px;height:22px" title="Teal" onclick="setAccent('teal')" id="acc-teal"></div>
+      <div class="pcp-swatch" style="background:#d97706;width:22px;height:22px" title="Amber" onclick="setAccent('amber')" id="acc-amber"></div>
+    </div>
+    <div class="layout-divider"></div>
+    <span class="layout-bar-label">Text</span>
+    <div style="display:flex;gap:5px">
+      <button class="panel-mini-btn" onclick="setFontSize('sm')" id="fs-sm" style="font-size:10px">A−</button>
+      <button class="panel-mini-btn" onclick="setFontSize('md')" id="fs-md">A</button>
+      <button class="panel-mini-btn" onclick="setFontSize('lg')" id="fs-lg" style="font-size:14px">A+</button>
     </div>
     <div class="layout-divider"></div>
     <span class="layout-bar-label">Hidden</span>
@@ -474,8 +507,21 @@ let currentUser=null, NS='';
 let regData={};
 let selectedAvatarColor=AVATAR_COLORS[0];
 
-function getAccounts(){try{return JSON.parse(localStorage.getItem('sit_accounts')||'null')||JSON.parse(JSON.stringify(SEED_ACCOUNTS));}catch{return JSON.parse(JSON.stringify(SEED_ACCOUNTS));}}
-function saveAccounts(a){localStorage.setItem('sit_accounts',JSON.stringify(a));}
+function getAccounts(){
+  try{
+    const stored=localStorage.getItem('sit_accounts');
+    if(stored){
+      // Merge: stored accounts take priority, but seed accounts always exist as fallback
+      const parsed=JSON.parse(stored);
+      return Object.assign({},JSON.parse(JSON.stringify(SEED_ACCOUNTS)),parsed);
+    }
+    return JSON.parse(JSON.stringify(SEED_ACCOUNTS));
+  }catch{return JSON.parse(JSON.stringify(SEED_ACCOUNTS));}
+}
+function saveAccounts(a){
+  // Always save the full merged set
+  localStorage.setItem('sit_accounts',JSON.stringify(a));
+}
 
 function showScreen(id){
   ['login-screen','register-screen','dashboard-screen'].forEach(s=>{
@@ -710,6 +756,7 @@ const PANEL_DEFS=[
   {id:'alerts',   title:'Alerts & reminders', icon:'ti-bell'},
   {id:'timetable',title:'Timetable',          icon:'ti-calendar'},
   {id:'deadlines',title:'Upcoming deadlines', icon:'ti-clock'},
+  {id:'todo',     title:'To-do list',         icon:'ti-checkbox'},
   {id:'calendar', title:'Calendar',           icon:'ti-calendar-month'},
   {id:'support',  title:'Support & wellbeing',icon:'ti-heart'},
 ];
@@ -771,8 +818,9 @@ function initDashboard(){
 
   setLayout(layoutCols);
   renderPanels();
+  applyTheme();
   // Slight delay so UI paints first
-  setTimeout(checkDeadlineNotifications, 800);
+  setTimeout(()=>{checkDeadlineNotifications();scheduleNotifications();}, 800);
 }
 
 /* ══ LAYOUT ══ */
@@ -848,7 +896,7 @@ function renderPanels(){
     wrapper.addEventListener('dragleave',onDragLeave);
     wrapper.addEventListener('drop',onDrop);
   });
-  renderLinks();renderAlerts();renderCountdowns();renderCalendar();restoreTimetable();
+  renderLinks();renderAlerts();renderCountdowns();renderCalendar();restoreTimetable();renderTodos();
 }
 
 function buildPanelInner(id){
@@ -924,6 +972,22 @@ function buildPanelInner(id){
           <div class="sc-desc">Clubs, societies & student life</div>
         </a>
       </div>`;
+    case'todo':return`
+      <div class="panel-title">To-do List
+        <button class="section-add-btn" style="display:flex" onclick="openTodoInput()"><i class="ti ti-plus"></i> Add task</button>
+      </div>
+      <div id="todo-input-row" style="display:none;margin-bottom:10px;gap:6px;align-items:center">
+        <input type="text" id="todo-input" placeholder="New task…" style="flex:1;background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 11px;font-size:13px;font-family:var(--font-body);color:var(--text);outline:none" onkeydown="if(event.key==='Enter')saveTodo();if(event.key==='Escape')closeTodoInput()">
+        <select id="todo-priority" style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 8px;font-size:12px;font-family:var(--font-body);color:var(--text);outline:none">
+          <option value="normal">Normal</option>
+          <option value="high">🔴 High</option>
+          <option value="low">🟢 Low</option>
+        </select>
+        <button class="btn-primary" style="padding:8px 13px;font-size:12px" onclick="saveTodo()">Add</button>
+        <button class="btn-cancel" style="padding:8px 10px;font-size:12px" onclick="closeTodoInput()">✕</button>
+      </div>
+      <div id="todo-list"></div>
+      <div id="todo-empty" style="font-size:13px;color:var(--text-muted);text-align:center;padding:1.5rem;display:none">Nothing to do — enjoy the break! ✨</div>`;
     default:return`<div class="panel-title">${id}</div>`;
   }
 }
@@ -1057,6 +1121,57 @@ function saveCountdown(){
 }
 function deleteCountdown(id){countdowns=countdowns.filter(c=>c.id!==id);save('cds',countdowns);renderCountdowns();}
 
+/* ══ TODO LIST ══ */
+let todos=[];
+function renderTodos(){
+  todos=load('todos',[]);
+  const list=document.getElementById('todo-list');
+  const empty=document.getElementById('todo-empty');
+  if(!list)return;
+  const active=todos.filter(t=>!t.done);
+  const done=todos.filter(t=>t.done);
+  if(!todos.length){list.innerHTML='';if(empty)empty.style.display='';return;}
+  if(empty)empty.style.display='none';
+  const priorityColor={high:'#ef4444',normal:'var(--primary)',low:'#22c55e'};
+  const renderItem=t=>`
+    <div class="todo-item${t.done?' done':''}" data-id="${t.id}">
+      <button class="todo-check" onclick="toggleTodo('${t.id}')" title="${t.done?'Mark undone':'Mark done'}">
+        <i class="ti ${t.done?'ti-circle-check':'ti-circle'}" style="color:${t.done?'#22c55e':priorityColor[t.priority||'normal']}"></i>
+      </button>
+      <span class="todo-text">${t.text}</span>
+      <button class="todo-del" onclick="deleteTodo('${t.id}')"><i class="ti ti-x"></i></button>
+    </div>`;
+  list.innerHTML=active.map(renderItem).join('')+(done.length?`<div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px;padding-top:8px;border-top:1px solid var(--border)">Done (${done.length})</div>`+done.map(renderItem).join(''):'');
+}
+function openTodoInput(){
+  const row=document.getElementById('todo-input-row');
+  if(row){row.style.display='flex';document.getElementById('todo-input')?.focus();}
+}
+function closeTodoInput(){
+  const row=document.getElementById('todo-input-row');
+  if(row){row.style.display='none';const inp=document.getElementById('todo-input');if(inp)inp.value='';}
+}
+function saveTodo(){
+  const inp=document.getElementById('todo-input');
+  const text=inp?.value.trim();
+  if(!text)return;
+  const priority=document.getElementById('todo-priority')?.value||'normal';
+  todos=load('todos',[]);
+  todos.unshift({id:'t'+Date.now(),text,done:false,priority});
+  save('todos',todos);closeTodoInput();renderTodos();
+}
+function toggleTodo(id){
+  todos=load('todos',[]);
+  const t=todos.find(x=>x.id===id);
+  if(t)t.done=!t.done;
+  save('todos',todos);renderTodos();
+}
+function deleteTodo(id){
+  todos=load('todos',[]);
+  todos=todos.filter(x=>x.id!==id);
+  save('todos',todos);renderTodos();
+}
+
 /* ══ COLOUR MODAL ══ */
 function openColorModal(type,id){
   colorTarget={type,id};
@@ -1154,17 +1269,32 @@ function showTimetable(name){
   renderTimetable();
 }
 function parseICS(text){
+  // Unfold lines (RFC 5545: CRLF + whitespace = continuation)
+  text=text.replace(/\r?\n[ \t]/g,'');
   const events=[];let cur=null;
-  const parseDate=v=>{if(!v)return null;v=v.replace(/[TZ]/g,'');const m=v.match(/^(\d{4})(\d{2})(\d{2})T?(\d{2})(\d{2})(\d{2})?/);if(!m)return null;return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));};
+  const parseDate=v=>{
+    if(!v)return null;
+    // Strip TZID prefix e.g. "TZID=Asia/Singapore:20240101T080000"
+    const ci=v.lastIndexOf(':');if(ci>0)v=v.slice(ci+1);
+    v=v.replace('Z','');
+    const m=v.match(/^(\d{4})(\d{2})(\d{2})T?(\d{2})?(\d{2})?(\d{2})?/);
+    if(!m)return null;
+    return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));
+  };
   text.split(/\r?\n/).forEach(l=>{
     if(l.startsWith('BEGIN:VEVENT')){cur={};return;}
     if(l.startsWith('END:VEVENT')){if(cur?.start&&cur?.end)events.push(cur);cur=null;return;}
     if(!cur)return;
     const colon=l.indexOf(':');if(colon<0)return;
-    const key=l.slice(0,colon).split(';')[0].toUpperCase();const val=l.slice(colon+1).trim();
-    if(key==='SUMMARY')cur.summary=val;if(key==='LOCATION')cur.location=val;
-    if(key==='DTSTART'){const d=parseDate(val);if(d)cur.start=d.toISOString();}
-    if(key==='DTEND'){const d=parseDate(val);if(d)cur.end=d.toISOString();}
+    const keyFull=l.slice(0,colon).toUpperCase();
+    const key=keyFull.split(';')[0];
+    const val=l.slice(colon+1).trim();
+    if(key==='SUMMARY')cur.summary=val.replace(/\\,/g,',').replace(/\\n/g,' ').trim();
+    if(key==='LOCATION')cur.location=val.replace(/\\,/g,',').replace(/\\n/g,' ').trim();
+    if(key==='DESCRIPTION')cur.description=val.replace(/\\n/g,'\n').trim();
+    if(key==='DTSTART'||keyFull.startsWith('DTSTART')){const d=parseDate(l.slice(colon+1));if(d)cur.start=d.toISOString();}
+    if(key==='DTEND'||keyFull.startsWith('DTEND')){const d=parseDate(l.slice(colon+1));if(d)cur.end=d.toISOString();}
+    if(key==='RRULE')cur.rrule=val;
   });
   return events;
 }
@@ -1197,9 +1327,10 @@ function renderTimetable(){
         const eh=new Date(ev.end).getHours(),em=new Date(ev.end).getMinutes();
         const ts=`${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
         const isLab=ev.summary&&/(lab|practical|skills|prac)/i.test(ev.summary);
+        const locHtml=ev.location?`<div class="tt-event-loc"><i class="ti ti-map-pin" style="font-size:9px"></i> <a href="https://www.singaporetech.edu.sg/campus-wayfinder?q=${encodeURIComponent(ev.location)}" target="_blank" style="color:inherit;text-decoration:underline dotted;cursor:pointer" onclick="event.stopPropagation()" title="Open in Campus Wayfinder">${ev.location}</a></div>`:'';
         html+=`<div class="tt-event" style="background:${col.bg};color:${col.text}" title="${ev.summary}${ev.location?'\n'+ev.location:''}\n${ts}">
           <div class="tt-event-title">${ev.summary}</div>
-          ${ev.location?`<div class="tt-event-loc"><i class="ti ti-map-pin" style="font-size:9px"></i> ${ev.location}</div>`:''}
+          ${locHtml}
           <div style="font-size:9px;opacity:.8;font-weight:700;margin-top:2px">${ts}</div>
           ${isLab?`<div class="tt-attire-badge"><i class="ti ti-shirt"></i> Check attire</div>`:''}
         </div>`;
@@ -1287,6 +1418,66 @@ function checkDeadlineNotifications(){
     }
   });
   if(updated)save('notif_shown',shown);
+}
+
+/* ══ THEME / DARK MODE ══ */
+function cycleTheme(){
+  const dark=document.body.classList.toggle('dark');
+  save('dark_mode',dark);
+  document.getElementById('theme-toggle').innerHTML=dark?'<i class="ti ti-sun"></i>':'<i class="ti ti-moon"></i>';
+}
+function applyTheme(){
+  const dark=load('dark_mode',false);
+  if(dark){document.body.classList.add('dark');document.getElementById('theme-toggle').innerHTML='<i class="ti ti-sun"></i>';}
+  const accent=load('accent','purple');
+  setAccent(accent,true);
+  const fs=load('font_size','md');
+  setFontSize(fs,true);
+}
+function setAccent(name,silent){
+  ['purple','red','teal','amber'].forEach(a=>{
+    document.body.classList.remove('accent-'+a);
+    document.getElementById('acc-'+a)?.style?.setProperty('border-color','transparent');
+  });
+  if(name!=='purple')document.body.classList.add('accent-'+name);
+  const el=document.getElementById('acc-'+name);if(el)el.style.borderColor='#fff';
+  if(!silent)save('accent',name);
+}
+function setFontSize(size,silent){
+  document.body.classList.remove('text-sm','text-lg');
+  if(size!=='md')document.body.classList.add('text-'+size);
+  ['sm','md','lg'].forEach(s=>document.getElementById('fs-'+s)?.classList.remove('active'));
+  document.getElementById('fs-'+size)?.classList.add('active');
+  if(!silent)save('font_size',size);
+}
+
+/* ══ PUSH NOTIFICATIONS ══ */
+function requestNotifPermission(){
+  if(!('Notification' in window)){showToast('Not supported','Your browser does not support notifications.','warn');return;}
+  if(Notification.permission==='granted'){scheduleNotifications();showToast('Alerts on','Deadline alerts are active!','info');return;}
+  Notification.requestPermission().then(p=>{
+    if(p==='granted'){scheduleNotifications();showToast('Alerts on ✓','You\'ll get notified 3 days, 1 day, and the day of deadlines.','info');}
+    else showToast('Permission denied','Enable notifications in browser settings.','warn');
+  });
+}
+function scheduleNotifications(){
+  if(Notification.permission!=='granted')return;
+  if(!countdowns||!countdowns.length)return;
+  const today=new Date();today.setHours(0,0,0,0);
+  const shown=load('push_shown',{});let updated=false;
+  countdowns.forEach(cd=>{
+    const target=new Date(cd.date);target.setHours(0,0,0,0);
+    const diff=Math.round((target-today)/86400000);
+    [0,1,3].forEach(threshold=>{
+      const key=cd.id+'_push_'+threshold;
+      if(diff===threshold&&!shown[key]){
+        const msg=diff===0?`⚠️ DUE TODAY: ${cd.label}`:diff===1?`Due tomorrow: ${cd.label}`:`${cd.label} due in 3 days`;
+        try{new Notification('SIT Dashboard',{body:msg,icon:'https://www.singaporetech.edu.sg/favicon.ico'});}catch{}
+        shown[key]=true;updated=true;
+      }
+    });
+  });
+  if(updated)save('push_shown',shown);
 }
 
 /* Enter key on login */
