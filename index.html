@@ -30,20 +30,7 @@
     --font-display:'Space Mono',monospace;--font-body:'DM Sans',sans-serif;
 }
 
-/* ── THEME: DARK ── */
-body.theme-dark{--bg:#0f0e1a;--bg-2:#161424;--bg-3:#1e1b2e;--bg-4:#26223a;--bg-5:#2e2a45;--text:#e8e3ff;--text-mid:#a899d4;--text-muted:#6b5f99;--border:rgba(108,71,255,0.2);--border-strong:rgba(108,71,255,0.45);--shadow:0 4px 24px rgba(0,0,0,0.5);}
-/* ── THEME: SIT RED ── */
-body.theme-sit{--primary:#e01c2e;--primary-light:#fde8ea;--primary-mid:#f05060;--bg:#fff7f7;--bg-2:#ffffff;--bg-3:#fff0f0;--bg-4:#ffe0e0;--bg-5:#ffd0d0;--border:rgba(224,28,46,0.15);--border-strong:rgba(224,28,46,0.35);--shadow:0 4px 24px rgba(224,28,46,0.12);}
-/* ── THEME: OCEAN ── */
-body.theme-ocean{--primary:#0284c7;--primary-light:#e0f2fe;--primary-mid:#38bdf8;--bg:#f0f9ff;--bg-2:#ffffff;--bg-3:#e0f2fe;--bg-4:#bae6fd;--bg-5:#7dd3fc;--border:rgba(2,132,199,0.15);--border-strong:rgba(2,132,199,0.35);--shadow:0 4px 24px rgba(2,132,199,0.12);}
-/* ── THEME: FOREST ── */
-body.theme-forest{--primary:#16a34a;--primary-light:#dcfce7;--primary-mid:#4ade80;--bg:#f0fdf4;--bg-2:#ffffff;--bg-3:#dcfce7;--bg-4:#bbf7d0;--bg-5:#86efac;--border:rgba(22,163,74,0.15);--border-strong:rgba(22,163,74,0.35);--shadow:0 4px 24px rgba(22,163,74,0.12);}
-/* ── FONT SIZE ── */
-body.fs-sm{font-size:13px;}body.fs-lg{font-size:16px;}
-/* ── DENSITY ── */
-body.den-compact .panel{padding:.9rem;}body.den-compact .dash-wrap{gap:.75rem;}
-body.den-spacious .panel{padding:1.9rem;}body.den-spacious .dash-wrap{gap:2rem;}
-
+*{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
 .auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;background:var(--bg);position:relative;overflow:hidden;}
 .auth-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(108,71,255,0.18) 0%,transparent 70%),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(108,71,255,0.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(108,71,255,0.04) 40px);pointer-events:none;}
@@ -236,46 +223,41 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .wb-sub{font-size:13px;color:var(--text-mid);font-weight:500;margin-top:2px;}
 .wb-close{margin-left:auto;background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;padding:4px;flex-shrink:0;}
 .wb-close:hover{color:var(--text);}
+.support-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}
+.support-card{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--border);text-decoration:none;transition:all .2s;background:var(--bg-3);}
+.support-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+.sc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.sc-name{font-size:13px;font-weight:700;color:var(--text);}
+.sc-desc{font-size:11px;color:var(--text-muted);font-weight:500;line-height:1.4;}
+.tt-attire-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;background:rgba(245,158,11,0.25);color:#fbbf24;margin-top:3px;border:1px solid rgba(245,158,11,0.4);}
+/* Toast notifications */
+#toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.toast{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:0 8px 32px rgba(0,0,0,0.25);font-size:13px;max-width:320px;pointer-events:all;animation:toastIn .3s cubic-bezier(.16,1,.3,1) both;border-left:3px solid var(--primary);}
+.toast.urgent{border-left-color:var(--sit-red);}
+.toast.warn{border-left-color:#f59e0b;}
+.toast-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.toast-title{font-weight:700;color:var(--text);margin-bottom:2px;}
+.toast-msg{color:var(--text-mid);font-weight:500;line-height:1.4;}
+.toast-close{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:14px;padding:2px;flex-shrink:0;}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+/* Mobile responsiveness */
+@media(max-width:680px){
+  .tb-right .icon-btn span{display:none;}
+  .tb-right .icon-btn{padding:8px;}
+  .user-chip span{display:none;}
+  .top-bar{padding:.8rem 1rem;flex-wrap:wrap;gap:.5rem;}
+  .tb-right{gap:5px;}
+  .dash-wrap{padding:1rem .75rem;}
+  .support-grid{grid-template-columns:repeat(2,1fr);}
+}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 @keyframes scaleUp{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
-
-/* ── NOTIFICATION / THEME PANEL ── */
-.notif-panel{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden;animation:fadeIn .2s ease;}
-.notif-panel-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;font-size:13px;font-weight:700;color:var(--text);border-bottom:1px solid var(--border);}
-.notif-list{max-height:320px;overflow-y:auto;}
-.notif-item{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;}
-.notif-item:last-child{border-bottom:none;}
-.notif-urgency{font-size:18px;flex-shrink:0;}
-.notif-body{flex:1;}
-.notif-title{font-size:13px;font-weight:700;color:var(--text);}
-.notif-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
-.notif-empty{padding:2rem;text-align:center;font-size:13px;color:var(--text-muted);}
-.notif-badge{position:absolute;top:4px;right:4px;background:var(--sit-red);color:#fff;border-radius:10px;font-size:10px;font-weight:700;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);}
-.notif-btn{position:relative;}
-/* ── THEME CHIPS ── */
-.theme-chip{font-size:12px;font-weight:700;padding:6px 12px;background:var(--bg-3);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text-mid);transition:all .15s;}
-.theme-chip:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
-.theme-chip.active{background:var(--primary);color:#fff;border-color:var(--primary);}
-/* ── MOBILE NAV ── */
-.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg-2);border-top:1px solid var(--border);z-index:150;padding:6px 0 env(safe-area-inset-bottom,8px);}
-.mnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;background:none;border:none;cursor:pointer;font-size:9px;font-weight:700;color:var(--text-muted);font-family:var(--font-body);position:relative;}
-.mnav-btn i{font-size:20px;}
-.mnav-btn:hover{color:var(--primary);}
-.mnav-badge{background:var(--sit-red);color:#fff;border-radius:10px;font-size:9px;font-weight:700;min-width:14px;height:14px;padding:0 3px;display:inline-flex;align-items:center;justify-content:center;margin-left:2px;}
-@media(max-width:640px){.mobile-nav{display:flex;}.dash-wrap{padding-bottom:80px;}.hide-xs{display:none!important;}.logout-mobile{display:flex!important;}}
-.logout-mobile{display:none;}
-/* ── TIMETABLE WAYFINDER + ATTIRE ── */
-.tt-event-actions{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
-.tt-action-btn{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);cursor:pointer;text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:3px;}
-.tt-action-btn:hover{background:rgba(255,255,255,0.3);}
-.tt-attire-badge{font-size:9px;font-weight:700;padding:2px 6px;background:rgba(224,28,46,0.25);border:1px solid rgba(224,28,46,0.4);border-radius:4px;color:#ff6b6b;}
-/* ── HIDE XS LABEL ── */
-@media(max-width:800px){.notif-btn-label{display:none;}}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
+<div id="toast-container"></div>
 <div id="login-screen" class="auth-screen">
   <div class="auth-card">
     <div class="auth-logo">
@@ -401,11 +383,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         <div class="user-avatar" id="tb-user-avatar" style="background:var(--red)">S</div>
         <span id="tb-user-name">Student</span>
       </div>
-      <button class="icon-btn notif-btn" id="notif-btn" onclick="toggleNotifPanel()" title="Reminders"><i class="ti ti-bell"></i> <span class="notif-btn-label">Alerts</span><span class="notif-badge" id="notif-badge" style="display:none"></span></button>
-      <button class="icon-btn" id="theme-btn" onclick="toggleThemePanel()" title="Theme"><i class="ti ti-palette"></i> <span class="hide-xs">Theme</span></button>
-      <button class="icon-btn" id="layout-toggle" onclick="toggleLayoutBar()"><i class="ti ti-layout-columns"></i> <span class="hide-xs">Layout</span></button>
-      <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit"></i> <span class="hide-xs">Edit</span></button>
-      <button class="logout-btn hide-xs" onclick="doLogout()"><i class="ti ti-logout"></i> Sign out</button>
+      <button class="icon-btn" id="layout-toggle" onclick="toggleLayoutBar()"><i class="ti ti-layout-columns"></i> <span>Layout</span></button>
+      <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit"></i> <span>Customise</span></button>
+      <button class="logout-btn" onclick="doLogout()"><i class="ti ti-logout"></i> Sign out</button>
     </div>
   </div>
   <div id="welcome-banner" style="display:none">
@@ -433,58 +413,11 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     <span class="layout-bar-label">Hidden</span>
     <div id="hidden-chips" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
   </div>
-  <!-- NOTIFICATION PANEL -->
-  <div id="notif-panel" style="display:none" class="notif-panel">
-    <div class="notif-panel-header">
-      <span><i class="ti ti-bell" style="margin-right:6px"></i>Reminders</span>
-      <button onclick="toggleNotifPanel()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px"><i class="ti ti-x"></i></button>
-    </div>
-    <div id="notif-list" class="notif-list"></div>
-    <div style="font-size:11px;color:var(--text-muted);padding:8px 12px;border-top:1px solid var(--border);text-align:center">Alerts with dates show up here 3 days, 1 day, and on the day before</div>
-  </div>
-  <!-- THEME PANEL -->
-  <div id="theme-panel" style="display:none" class="notif-panel">
-    <div class="notif-panel-header">
-      <span><i class="ti ti-palette" style="margin-right:6px"></i>Theme & Display</span>
-      <button onclick="toggleThemePanel()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px"><i class="ti ti-x"></i></button>
-    </div>
-    <div style="padding:12px">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);margin-bottom:8px">Colour Theme</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-        <div class="theme-chip" id="tc-default" onclick="setTheme('default')">🟣 Default</div>
-        <div class="theme-chip" id="tc-dark" onclick="setTheme('dark')">🌑 Dark</div>
-        <div class="theme-chip" id="tc-sit" onclick="setTheme('sit')">🔴 SIT Red</div>
-        <div class="theme-chip" id="tc-ocean" onclick="setTheme('ocean')">🔵 Ocean</div>
-        <div class="theme-chip" id="tc-forest" onclick="setTheme('forest')">🌿 Forest</div>
-      </div>
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);margin-bottom:8px">Font Size</div>
-      <div style="display:flex;gap:8px;margin-bottom:16px">
-        <div class="theme-chip" id="fs-sm" onclick="setFontSize('sm')">Small</div>
-        <div class="theme-chip" id="fs-md" onclick="setFontSize('md')">Medium</div>
-        <div class="theme-chip" id="fs-lg" onclick="setFontSize('lg')">Large</div>
-      </div>
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);margin-bottom:8px">Dashboard Density</div>
-      <div style="display:flex;gap:8px">
-        <div class="theme-chip" id="den-compact" onclick="setDensity('compact')">Compact</div>
-        <div class="theme-chip" id="den-normal" onclick="setDensity('normal')">Normal</div>
-        <div class="theme-chip" id="den-spacious" onclick="setDensity('spacious')">Spacious</div>
-      </div>
-    </div>
-  </div>
   <div class="panels-container cols-2" id="panels-container"></div>
   <div class="data-bar">
     <button class="data-btn" onclick="exportData()"><i class="ti ti-download"></i> Export</button>
     <button class="data-btn" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload"></i> Import</button>
     <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
-    <button class="data-btn logout-mobile" onclick="doLogout()"><i class="ti ti-logout"></i> Sign out</button>
-  </div>
-  <!-- MOBILE BOTTOM NAV -->
-  <div class="mobile-nav" id="mobile-nav">
-    <button class="mnav-btn" onclick="scrollToPanel('links')"><i class="ti ti-link"></i><span>Links</span></button>
-    <button class="mnav-btn" onclick="scrollToPanel('alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
-    <button class="mnav-btn" onclick="scrollToPanel('timetable')"><i class="ti ti-calendar"></i><span>Timetable</span></button>
-    <button class="mnav-btn" onclick="scrollToPanel('deadlines')"><i class="ti ti-clock"></i><span>Deadlines</span></button>
-    <button class="mnav-btn" onclick="toggleNotifPanel()"><i class="ti ti-bell-ringing"></i><span>Reminders<span class="mnav-badge" id="mnav-badge" style="display:none"></span></span></button>
   </div>
 </div>
 </div>
@@ -735,30 +668,25 @@ const CAT_ICONS={Portal:'ti-layout-dashboard',Library:'ti-books',Tool:'ti-tool',
 
 function getDefaultLinks(prog){
   const links=[
-    {id:'l1',name:'IN4SIT',url:'https://in4sit.singaporetech.edu.sg',cat:'Portal',icon:'ti-school',color:'blue'},
-    {id:'l2',name:'xSITE',url:'https://xsite.singaporetech.edu.sg',cat:'Portal',icon:'ti-layout-dashboard',color:'teal'},
-    {id:'l3',name:'Outlook',url:'https://www.outlook.com/sit.singaporetech.edu.sg',cat:'Portal',icon:'ti-mail',color:'blue'},
-    {id:'l4',name:'Library Databases',url:'https://libguides.singaporetech.edu.sg/az/databases',cat:'Library',icon:'ti-books',color:'purple'},
-    {id:'l5',name:'ONE SEARCH',url:'https://libguides.singaporetech.edu.sg/findit/onesearch',cat:'Library',icon:'ti-search',color:'purple'},
-    {id:'l6',name:'Campus Wayfinder',url:'https://www.singaporetech.edu.sg/campus-wayfinder',cat:'Tool',icon:'ti-map-pin',color:'green'},
-    {id:'l7',name:'Resource Booking',url:'https://rbs.singaporetech.edu.sg/',cat:'Tool',icon:'ti-calendar-event',color:'green'},
-    {id:'l8',name:'123RF Media',url:'https://libguides.singaporetech.edu.sg/az/databases?q=123RF',cat:'Library',icon:'ti-photo',color:'gray'},
-    {id:'l9',name:'Media Equipment',url:'https://singaporetech.primo.exlibrisgroup.com/discovery/collectionDiscovery?vid=65SIT_INST:SIT&inst=65SIT_INST&collectionId=8130219950004056',cat:'Tool',icon:'ti-device-camera-video',color:'gray'},
-    {id:'l11',name:'CATES',url:'https://cates.sg/',cat:'App',icon:'ti-certificate',color:'amber'},
-    {id:'l12',name:'Wholesome',url:'https://selforder.eighthawker.com/checkin/6811ce630cc9967e0e3ae478',cat:'App',icon:'ti-salad',color:'green'},
-    {id:'l13',name:'Pulse',url:'https://apps.brightspace.com/pulse/launch',cat:'App',icon:'ti-device-mobile',color:'teal'},
-    {id:'l14',name:'Echo360',url:'https://echo360.net.au/',cat:'Portal',icon:'ti-video',color:'blue'},
-    {id:'l15',name:'Zoom',url:'https://singaporetech.zoom.us/',cat:'Tool',icon:'ti-video-plus',color:'blue'},
-    {id:'l16',name:'IT Support',url:'https://sitsingaporetechedu.sharepoint.com/sites/Students',cat:'Portal',icon:'ti-device-laptop',color:'gray'},
-    {id:'l17',name:'OSE / Intranet',url:'https://sitsingaporetechedu.sharepoint.com/sites/Students/SitePages/SITizen-Guide.aspx',cat:'Portal',icon:'ti-users',color:'green'},
-    {id:'l18',name:'Mindline',url:'https://mindline.sg/sit',cat:'App',icon:'ti-heart',color:'teal'},
-    {id:'l19',name:'Counselling',url:'mailto:SITCounselling@SingaporeTech.edu.sg',cat:'Other',icon:'ti-messages',color:'purple'},
-    {id:'l20',name:'Job Portal',url:'https://readytalent2.singaporetech.edu.sg/',cat:'Portal',icon:'ti-briefcase',color:'amber'},
-    {id:'l21',name:'Student Insurance',url:'https://sitsingaporetechedu.sharepoint.com/sites/Students/SitePages/Student-Insurance.aspx',cat:'Portal',icon:'ti-shield',color:'blue'},
-    {id:'l22',name:'Bursaries',url:'https://in4sit.singaporetech.edu.sg/psc/CSSISSTD/EMPLOYEE/SA/c/NUI_FRAMEWORK.PT_LANDINGPAGE.GBL',cat:'Portal',icon:'ti-coin',color:'amber'},
-    {id:'l23',name:'CCAs',url:'https://www.singaporetech.edu.sg/life-at-sit/find-your-tribe',cat:'Other',icon:'ti-star',color:'purple'},
+    {id:'l1', name:'IN4SIT',            url:'https://in4sit.singaporetech.edu.sg',           cat:'Portal',  icon:'ti-school',            color:'blue'},
+    {id:'l2', name:'xSITE',             url:'https://xsite.singaporetech.edu.sg',             cat:'Portal',  icon:'ti-layout-dashboard',  color:'teal'},
+    {id:'l3', name:'Outlook',           url:'https://www.outlook.com/sit.singaporetech.edu.sg', cat:'Portal', icon:'ti-mail',             color:'blue'},
+    {id:'l4', name:'Library Databases', url:'https://libguides.singaporetech.edu.sg/az/databases', cat:'Library', icon:'ti-books',        color:'purple'},
+    {id:'l5', name:'ONE SEARCH',        url:'https://libguides.singaporetech.edu.sg/findit/onesearch', cat:'Library', icon:'ti-search',  color:'purple'},
+    {id:'l6', name:'Campus Wayfinder',  url:'https://www.singaporetech.edu.sg/campus-wayfinder', cat:'Tool',  icon:'ti-map-pin',          color:'green'},
+    {id:'l7', name:'Resource Booking',  url:'https://rbs.singaporetech.edu.sg/',              cat:'Tool',    icon:'ti-calendar-event',   color:'green'},
+    {id:'l8', name:'Echo360',           url:'https://echo360.net.au/',                        cat:'App',     icon:'ti-video',            color:'red'},
+    {id:'l9', name:'Zoom',              url:'https://singaporetech.zoom.us/',                 cat:'App',     icon:'ti-camera',           color:'blue'},
+    {id:'l10',name:'Pulse App',         url:'https://apps.brightspace.com/pulse/launch',      cat:'App',     icon:'ti-bell',             color:'teal'},
+    {id:'l11',name:'Intranet',          url:'https://sitsingaporetechedu.sharepoint.com/sites/Students/SitePages/SITizen-Guide.aspx', cat:'Portal', icon:'ti-building', color:'blue'},
+    {id:'l12',name:'WHOLEsome',         url:'https://selforder.eighthawker.com/checkin/6811ce630cc9967e0e3ae478', cat:'App', icon:'ti-soup', color:'green'},
+    {id:'l13',name:'CATES App',         url:'https://cates.sg/',                              cat:'App',     icon:'ti-first-aid-kit',    color:'amber'},
+    {id:'l14',name:'123RF Media',       url:'https://libguides.singaporetech.edu.sg/az/databases?q=123RF', cat:'Library', icon:'ti-photo', color:'gray'},
+    {id:'l15',name:'Media Equip Book',  url:'https://singaporetech.primo.exlibrisgroup.com/discovery/collectionDiscovery?vid=65SIT_INST:SIT&inst=65SIT_INST&collectionId=8130219950004056', cat:'Library', icon:'ti-device-tv', color:'gray'},
+    {id:'l16',name:'Job Portal',        url:'https://readytalent2.singaporetech.edu.sg/',     cat:'Portal',  icon:'ti-briefcase',        color:'amber'},
   ];
   return links;
+}
 
 function getDefaultAlerts(prog){
   const a=[{id:'a1',mod:'General',msg:'Check timetable for any Week 1 changes',date:'',color:'amber'}];
@@ -783,6 +711,7 @@ const PANEL_DEFS=[
   {id:'timetable',title:'Timetable',          icon:'ti-calendar'},
   {id:'deadlines',title:'Upcoming deadlines', icon:'ti-clock'},
   {id:'calendar', title:'Calendar',           icon:'ti-calendar-month'},
+  {id:'support',  title:'Support & wellbeing',icon:'ti-heart'},
 ];
 
 function load(key,def){try{const v=localStorage.getItem(NS+key);return v?JSON.parse(v):def;}catch{return def;}}
@@ -833,7 +762,8 @@ function initDashboard(){
     const wb=document.getElementById('welcome-banner');
     const wt=document.getElementById('wb-title');
     wb.style.display='';
-    wt.textContent=`Welcome, ${currentUser.name.split(' ')[0]}! 🎉`;
+    wt.textContent=`Welcome to SIT, ${currentUser.name.split(' ')[0]}! 🎉`;
+    document.getElementById('wb-sub').innerHTML=`Your dashboard is ready. <strong>Day Zero tips:</strong> always carry your admin card, turn on Pulse notifications, and apply for bursaries before 31 Aug!`;
     localStorage.removeItem(NS+'is_new');
   } else {
     document.getElementById('welcome-banner').style.display='none';
@@ -841,6 +771,8 @@ function initDashboard(){
 
   setLayout(layoutCols);
   renderPanels();
+  // Slight delay so UI paints first
+  setTimeout(checkDeadlineNotifications, 800);
 }
 
 /* ══ LAYOUT ══ */
@@ -930,7 +862,11 @@ function buildPanelInner(id){
           <input type="file" accept=".ics" id="ics-file-input" onchange="handleIcsUpload(event)">
           <div class="tt-upload-icon"><i class="ti ti-calendar-upload"></i></div>
           <p>Drop your <strong>.ics</strong> timetable here</p>
-          <small>Export from IN4SIT, then upload</small>
+          <small>IN4SIT → Course Management → My Weekly Schedule → List View → Extract (blue button)</small>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px;">
+          <i class="ti ti-info-circle"></i>
+          <span>Use the <a href="https://chromewebstore.google.com/detail/sit-timetable-grabber/cnffedmfildfgejcckjcmhabbdkpcibh" target="_blank" style="color:var(--primary);font-weight:700;text-decoration:none">SIT Timetable Grabber</a> Chrome extension to export your .ics file.</span>
         </div>
         <div id="tt-file-name" class="tt-file-name" style="display:none"></div>
       </div>
@@ -940,6 +876,7 @@ function buildPanelInner(id){
           <span class="tt-week-label" id="tt-week-label"></span>
           <button class="cal-nav" onclick="ttNextWeek()"><i class="ti ti-chevron-right"></i></button>
         </div>
+        <div id="tt-attire-notice" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.35);border-radius:var(--radius-sm);font-size:12px;color:#fbbf24;font-weight:600;"><i class="ti ti-shirt"></i> Lab/practical this week — check your attire requirements!</div>
         <div id="tt-grid-container"></div>
         <div class="tt-legend" id="tt-legend"></div>
       </div>`;
@@ -953,6 +890,40 @@ function buildPanelInner(id){
       </div>
       <div class="cal-grid" id="cal-day-names"></div>
       <div class="cal-grid" id="cal-days"></div>`;
+    case'support':return`
+      <div class="panel-title">Support &amp; Wellbeing</div>
+      <div class="support-grid">
+        <a class="support-card" href="https://mindline.sg/sit" target="_blank">
+          <div class="sc-icon" style="background:rgba(139,92,246,0.15);color:#a78bfa"><i class="ti ti-brain"></i></div>
+          <div class="sc-name">Mindline</div>
+          <div class="sc-desc">Mental wellness check-ins & resources</div>
+        </a>
+        <a class="support-card" href="mailto:SITCounselling@SingaporeTech.edu.sg" target="_blank">
+          <div class="sc-icon" style="background:rgba(74,222,128,0.15);color:#4ade80"><i class="ti ti-message-heart"></i></div>
+          <div class="sc-name">Counselling</div>
+          <div class="sc-desc">Free, confidential — email to book</div>
+        </a>
+        <a class="support-card" href="https://sitsingaporetechedu.sharepoint.com/sites/Students/SitePages/Student-Insurance.aspx" target="_blank">
+          <div class="sc-icon" style="background:rgba(59,130,246,0.15);color:#60a5fa"><i class="ti ti-shield-heart"></i></div>
+          <div class="sc-name">Insurance</div>
+          <div class="sc-desc">GP visits only $5 — claim here</div>
+        </a>
+        <a class="support-card" href="https://in4sit.singaporetech.edu.sg/psc/CSSISSTD/EMPLOYEE/SA/c/NUI_FRAMEWORK.PT_LANDINGPAGE.GBL" target="_blank">
+          <div class="sc-icon" style="background:rgba(245,158,11,0.15);color:#fbbf24"><i class="ti ti-award"></i></div>
+          <div class="sc-name">Bursaries</div>
+          <div class="sc-desc">Apply on IN4SIT — check deadlines!</div>
+        </a>
+        <a class="support-card" href="https://help.singaporetech.edu.sg" target="_blank">
+          <div class="sc-icon" style="background:rgba(20,184,166,0.15);color:#2dd4bf"><i class="ti ti-device-desktop"></i></div>
+          <div class="sc-name">IT Helpdesk</div>
+          <div class="sc-desc">Tech support & OSE issues</div>
+        </a>
+        <a class="support-card" href="https://www.singaporetech.edu.sg/life-at-sit/find-your-tribe" target="_blank">
+          <div class="sc-icon" style="background:rgba(236,72,153,0.15);color:#f472b6"><i class="ti ti-users"></i></div>
+          <div class="sc-name">CCAs</div>
+          <div class="sc-desc">Clubs, societies & student life</div>
+        </a>
+      </div>`;
     default:return`<div class="panel-title">${id}</div>`;
   }
 }
@@ -1225,10 +1196,12 @@ function renderTimetable(){
         const sh=new Date(ev.start).getHours(),sm=new Date(ev.start).getMinutes();
         const eh=new Date(ev.end).getHours(),em=new Date(ev.end).getMinutes();
         const ts=`${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
+        const isLab=ev.summary&&/(lab|practical|skills|prac)/i.test(ev.summary);
         html+=`<div class="tt-event" style="background:${col.bg};color:${col.text}" title="${ev.summary}${ev.location?'\n'+ev.location:''}\n${ts}">
           <div class="tt-event-title">${ev.summary}</div>
-          ${ev.location?`<div class="tt-event-loc">${ev.location}</div>`:''}
+          ${ev.location?`<div class="tt-event-loc"><i class="ti ti-map-pin" style="font-size:9px"></i> ${ev.location}</div>`:''}
           <div style="font-size:9px;opacity:.8;font-weight:700;margin-top:2px">${ts}</div>
+          ${isLab?`<div class="tt-attire-badge"><i class="ti ti-shirt"></i> Check attire</div>`:''}
         </div>`;
       });
       html+=`</div>`;
@@ -1277,6 +1250,43 @@ function importData(e){
       setLayout(layoutCols);renderPanels();alert('Imported successfully!');
     }catch{alert('Invalid file.');}
   };reader.readAsText(file);e.target.value='';
+}
+
+/* ══ TOAST NOTIFICATIONS ══ */
+function showToast(title,msg,type='info',duration=6000){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className=`toast ${type==='urgent'?'urgent':type==='warn'?'warn':''}`;
+  const icon=type==='urgent'?'ti-alarm':'ti-bell';
+  t.innerHTML=`<i class="ti ${icon} toast-icon" style="color:${type==='urgent'?'var(--sit-red)':type==='warn'?'#f59e0b':'var(--primary)'}"></i>
+    <div><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div>
+    <button class="toast-close" onclick="this.closest('.toast').remove()"><i class="ti ti-x"></i></button>`;
+  c.appendChild(t);
+  if(duration>0)setTimeout(()=>t.remove(),duration);
+}
+
+function checkDeadlineNotifications(){
+  if(!countdowns||!countdowns.length)return;
+  const today=new Date();today.setHours(0,0,0,0);
+  const shown=load('notif_shown',{});
+  let updated=false;
+  countdowns.forEach(cd=>{
+    const target=new Date(cd.date);target.setHours(0,0,0,0);
+    const diff=Math.round((target-today)/86400000);
+    const key=cd.id+'_'+diff;
+    if(shown[key])return;
+    if(diff===0){
+      showToast(`⚠️ Due TODAY: ${cd.label}`,'This deadline is due today!','urgent');
+      shown[key]=true;updated=true;
+    } else if(diff===1){
+      showToast(`Due tomorrow: ${cd.label}`,'You have 1 day left.','warn');
+      shown[key]=true;updated=true;
+    } else if(diff===3){
+      showToast(`Deadline in 3 days: ${cd.label}`,'Coming up soon — plan ahead.','info');
+      shown[key]=true;updated=true;
+    }
+  });
+  if(updated)save('notif_shown',shown);
 }
 
 /* Enter key on login */
