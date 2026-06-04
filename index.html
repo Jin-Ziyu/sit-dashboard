@@ -1350,26 +1350,38 @@ function renderTimetable(){
   const lbl=document.getElementById('tt-week-label');
   if(lbl)lbl.textContent=fmt(weekStart)+' – '+fmt(new Date(+weekStart+6*86400000));
   const days=Array.from({length:7},(_,i)=>{const d=new Date(weekStart);d.setDate(weekStart.getDate()+i);return d;});
-  const todayIso=new Date().toISOString().slice(0,10);
-  const dayEvents=days.map(d=>{const iso=d.toISOString().slice(0,10);return ttEvents.filter(ev=>ev.start.slice(0,10)===iso).sort((a,b)=>a.start.localeCompare(b.start));});
+  // Always use local date string (not UTC) for comparisons
+  const localDateStr=d=>{const pad=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;};
+  const todayIso=localDateStr(new Date());
+  const dayEvents=days.map(d=>{
+    const iso=localDateStr(d);
+    return ttEvents.filter(ev=>ev.start.slice(0,10)===iso).sort((a,b)=>a.start.localeCompare(b.start));
+  });
   const allThisWeek=dayEvents.flat();
   const container=document.getElementById('tt-grid-container');if(!container)return;
   if(!allThisWeek.length){container.innerHTML='<div class="tt-empty">No classes this week.</div>';renderTtLegend();return;}
+  // Parse hours directly from stored local ISO string (no Date constructor to avoid UTC shift)
+  const parseLocalHour=iso=>parseInt(iso.slice(11,13),10);
+  const parseLocalMin=iso=>parseInt(iso.slice(14,16),10);
   let minH=8,maxH=18;
-  allThisWeek.forEach(ev=>{const h1=new Date(ev.start).getHours();const h2=new Date(ev.end).getHours()+(new Date(ev.end).getMinutes()>0?1:0);if(h1<minH)minH=h1;if(h2>maxH)maxH=h2;});
+  allThisWeek.forEach(ev=>{
+    const h1=parseLocalHour(ev.start);
+    const h2=parseLocalHour(ev.end)+(parseLocalMin(ev.end)>0?1:0);
+    if(h1<minH)minH=h1;if(h2>maxH)maxH=h2;
+  });
   const DAY_NAMES=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   let html=`<div style="display:grid;grid-template-columns:44px repeat(7,1fr);gap:4px;overflow-x:auto;min-width:0;padding-bottom:4px;">`;
   html+=`<div></div>`;
-  days.forEach((d,i)=>{const iso=d.toISOString().slice(0,10);html+=`<div class="tt-header${iso===todayIso?' today-col':''}">${DAY_NAMES[i]}<br><span style="font-weight:500;font-size:10px;opacity:.8">${d.getDate()}</span></div>`;});
+  days.forEach((d,i)=>{const iso=localDateStr(d);html+=`<div class="tt-header${iso===todayIso?' today-col':''}">${DAY_NAMES[i]}<br><span style="font-weight:500;font-size:10px;opacity:.8">${d.getDate()}</span></div>`;});
   for(let h=minH;h<=maxH;h++){
     html+=`<div class="tt-time">${String(h).padStart(2,'0')}:00</div>`;
     days.forEach((d,di)=>{
-      const evs=dayEvents[di].filter(ev=>new Date(ev.start).getHours()===h);
+      const evs=dayEvents[di].filter(ev=>parseLocalHour(ev.start)===h);
       html+=`<div class="tt-cell">`;
       evs.forEach(ev=>{
         const col=ttColor(ev.summary);
-        const sh=new Date(ev.start).getHours(),sm=new Date(ev.start).getMinutes();
-        const eh=new Date(ev.end).getHours(),em=new Date(ev.end).getMinutes();
+        const sh=parseLocalHour(ev.start),sm=parseLocalMin(ev.start);
+        const eh=parseLocalHour(ev.end),em=parseLocalMin(ev.end);
         const ts=`${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
         const isLab=ev.summary&&/(lab|practical|skills|prac)/i.test(ev.summary);
         const locHtml=ev.location?`<div class="tt-event-loc"><i class="ti ti-map-pin" style="font-size:9px"></i> <a href="https://www.singaporetech.edu.sg/campus-wayfinder?q=${encodeURIComponent(ev.location)}" target="_blank" style="color:inherit;text-decoration:underline dotted;cursor:pointer" onclick="event.stopPropagation()" title="Open in Campus Wayfinder">${ev.location}</a></div>`:'';
