@@ -396,7 +396,10 @@ body.accent-red{--primary:#e01c2e;--primary-light:rgba(224,28,46,0.12);--primary
 body.accent-teal{--primary:#14b8a6;--primary-light:rgba(20,184,166,0.1);--primary-mid:#2dd4bf;--bg:#f0fdfc;}
 body.accent-amber{--primary:#d97706;--primary-light:rgba(245,158,11,0.1);--primary-mid:#f59e0b;--bg:#fffbeb;}
 /* Font size */
-body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
+:root{--base-fs:13px;}
+body.text-sm{--base-fs:11px;}
+body.text-lg{--base-fs:16px;}
+.lc-name,.lc-desc,.lc-tag,.ai-msg,.xn-title,.xn-msg,.cd-label,.todo-text,.news-title,.news-excerpt,.sc-name,.sc-desc,.custom-panel-content,.tt-event-title,.tt-event-loc{font-size:var(--base-fs)!important;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 @keyframes scaleUp{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
 
@@ -2398,6 +2401,8 @@ function setAccent(name,silent){
 function setFontSize(size,silent){
   document.body.classList.remove('text-sm','text-lg');
   if(size!=='md')document.body.classList.add('text-'+size);
+  const fsMap={sm:'11px',md:'13px',lg:'16px'};
+  document.documentElement.style.setProperty('--base-fs',fsMap[size]||'13px');
   ['sm','md','lg'].forEach(s=>document.getElementById('fs-'+s)?.classList.remove('active'));
   document.getElementById('fs-'+size)?.classList.add('active');
   if(!silent)save('font_size',size);
