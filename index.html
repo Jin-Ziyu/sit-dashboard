@@ -240,6 +240,66 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .toast-msg{color:var(--text-mid);font-weight:500;line-height:1.4;}
 .toast-close{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:14px;padding:2px;flex-shrink:0;}
 @keyframes toastIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+
+/* xSITE-style notification alerts */
+.xsite-notif{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border-radius:var(--radius-md);border:1px solid var(--xn-border,rgba(108,71,255,0.3));background:var(--xn-bg,rgba(108,71,255,0.07));margin-bottom:8px;position:relative;transition:border-color .2s;}
+.xsite-notif:hover{border-color:var(--xn-hover-border,rgba(108,71,255,0.55));}
+.xn-dot-wrap{position:relative;flex-shrink:0;margin-top:3px;}
+.xn-dot{width:8px;height:8px;border-radius:50%;background:var(--xn-dot,var(--primary));position:absolute;top:-2px;right:-2px;animation:pulseDot 2s ease-in-out infinite;}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(108,71,255,0.5);}50%{box-shadow:0 0 0 5px rgba(108,71,255,0);}}
+.xn-icon{font-size:20px;color:var(--xn-icon,var(--primary));width:36px;height:36px;background:var(--xn-icon-bg,rgba(108,71,255,0.12));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.xn-body{flex:1;min-width:0;}
+.xn-app{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--xn-app,var(--text-muted));margin-bottom:2px;display:flex;align-items:center;gap:4px;}
+.xn-app-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:10px;background:var(--xn-app-badge-bg,rgba(108,71,255,0.15));color:var(--xn-app,var(--primary));font-size:9px;font-weight:700;letter-spacing:.5px;}
+.xn-title{font-size:13px;font-weight:700;color:var(--xn-title,var(--text));line-height:1.35;margin-bottom:2px;}
+.xn-msg{font-size:12px;color:var(--xn-msg,var(--text-mid));font-weight:500;line-height:1.4;}
+.xn-meta{font-size:10px;font-weight:600;color:var(--xn-meta,var(--text-muted));margin-top:4px;display:flex;align-items:center;gap:6px;}
+.xn-urgent .xn-icon{background:rgba(224,28,46,0.15);color:var(--sit-red);}
+.xn-urgent{--xn-border:rgba(224,28,46,0.4);--xn-bg:rgba(224,28,46,0.07);--xn-dot:#e01c2e;--xn-hover-border:rgba(224,28,46,0.6);}
+.xn-urgent .xn-dot{background:#e01c2e;}
+.xn-urgent .xn-dot{animation-name:pulseDotRed;}
+@keyframes pulseDotRed{0%,100%{box-shadow:0 0 0 0 rgba(224,28,46,0.5);}50%{box-shadow:0 0 0 5px rgba(224,28,46,0);}}
+.xn-warn .xn-icon{background:rgba(245,158,11,0.15);color:#f59e0b;}
+.xn-warn{--xn-border:rgba(245,158,11,0.4);--xn-bg:rgba(245,158,11,0.07);--xn-dot:#f59e0b;--xn-hover-border:rgba(245,158,11,0.6);}
+.xn-warn .xn-app-badge{background:rgba(245,158,11,0.15);color:#f59e0b;}
+.xn-warn .xn-dot{background:#f59e0b;animation-name:pulseDotAmber;}
+@keyframes pulseDotAmber{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.5);}50%{box-shadow:0 0 0 5px rgba(245,158,11,0);}}
+.xn-del-btn{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:12px;padding:3px;opacity:0;transition:opacity .15s;border-radius:4px;}
+.xsite-notif:hover .xn-del-btn{opacity:1;}
+.edit-mode .xn-del-btn{opacity:1;color:var(--sit-red);}
+.xn-color-btn{position:absolute;bottom:8px;right:8px;background:var(--bg-3);border:1px solid var(--border);border-radius:5px;cursor:pointer;color:var(--text-muted);width:20px;height:20px;display:none;align-items:center;justify-content:center;font-size:11px;}
+.edit-mode .xn-color-btn{display:flex;}
+.notif-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.notif-count-badge{font-size:10px;font-weight:700;padding:2px 8px;background:var(--primary);color:#fff;border-radius:20px;letter-spacing:.3px;}
+
+/* Outlook News panel */
+.news-item{border-radius:var(--radius-md);border:1px solid var(--border);overflow:hidden;margin-bottom:10px;transition:border-color .2s,transform .2s;cursor:pointer;}
+.news-item:hover{border-color:var(--border-strong);transform:translateY(-1px);}
+.news-img-wrap{width:100%;aspect-ratio:16/7;background:var(--bg-3);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;}
+.news-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.news-img-placeholder{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-muted);}
+.news-img-placeholder i{font-size:28px;}
+.news-img-placeholder span{font-size:11px;font-weight:600;}
+.news-body{padding:11px 13px;}
+.news-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--primary);margin-bottom:4px;}
+.news-title{font-size:14px;font-weight:800;color:var(--text);line-height:1.35;margin-bottom:4px;}
+.news-excerpt{font-size:12px;color:var(--text-mid);font-weight:500;line-height:1.5;}
+.news-meta{font-size:10px;color:var(--text-muted);font-weight:600;margin-top:6px;display:flex;align-items:center;gap:6px;}
+.news-add-zone{border:2px dashed rgba(108,71,255,0.25);border-radius:var(--radius-md);padding:1.5rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg-3);position:relative;margin-bottom:8px;}
+.news-add-zone:hover,.news-add-zone.drag-over{border-color:var(--primary);background:var(--primary-light);}
+.news-add-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.news-add-zone p{font-size:13px;font-weight:600;color:var(--text-mid);margin-top:6px;}
+.news-add-zone i{font-size:24px;color:var(--text-muted);}
+.news-del-btn{position:absolute;top:8px;right:8px;background:rgba(26,19,53,0.65);border:none;border-radius:6px;cursor:pointer;color:#fff;width:24px;height:24px;display:none;align-items:center;justify-content:center;font-size:12px;backdrop-filter:blur(4px);}
+.news-item:hover .news-del-btn,.edit-mode .news-del-btn{display:flex;}
+.news-form{background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;margin-bottom:10px;display:none;}
+.news-form.open{display:block;animation:fadeIn .2s ease;}
+.news-form input,.news-form textarea{width:100%;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;font-family:var(--font-body);color:var(--text);outline:none;margin-bottom:7px;resize:vertical;}
+.news-form textarea{min-height:56px;}
+.news-form input:focus,.news-form textarea:focus{border-color:var(--primary);}
+.news-form input::placeholder,.news-form textarea::placeholder{color:var(--text-muted);}
+.outlook-banner{display:flex;align-items:center;gap:8px;padding:8px 11px;background:rgba(0,120,212,0.1);border:1px solid rgba(0,120,212,0.3);border-radius:var(--radius-sm);margin-bottom:10px;font-size:11px;font-weight:600;color:#0078d4;}
+.outlook-banner i{font-size:14px;flex-shrink:0;}
 /* Mobile responsiveness */
 @media(max-width:680px){
   .tb-right .icon-btn span{display:none;}
@@ -250,6 +310,46 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   .dash-wrap{padding:1rem .75rem;}
   .support-grid{grid-template-columns:repeat(2,1fr);}
 }
+
+/* ── TAB BAR ── */
+.tab-bar{display:flex;align-items:center;gap:4px;padding:0 2px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap;}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-item{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;font-size:13px;font-weight:600;color:var(--text-muted);background:var(--bg-3);border:1px solid var(--border);border-bottom:none;cursor:pointer;transition:all .15s;white-space:nowrap;position:relative;flex-shrink:0;}
+.tab-item:hover{color:var(--text);background:var(--bg-4);}
+.tab-item.active{color:var(--primary);background:var(--bg-2);border-color:var(--border-strong);font-weight:700;}
+.tab-item.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--primary);}
+.tab-rename-input{background:transparent;border:none;outline:none;font-size:13px;font-weight:700;color:var(--primary);font-family:var(--font-body);width:80px;min-width:40px;}
+.tab-del{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:11px;padding:1px 2px;border-radius:3px;opacity:0;transition:opacity .15s;display:flex;align-items:center;}
+.tab-item:hover .tab-del,.tab-item.active .tab-del{opacity:1;}
+.tab-del:hover{color:var(--sit-red);}
+.tab-add{display:flex;align-items:center;gap:4px;padding:7px 11px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;font-size:12px;font-weight:700;color:var(--text-muted);background:transparent;border:1px dashed var(--border);border-bottom:none;cursor:pointer;transition:all .15s;flex-shrink:0;}
+.tab-add:hover{color:var(--primary);border-color:var(--primary);}
+.tab-bar-wrap{background:var(--bg-2);border:1px solid var(--border);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:.6rem 1rem 0;overflow:hidden;}
+.panels-outer{background:var(--bg-2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:1rem 1rem 1.25rem;}
+
+/* ── PROFILE MODAL ── */
+.profile-modal{width:480px;}
+.avatar-preview-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:1.25rem;}
+.avatar-preview{width:80px;height:80px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;font-family:var(--font-display);overflow:hidden;flex-shrink:0;transition:border-radius .3s,border .3s;border:3px solid transparent;}
+.avatar-preview img{width:100%;height:100%;object-fit:cover;}
+.avatar-upload-btn{font-size:12px;font-weight:700;padding:6px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-3);color:var(--text-mid);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;position:relative;}
+.avatar-upload-btn:hover{background:var(--bg-4);color:var(--text);}
+.avatar-upload-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.shape-grid{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.shape-opt{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:8px 10px;border-radius:var(--radius-sm);border:2px solid var(--border);background:var(--bg-3);transition:all .15s;min-width:60px;}
+.shape-opt:hover{border-color:var(--border-strong);}
+.shape-opt.selected{border-color:var(--primary);background:var(--primary-light);}
+.shape-swatch{width:32px;height:32px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;}
+.shape-opt span{font-size:10px;font-weight:700;color:var(--text-muted);}
+.shape-opt.selected span{color:var(--primary);}
+.border-color-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+.bc-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .1s;flex-shrink:0;}
+.bc-swatch:hover{transform:scale(1.15);}
+.bc-swatch.selected{border-color:var(--text)!important;transform:scale(1.05);}
+.border-style-row{display:flex;gap:7px;margin-bottom:14px;}
+.bs-opt{padding:5px 12px;border-radius:var(--radius-sm);border:2px solid var(--border);background:var(--bg-3);font-size:11px;font-weight:700;cursor:pointer;color:var(--text-muted);transition:all .15s;}
+.bs-opt:hover{border-color:var(--border-strong);}
+.bs-opt.selected{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
 /* Todo */
 .todo-item{display:flex;align-items:center;gap:8px;padding:8px 6px;border-radius:var(--radius-sm);transition:background .15s;}
 .todo-item:hover{background:var(--bg-3);}
@@ -424,14 +524,14 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
       </div>
     </div>
     <div class="tb-right">
-      <div class="user-chip">
+      <div class="user-chip" onclick="openProfileModal()" title="Edit profile picture & style" style="cursor:pointer">
         <div class="user-avatar" id="tb-user-avatar" style="background:var(--red)">S</div>
         <span id="tb-user-name">Student</span>
       </div>
       <button class="icon-btn" id="layout-toggle" onclick="toggleLayoutBar()"><i class="ti ti-layout-columns"></i> <span>Layout</span></button>
       <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit"></i> <span>Customise</span></button>
       <button class="icon-btn" id="theme-toggle" onclick="cycleTheme()" title="Toggle dark/light mode"><i class="ti ti-moon"></i></button>
-      <button class="icon-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable push alerts for deadlines"><i class="ti ti-bell-ringing"></i> <span>Alerts</span></button>
+      <button class="icon-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable push alerts: get notified 3 days before, 1 day before, and the morning of each deadline — even when the tab is closed"><i class="ti ti-bell-ringing"></i> <span>Alerts</span></button>
       <button class="logout-btn" onclick="doLogout()"><i class="ti ti-logout"></i> Sign out</button>
     </div>
   </div>
@@ -475,7 +575,15 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
     <span class="layout-bar-label">Hidden</span>
     <div id="hidden-chips" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
   </div>
-  <div class="panels-container cols-2" id="panels-container"></div>
+
+  <!-- TAB BAR + PANELS -->
+  <div class="tab-bar-wrap">
+    <div class="tab-bar" id="tab-bar"></div>
+  </div>
+  <div class="panels-outer">
+    <div class="panels-container cols-2" id="panels-container"></div>
+  </div>
+
   <div class="data-bar">
     <button class="data-btn" onclick="exportData()"><i class="ti ti-download"></i> Export</button>
     <button class="data-btn" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload"></i> Import</button>
@@ -516,6 +624,44 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
   <div class="modal"><h3>Choose colour</h3>
     <div class="color-swatch-row" id="color-picker-row"></div>
     <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-color')">Cancel</button></div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="modal-profile" onclick="if(event.target===this)closeModal('modal-profile')">
+  <div class="modal profile-modal">
+    <h3>Profile & Avatar</h3>
+    <div class="avatar-preview-wrap">
+      <div class="avatar-preview" id="prof-preview">S</div>
+      <label class="avatar-upload-btn"><i class="ti ti-upload"></i> Upload photo
+        <input type="file" accept="image/*" onchange="profilePhotoSelected(event)">
+      </label>
+      <button class="panel-mini-btn" onclick="clearProfilePhoto()" style="font-size:11px">Remove photo</button>
+    </div>
+    <label>Avatar shape</label>
+    <div class="shape-grid" id="shape-grid"></div>
+    <label>Border colour</label>
+    <div class="border-color-row" id="border-color-row"></div>
+    <label>Border style</label>
+    <div class="border-style-row" id="border-style-row"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-profile')">Cancel</button>
+      <button class="btn-primary" onclick="saveProfileStyle()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD TAB MODAL -->
+<div class="modal-overlay" id="modal-addtab" onclick="if(event.target===this)closeModal('modal-addtab')">
+  <div class="modal"><h3>New tab</h3>
+    <label>Tab name</label>
+    <input type="text" id="addtab-name" placeholder="e.g. Year 2, Research, Side projects" maxlength="24">
+    <label>Icon <span style="font-weight:500;text-transform:none;font-size:10px">(Tabler icon name, optional)</span></label>
+    <input type="text" id="addtab-icon" placeholder="e.g. ti-book, ti-rocket, ti-star">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-addtab')">Cancel</button>
+      <button class="btn-primary" onclick="confirmAddTab()">Create tab</button>
+    </div>
   </div>
 </div>
 
@@ -789,6 +935,7 @@ function getDefaultCountdowns(){
 const PANEL_DEFS=[
   {id:'links',    title:'Quick links',        icon:'ti-link'},
   {id:'alerts',   title:'Alerts & reminders', icon:'ti-bell'},
+  {id:'news',     title:'Outlook News',       icon:'ti-news'},
   {id:'timetable',title:'Timetable',          icon:'ti-calendar'},
   {id:'deadlines',title:'Upcoming deadlines', icon:'ti-clock'},
   {id:'todo',     title:'To-do list',         icon:'ti-checkbox'},
@@ -804,6 +951,13 @@ let calYear,calMonth;
 const todayDate=new Date();
 let colorTarget=null;
 let ttEvents=[],ttWeekOffset=0,ttColorIdx=0;
+
+/* ── TABS STATE ── */
+let tabs=[], activeTabId=null;
+
+/* ── PROFILE STATE ── */
+let profileStyle={shape:'circle',borderColor:'none',borderStyle:'solid',photo:null};
+let profileStyleDraft={};
 
 function dismissWelcome(){
   document.getElementById('welcome-banner').style.display='none';
@@ -826,6 +980,15 @@ function initDashboard(){
   ttWeekOffset=0;
 
   PANEL_DEFS.forEach(p=>{if(!panelOrder.includes(p.id))panelOrder.push(p.id);});
+
+  // Load tabs — default single "Home" tab
+  tabs=load('tabs',[{id:'tab_home',name:'Home',icon:'ti-home',panelOrder:null,panelHidden:null,panelColors:null,panelSpan:null,layoutCols:null}]);
+  if(!tabs.length)tabs=[{id:'tab_home',name:'Home',icon:'ti-home',panelOrder:null,panelHidden:null,panelColors:null,panelSpan:null,layoutCols:null}];
+  activeTabId=load('active_tab',tabs[0].id);
+  if(!tabs.find(t=>t.id===activeTabId))activeTabId=tabs[0].id;
+
+  // Load profile style
+  profileStyle=load('profile_style',{shape:'circle',borderColor:'none',borderStyle:'solid',photo:null});
 
   const defaultTitle=currentUser.name.split(' ')[0]+"'s Dashboard";
   const savedTitle=load('dash_title',defaultTitle);
@@ -851,10 +1014,11 @@ function initDashboard(){
     document.getElementById('welcome-banner').style.display='none';
   }
 
+  applyProfileStyle();
+  renderTabs();
   setLayout(layoutCols);
   renderPanels();
   applyTheme();
-  // Slight delay so UI paints first
   setTimeout(()=>{checkDeadlineNotifications();scheduleNotifications();}, 800);
 }
 
@@ -863,6 +1027,7 @@ function setLayout(n){
   layoutCols=n;save('layout_cols',n);
   document.getElementById('panels-container').className=`panels-container cols-${n}`;
   [1,2,3].forEach(i=>document.getElementById('lopt-'+i)?.classList.toggle('selected',i===n));
+  saveTabState();
 }
 
 function toggleLayoutBar(){
@@ -873,6 +1038,256 @@ function toggleLayoutBar(){
   renderHiddenChips();
 }
 
+/* ══ TAB SYSTEM ══ */
+function getTabState(tabId){
+  // Returns the per-tab saved state, falling back to global
+  const t=tabs.find(x=>x.id===tabId);if(!t)return null;
+  return{
+    panelOrder: t.panelOrder||load('panel_order',PANEL_DEFS.map(p=>p.id)),
+    panelHidden:t.panelHidden||load('panel_hidden',[]),
+    panelColors:t.panelColors||load('panel_colors',{}),
+    panelSpan:  t.panelSpan  ||load('panel_span',{}),
+    layoutCols: t.layoutCols ||load('layout_cols',2),
+  };
+}
+
+function saveTabState(){
+  const t=tabs.find(x=>x.id===activeTabId);if(!t)return;
+  t.panelOrder =[...panelOrder];
+  t.panelHidden=[...panelHidden];
+  t.panelColors={...panelColors};
+  t.panelSpan  ={...panelSpan};
+  t.layoutCols =layoutCols;
+  save('tabs',tabs);
+}
+
+function switchTab(tabId){
+  saveTabState();
+  activeTabId=tabId;
+  save('active_tab',tabId);
+  const state=getTabState(tabId);
+  if(state){
+    panelOrder =state.panelOrder;
+    panelHidden=state.panelHidden;
+    panelColors=state.panelColors;
+    panelSpan  =state.panelSpan;
+    layoutCols =state.layoutCols;
+  }
+  PANEL_DEFS.forEach(p=>{if(!panelOrder.includes(p.id))panelOrder.push(p.id);});
+  renderTabs();
+  setLayout(layoutCols);
+  renderPanels();
+}
+
+function renderTabs(){
+  const bar=document.getElementById('tab-bar');if(!bar)return;
+  bar.innerHTML=tabs.map(t=>{
+    const isActive=t.id===activeTabId;
+    return`<div class="tab-item${isActive?' active':''}" onclick="switchTab('${t.id}')" ondblclick="startTabRename('${t.id}',event)">
+      <i class="ti ${t.icon||'ti-layout-dashboard'}" style="font-size:13px"></i>
+      <span class="tab-label" id="tab-label-${t.id}">${t.name}</span>
+      ${tabs.length>1?`<button class="tab-del" title="Delete tab" onclick="event.stopPropagation();deleteTab('${t.id}')"><i class="ti ti-x"></i></button>`:''}
+    </div>`;
+  }).join('')+`<div class="tab-add" onclick="openModal('modal-addtab')"><i class="ti ti-plus" style="font-size:12px"></i> New tab</div>`;
+}
+
+function startTabRename(tabId,e){
+  e.stopPropagation();
+  const label=document.getElementById('tab-label-'+tabId);if(!label)return;
+  const t=tabs.find(x=>x.id===tabId);if(!t)return;
+  const inp=document.createElement('input');
+  inp.className='tab-rename-input';
+  inp.value=t.name;
+  inp.maxLength=24;
+  label.replaceWith(inp);
+  inp.focus();inp.select();
+  function finish(){
+    const newName=inp.value.trim()||t.name;
+    t.name=newName;save('tabs',tabs);
+    const span=document.createElement('span');span.className='tab-label';span.id='tab-label-'+tabId;span.textContent=newName;
+    inp.replaceWith(span);
+  }
+  inp.addEventListener('blur',finish);
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='Escape')inp.blur();});
+}
+
+function confirmAddTab(){
+  const name=document.getElementById('addtab-name').value.trim()||'New Tab';
+  const icon=document.getElementById('addtab-icon').value.trim()||'ti-layout-dashboard';
+  const newTab={
+    id:'tab_'+Date.now(),name,icon,
+    panelOrder:PANEL_DEFS.map(p=>p.id),
+    panelHidden:[],panelColors:{},panelSpan:{},layoutCols:2
+  };
+  tabs.push(newTab);
+  save('tabs',tabs);
+  closeModal('modal-addtab');
+  document.getElementById('addtab-name').value='';
+  document.getElementById('addtab-icon').value='';
+  switchTab(newTab.id);
+}
+
+function deleteTab(tabId){
+  if(tabs.length<=1){showToast('Cannot delete','You need at least one tab.','warn');return;}
+  if(!confirm('Delete this tab? Its layout will be lost.'))return;
+  tabs=tabs.filter(t=>t.id!==tabId);
+  save('tabs',tabs);
+  if(activeTabId===tabId)switchTab(tabs[0].id);
+  else renderTabs();
+}
+
+/* ══ PROFILE & AVATAR STYLE ══ */
+const AVATAR_SHAPES=[
+  {id:'circle',   label:'Circle',  br:'50%',         clip:''},
+  {id:'rounded',  label:'Rounded', br:'22%',         clip:''},
+  {id:'squircle', label:'Squircle',br:'30%',         clip:''},
+  {id:'square',   label:'Square',  br:'4px',         clip:''},
+  {id:'hexagon',  label:'Hexagon', br:'0',           clip:'polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)'},
+  {id:'diamond',  label:'Diamond', br:'0',           clip:'polygon(50% 0%,100% 50%,50% 100%,0% 50%)'},
+];
+const BORDER_COLORS=[
+  {id:'none',    hex:'transparent', label:'None'},
+  {id:'white',   hex:'#ffffff',     label:'White'},
+  {id:'primary', hex:'var(--primary)',label:'Accent'},
+  {id:'red',     hex:'#e01c2e',     label:'Red'},
+  {id:'blue',    hex:'#3b82f6',     label:'Blue'},
+  {id:'teal',    hex:'#14b8a6',     label:'Teal'},
+  {id:'amber',   hex:'#f59e0b',     label:'Amber'},
+  {id:'black',   hex:'#111111',     label:'Black'},
+  {id:'gold',    hex:'#ffd700',     label:'Gold'},
+  {id:'gradient',hex:'conic-gradient(#e01c2e,#6c47ff,#00bcd4,#00c853,#e01c2e)',label:'Rainbow'},
+];
+const BORDER_STYLES=['solid','dashed','dotted','double'];
+
+function getAvatarCSS(style){
+  const shape=AVATAR_SHAPES.find(s=>s.id===style.shape)||AVATAR_SHAPES[0];
+  const bc=BORDER_COLORS.find(b=>b.id===style.borderColor)||BORDER_COLORS[0];
+  let css=`border-radius:${shape.br};`;
+  if(shape.clip)css+=`clip-path:${shape.clip};`;
+  if(bc.id==='none'){css+='border:none;';}
+  else if(bc.id==='gradient'){
+    css+='border:3px solid transparent;background-clip:padding-box;outline:3px solid transparent;';
+    // gradient border via box-shadow fallback
+    css+='box-shadow:0 0 0 3px transparent;';
+    // we'll apply via wrapper
+  } else {
+    css+=`border:3px ${style.borderStyle||'solid'} ${bc.hex};`;
+  }
+  return css;
+}
+
+function applyAvatarStyle(el,style){
+  if(!el)return;
+  const shape=AVATAR_SHAPES.find(s=>s.id===style.shape)||AVATAR_SHAPES[0];
+  const bc=BORDER_COLORS.find(b=>b.id===style.borderColor)||BORDER_COLORS[0];
+  el.style.borderRadius=shape.br;
+  el.style.clipPath=shape.clip||'';
+  if(bc.id==='none'){el.style.border='none';}
+  else if(bc.id==='gradient'){
+    el.style.border='3px solid transparent';
+    el.style.background=`conic-gradient(#e01c2e,#6c47ff,#00bcd4,#00c853,#e01c2e) border-box`;
+    el.style.setProperty('-webkit-mask','linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0)');
+    el.style.setProperty('-webkit-mask-composite','destination-out');
+    el.style.maskComposite='exclude';
+  } else {
+    el.style.border=`3px ${style.borderStyle||'solid'} ${bc.hex}`;
+    el.style.background='';
+  }
+  // Photo
+  const initials=currentUser?currentUser.name.split(' ').map(n=>n[0]).join('').toUpperCase():'S';
+  if(style.photo){
+    el.innerHTML=`<img src="${style.photo}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`;
+  } else {
+    el.innerHTML=initials;
+    if(!style.photo&&bc.id!=='gradient')el.style.background=currentUser?.color||'#6c47ff';
+  }
+}
+
+function applyProfileStyle(){
+  const av=document.getElementById('tb-user-avatar');
+  if(av){
+    av.style.width='32px';av.style.height='32px';av.style.fontSize='11px';
+    applyAvatarStyle(av,profileStyle);
+  }
+}
+
+function openProfileModal(){
+  profileStyleDraft={...profileStyle};
+  buildProfileModal();
+  openModal('modal-profile');
+}
+
+function buildProfileModal(){
+  // Preview
+  updateProfilePreview();
+  // Shape grid
+  const sg=document.getElementById('shape-grid');
+  if(sg)sg.innerHTML=AVATAR_SHAPES.map(s=>`
+    <div class="shape-opt${profileStyleDraft.shape===s.id?' selected':''}" onclick="profileSetShape('${s.id}')">
+      <div class="shape-swatch" style="border-radius:${s.br};clip-path:${s.clip||'none'};overflow:hidden;background:var(--primary)">${currentUser?.name?.split(' ').map(n=>n[0]).join('').toUpperCase()||'S'}</div>
+      <span>${s.label}</span>
+    </div>`).join('');
+  // Border colours
+  const bcr=document.getElementById('border-color-row');
+  if(bcr)bcr.innerHTML=BORDER_COLORS.map(bc=>`
+    <div class="bc-swatch${profileStyleDraft.borderColor===bc.id?' selected':''}" style="background:${bc.id==='gradient'?'conic-gradient(#e01c2e,#6c47ff,#00bcd4,#00c853,#e01c2e)':bc.id==='none'?'var(--bg-3)':bc.hex};${bc.id==='none'?'border:1.5px dashed var(--border-strong)!important':''}" title="${bc.label}" onclick="profileSetBorderColor('${bc.id}')"></div>`).join('');
+  // Border styles
+  const bsr=document.getElementById('border-style-row');
+  if(bsr)bsr.innerHTML=BORDER_STYLES.map(bs=>`<div class="bs-opt${profileStyleDraft.borderStyle===bs?' selected':''}" onclick="profileSetBorderStyle('${bs}')">${bs.charAt(0).toUpperCase()+bs.slice(1)}</div>`).join('');
+}
+
+function updateProfilePreview(){
+  const prev=document.getElementById('prof-preview');if(!prev)return;
+  prev.style.width='80px';prev.style.height='80px';prev.style.fontSize='26px';
+  prev.style.background=currentUser?.color||'#6c47ff';
+  applyAvatarStyle(prev,profileStyleDraft);
+}
+
+function profileSetShape(id){
+  profileStyleDraft.shape=id;
+  document.querySelectorAll('.shape-opt').forEach(el=>el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  updateProfilePreview();
+}
+function profileSetBorderColor(id){
+  profileStyleDraft.borderColor=id;
+  document.querySelectorAll('.bc-swatch').forEach(el=>el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  updateProfilePreview();
+}
+function profileSetBorderStyle(bs){
+  profileStyleDraft.borderStyle=bs;
+  document.querySelectorAll('.bs-opt').forEach(el=>el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  updateProfilePreview();
+}
+function profilePhotoSelected(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{profileStyleDraft.photo=ev.target.result;updateProfilePreview();};
+  reader.readAsDataURL(file);
+}
+function clearProfilePhoto(){
+  profileStyleDraft.photo=null;updateProfilePreview();
+}
+function saveProfileStyle(){
+  profileStyle={...profileStyleDraft};
+  save('profile_style',profileStyle);
+  applyProfileStyle();
+  // Also update SP nav avatar
+  const spAv=document.getElementById('sp-nav-avatar');
+  if(spAv){
+    const initials=currentUser?.name.split(' ').map(n=>n[0]).join('').toUpperCase()||'S';
+    if(profileStyle.photo){spAv.innerHTML=`<img src="${profileStyle.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`;spAv.style.padding='0';}
+    else{spAv.textContent=initials;}
+    const shape=AVATAR_SHAPES.find(s=>s.id===profileStyle.shape)||AVATAR_SHAPES[0];
+    spAv.style.borderRadius=shape.br;
+    spAv.style.clipPath=shape.clip||'';
+  }
+  closeModal('modal-profile');
+  showToast('Profile updated','Your avatar style has been saved.','info',3000);
+}
+
 function renderHiddenChips(){
   const el=document.getElementById('hidden-chips');if(!el)return;
   const hidden=panelOrder.filter(id=>panelHidden.includes(id));
@@ -880,7 +1295,7 @@ function renderHiddenChips(){
   el.innerHTML=hidden.map(id=>{const def=PANEL_DEFS.find(p=>p.id===id);return`<div class="hidden-panel-chip" onclick="showPanel('${id}')"><i class="ti ti-eye"></i> ${def?.title||id}</div>`;}).join('');
 }
 
-function showPanel(id){panelHidden=panelHidden.filter(x=>x!==id);save('panel_hidden',panelHidden);renderPanels();renderHiddenChips();}
+function showPanel(id){panelHidden=panelHidden.filter(x=>x!==id);save('panel_hidden',panelHidden);saveTabState();renderPanels();renderHiddenChips();}
 
 /* ══ PANEL RENDERING ══ */
 function getPanelColorStyle(panelId){
@@ -931,13 +1346,20 @@ function renderPanels(){
     wrapper.addEventListener('dragleave',onDragLeave);
     wrapper.addEventListener('drop',onDrop);
   });
-  renderLinks();renderAlerts();renderCountdowns();renderCalendar();restoreTimetable();renderTodos();
+  renderLinks();renderAlerts();renderCountdowns();renderCalendar();restoreTimetable();renderTodos();renderNews();
 }
 
 function buildPanelInner(id){
   switch(id){
     case'links':return`<div class="panel-title">Quick Links</div><div class="links-grid" id="links-grid"></div>`;
-    case'alerts':return`<div class="panel-title">Alerts &amp; reminders<button class="section-add-btn" onclick="openModal('modal-alert')"><i class="ti ti-plus"></i> Add</button></div><div id="alerts-list"></div>`;
+    case'alerts':return`
+      <div class="panel-title">
+        <span style="display:flex;align-items:center;gap:6px"><i class="ti ti-bell-ringing" style="font-size:13px"></i>Notifications
+          <span class="notif-count-badge" id="notif-count-badge" style="display:none">0</span>
+        </span>
+        <button class="section-add-btn" style="display:flex" onclick="openModal('modal-alert')"><i class="ti ti-plus"></i> Add</button>
+      </div>
+      <div id="alerts-list"></div>`;
     case'timetable':return`
       <div class="panel-title">Timetable<div class="tt-controls"><button class="tt-clear-btn" id="tt-clear-btn" onclick="clearTimetable()" style="display:none"><i class="ti ti-trash"></i> Clear</button></div></div>
       <div id="tt-upload-section">
@@ -959,7 +1381,9 @@ function buildPanelInner(id){
           <span class="tt-week-label" id="tt-week-label"></span>
           <button class="cal-nav" onclick="ttNextWeek()"><i class="ti ti-chevron-right"></i></button>
         </div>
-        <div id="tt-attire-notice" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.35);border-radius:var(--radius-sm);font-size:12px;color:#fbbf24;font-weight:600;"><i class="ti ti-shirt"></i> Lab/practical this week — check your attire requirements!</div>
+        <div id="tt-attire-notice" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.35);border-radius:var(--radius-sm);font-size:12px;color:#fbbf24;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><i class="ti ti-shirt"></i> Lab/practical this week — check attire requirements!
+          <a href="https://www.singaporetech.edu.sg/campus-wayfinder" target="_blank" style="color:#fbbf24;font-size:11px;display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);padding:2px 8px;border-radius:10px;text-decoration:none;font-weight:700"><i class="ti ti-map-pin" style="font-size:10px"></i>Find lab →</a>
+        </div>
         <div id="tt-grid-container"></div>
         <div class="tt-legend" id="tt-legend"></div>
       </div>`;
@@ -1023,11 +1447,33 @@ function buildPanelInner(id){
       </div>
       <div id="todo-list"></div>
       <div id="todo-empty" style="font-size:13px;color:var(--text-muted);text-align:center;padding:1.5rem;display:none">Nothing to do — enjoy the break! ✨</div>`;
+    case'news':return`
+      <div class="panel-title"><span style="display:flex;align-items:center;gap:6px"><i class="ti ti-news" style="font-size:13px"></i>Outlook News</span>
+        <button class="section-add-btn" style="display:flex" onclick="openNewsForm()"><i class="ti ti-plus"></i> Add post</button>
+      </div>
+      <div class="outlook-banner"><i class="ti ti-mail"></i> SIT staff news &amp; announcements — paste a screenshot to add a post</div>
+      <div id="news-form" class="news-form">
+        <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">New post</div>
+        <input type="text" id="news-tag-in" placeholder="Tag (e.g. Announcement, Event)">
+        <input type="text" id="news-title-in" placeholder="Headline *" required>
+        <textarea id="news-excerpt-in" placeholder="Short description (optional)"></textarea>
+        <div class="news-add-zone" id="news-drop-zone" onclick="document.getElementById('news-img-in').click()">
+          <input type="file" id="news-img-in" accept="image/*" onchange="newsImageSelected(event)">
+          <i class="ti ti-photo-plus"></i>
+          <p id="news-img-label">Click or paste to add image</p>
+        </div>
+        <div style="display:flex;gap:7px;justify-content:flex-end">
+          <button class="btn-cancel" onclick="closeNewsForm()">Cancel</button>
+          <button class="btn-primary" onclick="saveNews()">Publish</button>
+        </div>
+      </div>
+      <div id="news-list"></div>
+      <div id="news-empty" style="font-size:13px;color:var(--text-muted);text-align:center;padding:2rem;">No news posts yet — paste a screenshot or add one above.</div>`;
     default:return`<div class="panel-title">${id}</div>`;
   }
 }
 
-function hidePanel(id){panelHidden.push(id);save('panel_hidden',panelHidden);renderPanels();renderHiddenChips();}
+function hidePanel(id){panelHidden.push(id);save('panel_hidden',panelHidden);saveTabState();renderPanels();renderHiddenChips();}
 function setPanelColor(panelId,colorId){
   panelColors[panelId]=colorId;save('panel_colors',panelColors);
   const panel=document.getElementById('panel-'+panelId);
@@ -1056,7 +1502,7 @@ function toggleEdit(){
   const t=document.getElementById('dash-title'),s=document.getElementById('dash-subtitle');
   t.contentEditable=editMode?'true':'false';
   s.contentEditable=editMode?'true':'false';
-  if(!editMode){save('dash_title',t.textContent);save('dash_subtitle',s.textContent);}
+  if(!editMode){save('dash_title',t.textContent);save('dash_subtitle',s.textContent);saveTabState();}
 }
 
 /* ══ DRAG & DROP ══ */
@@ -1070,7 +1516,7 @@ function onDrop(e){
   const a=dragSrc.dataset.panelId,b=this.dataset.panelId;
   const ia=panelOrder.indexOf(a),ib=panelOrder.indexOf(b);
   [panelOrder[ia],panelOrder[ib]]=[panelOrder[ib],panelOrder[ia]];
-  save('panel_order',panelOrder);renderPanels();
+  save('panel_order',panelOrder);saveTabState();renderPanels();
 }
 
 /* ══ LINKS ══ */
@@ -1100,23 +1546,68 @@ function saveLink(){
 }
 function deleteLink(id){links=links.filter(l=>l.id!==id);save('links',links);renderLinks();}
 
-/* ══ ALERTS ══ */
+/* ══ ALERTS (xSITE notification style) ══ */
 let alertColorSel='amber';
+
+function getAlertUrgency(al){
+  // Determine notification style based on color or date proximity
+  if(al.color==='red')return'urgent';
+  if(al.date){
+    const today=new Date();today.setHours(0,0,0,0);
+    const target=new Date(al.date);target.setHours(0,0,0,0);
+    const diff=Math.round((target-today)/86400000);
+    if(diff<=1)return'urgent';
+    if(diff<=3)return'warn';
+  }
+  if(al.color==='amber'||al.color==='green')return'warn';
+  return'';
+}
+
+function getAlertIcon(al){
+  if(al.color==='red')return'ti-alert-triangle';
+  if(al.mod&&al.mod.toLowerCase().includes('lab'))return'ti-flask';
+  if(al.mod&&al.mod.toLowerCase().includes('quiz'))return'ti-pencil';
+  if(al.date)return'ti-calendar-event';
+  return'ti-bell';
+}
+
+function getRelativeTime(dateStr){
+  if(!dateStr)return'';
+  const today=new Date();today.setHours(0,0,0,0);
+  const target=new Date(dateStr);target.setHours(0,0,0,0);
+  const diff=Math.round((target-today)/86400000);
+  if(diff===0)return'<span style="color:var(--sit-red);font-weight:800">Due today</span>';
+  if(diff===1)return'<span style="color:#f59e0b;font-weight:800">Due tomorrow</span>';
+  if(diff<0)return`<span style="color:var(--text-muted)">Passed</span>`;
+  if(diff<=7)return`<span style="color:var(--primary)">In ${diff} days</span>`;
+  return target.toLocaleDateString('en-SG',{day:'numeric',month:'short'});
+}
+
 function renderAlerts(){
   const list=document.getElementById('alerts-list');if(!list)return;
-  if(!alerts.length){list.innerHTML='<div style="font-size:13px;color:var(--white-faint);text-align:center;padding:1rem;">No alerts</div>';return;}
+  const badge=document.getElementById('notif-count-badge');
+  if(!alerts.length){
+    list.innerHTML='<div style="font-size:13px;color:var(--text-muted);text-align:center;padding:1.5rem;display:flex;flex-direction:column;align-items:center;gap:6px"><i class="ti ti-bell-off" style="font-size:24px;opacity:.4"></i>No notifications</div>';
+    if(badge){badge.style.display='none';}
+    return;
+  }
+  if(badge){badge.textContent=alerts.length;badge.style.display='';}
   list.innerHTML=alerts.map(al=>{
-    const c=COLORS.find(x=>x.id===al.color)||COLORS[0];
-    const style=c.bg?`--ai-bg:${c.bg};--ai-text:${c.text};--ai-sub:${c.sub};--ai-border:${c.border}`:'';
-    return`<div class="alert-item" style="${style}">
-      <i class="ti ti-bell ai-icon"></i>
-      <div>
-        <div class="ai-name">${al.mod||''}</div>
-        <div class="ai-msg">${al.msg}</div>
-        ${al.date?`<span class="ai-meta">${al.date}</span>`:''}
+    const urgency=getAlertUrgency(al);
+    const icon=getAlertIcon(al);
+    const modLabel=al.mod?`<span class="xn-app-badge">${al.mod}</span>`:'<span class="xn-app-badge">xSITE</span>';
+    const dateHtml=al.date?`<span>${getRelativeTime(al.date)}</span><span>·</span><span>${al.date}</span>`:'';
+    return`<div class="xsite-notif${urgency?' xn-'+urgency:''}">
+      <div class="xn-dot-wrap">
+        <div class="xn-icon"><i class="ti ${icon}"></i></div>
+        <div class="xn-dot"></div>
       </div>
-      <button class="del-btn" onclick="deleteAlert('${al.id}')"><i class="ti ti-x"></i></button>
-      <button class="color-btn" onclick="openColorModal('alert','${al.id}')"><i class="ti ti-palette"></i></button>
+      <div class="xn-body">
+        <div class="xn-app">${modLabel}</div>
+        <div class="xn-title">${al.msg}</div>
+        ${dateHtml?`<div class="xn-meta">${dateHtml}</div>`:''}
+      </div>
+      <button class="xn-del-btn" onclick="deleteAlert('${al.id}')"><i class="ti ti-x"></i></button>
     </div>`;
   }).join('');
 }
@@ -1529,13 +2020,87 @@ function setFontSize(size,silent){
   if(!silent)save('font_size',size);
 }
 
+/* ══ OUTLOOK NEWS PANEL ══ */
+let newsItems=[];
+let pendingNewsImg=null;
+
+function renderNews(){
+  newsItems=load('news_items',[]);
+  const list=document.getElementById('news-list');
+  const empty=document.getElementById('news-empty');
+  if(!list)return;
+  if(!newsItems.length){if(empty)empty.style.display='';list.innerHTML='';return;}
+  if(empty)empty.style.display='none';
+  list.innerHTML=newsItems.map(n=>`
+    <div class="news-item" style="position:relative">
+      <div class="news-img-wrap">
+        ${n.img?`<img src="${n.img}" alt="${n.title}" loading="lazy">`:`<div class="news-img-placeholder"><i class="ti ti-photo-off"></i><span>No image</span></div>`}
+      </div>
+      <div class="news-body">
+        ${n.tag?`<div class="news-tag">${n.tag}</div>`:''}
+        <div class="news-title">${n.title}</div>
+        ${n.excerpt?`<div class="news-excerpt">${n.excerpt}</div>`:''}
+        <div class="news-meta"><i class="ti ti-clock"></i> ${n.date}</div>
+      </div>
+      <button class="news-del-btn" onclick="deleteNews('${n.id}')"><i class="ti ti-x"></i></button>
+    </div>`).join('');
+}
+
+function openNewsForm(){
+  const f=document.getElementById('news-form');if(f){f.classList.add('open');document.getElementById('news-title-in').focus();}
+}
+function closeNewsForm(){
+  const f=document.getElementById('news-form');if(f)f.classList.remove('open');
+  pendingNewsImg=null;
+  ['news-tag-in','news-title-in','news-excerpt-in'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const lbl=document.getElementById('news-img-label');if(lbl)lbl.textContent='Click or paste to add image';
+  const inp=document.getElementById('news-img-in');if(inp)inp.value='';
+}
+
+function newsImageSelected(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){pendingNewsImg=ev.target.result;const lbl=document.getElementById('news-img-label');if(lbl)lbl.textContent='✓ Image ready';};
+  reader.readAsDataURL(file);
+}
+
+function saveNews(){
+  const title=document.getElementById('news-title-in').value.trim();
+  if(!title)return;
+  const tag=document.getElementById('news-tag-in').value.trim();
+  const excerpt=document.getElementById('news-excerpt-in').value.trim();
+  const now=new Date().toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric'});
+  newsItems=load('news_items',[]);
+  newsItems.unshift({id:'n'+Date.now(),title,tag,excerpt,img:pendingNewsImg||null,date:now});
+  save('news_items',newsItems);closeNewsForm();renderNews();
+  showToast('Post added','News item published to your dashboard.','info',4000);
+}
+function deleteNews(id){newsItems=load('news_items',[]);newsItems=newsItems.filter(n=>n.id!==id);save('news_items',newsItems);renderNews();}
+
+// Support paste-to-add image anywhere on the news panel
+document.addEventListener('paste',function(e){
+  const form=document.getElementById('news-form');
+  if(!form||!form.classList.contains('open'))return;
+  const items=e.clipboardData?.items;
+  if(!items)return;
+  for(const item of items){
+    if(item.type.startsWith('image/')){
+      const file=item.getAsFile();
+      const reader=new FileReader();
+      reader.onload=function(ev){pendingNewsImg=ev.target.result;const lbl=document.getElementById('news-img-label');if(lbl)lbl.textContent='✓ Image pasted';};
+      reader.readAsDataURL(file);
+      e.preventDefault();return;
+    }
+  }
+});
+
 /* ══ PUSH NOTIFICATIONS ══ */
 function requestNotifPermission(){
   if(!('Notification' in window)){showToast('Not supported','Your browser does not support notifications.','warn');return;}
-  if(Notification.permission==='granted'){scheduleNotifications();showToast('Alerts on','Deadline alerts are active!','info');return;}
+  if(Notification.permission==='granted'){scheduleNotifications();showToast('Alerts active ✓','You\'ll be notified 3 days before, 1 day before, and tonight for deadlines due tomorrow.','info');return;}
   Notification.requestPermission().then(p=>{
-    if(p==='granted'){scheduleNotifications();showToast('Alerts on ✓','You\'ll get notified 3 days, 1 day, and the day of deadlines.','info');}
-    else showToast('Permission denied','Enable notifications in browser settings.','warn');
+    if(p==='granted'){scheduleNotifications();showToast('Alerts enabled ✓','You\'ll get push alerts at: 3 days · 1 day · day-of each deadline — even when the tab is closed.','info',8000);}
+    else showToast('Permission denied','Enable notifications in your browser settings to get deadline alerts on your phone/computer.','warn',8000);
   });
 }
 function scheduleNotifications(){
@@ -1549,8 +2114,11 @@ function scheduleNotifications(){
     [0,1,3].forEach(threshold=>{
       const key=cd.id+'_push_'+threshold;
       if(diff===threshold&&!shown[key]){
-        const msg=diff===0?`⚠️ DUE TODAY: ${cd.label}`:diff===1?`Due tomorrow: ${cd.label}`:`${cd.label} due in 3 days`;
-        try{new Notification('SIT Dashboard',{body:msg,icon:'https://www.singaporetech.edu.sg/favicon.ico'});}catch{}
+        let msg;
+        if(diff===0)msg=`⚠️ DUE TODAY: ${cd.label}`;
+        else if(diff===1)msg=`🌙 Tonight reminder: ${cd.label} is due TOMORROW`;
+        else msg=`📅 ${cd.label} due in 3 days`;
+        try{new Notification('SIT Dashboard',{body:msg,icon:'https://www.singaporetech.edu.sg/favicon.ico',badge:'https://www.singaporetech.edu.sg/favicon.ico'});}catch{}
         shown[key]=true;updated=true;
       }
     });
