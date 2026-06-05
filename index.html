@@ -165,6 +165,19 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .panel-check-item i.ti-check-circle{color:var(--primary);}
 .panel-check-item i.ti-circle{color:var(--text-muted);}
 .panel-check-label{font-size:12px;font-weight:600;color:var(--text);}
+/* Add panel card */
+.add-panel-card{display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:1.5rem 1rem;border:2px dashed rgba(108,71,255,0.25);border-radius:var(--radius-lg);background:transparent;cursor:pointer;transition:all .2s;text-align:center;}
+.add-panel-card:hover{border-color:var(--primary);background:var(--primary-light);}
+.add-panel-card .apc-icon{font-size:24px;color:var(--text-muted);}
+.add-panel-card:hover .apc-icon{color:var(--primary);}
+.add-panel-card .apc-label{font-size:13px;font-weight:700;color:var(--text-muted);}
+.add-panel-card:hover .apc-label{color:var(--primary);}
+.add-panel-card .apc-chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:4px;}
+.add-panel-chip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--bg-3);border:1px solid var(--border);color:var(--text-mid);cursor:pointer;transition:all .15s;}
+.add-panel-chip:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary);}
+/* Layout bar hidden chips — rebranded as add buttons */
+.hidden-panel-chip{font-size:12px;font-weight:600;padding:5px 11px;border-radius:20px;background:var(--bg-3);border:1px dashed var(--border-strong);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s;}
+.hidden-panel-chip:hover{color:var(--primary);border-color:var(--primary);background:var(--primary-light);}
 .alert-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--ai-border,rgba(245,158,11,0.35));background:var(--ai-bg,rgba(245,158,11,0.08));margin-bottom:8px;position:relative;}
 .alert-item .ai-icon{font-size:16px;color:var(--ai-text,#d97706);flex-shrink:0;margin-top:2px;}
 .alert-item .ai-name{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ai-text,var(--text-muted));font-weight:700;}
@@ -590,7 +603,7 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
       <button class="panel-mini-btn" onclick="setFontSize('lg')" id="fs-lg" style="font-size:14px">A+</button>
     </div>
     <div class="layout-divider"></div>
-    <span class="layout-bar-label">Hidden</span>
+    <span class="layout-bar-label">Add Panel</span>
     <div id="hidden-chips" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
   </div>
 
@@ -1346,11 +1359,34 @@ function saveProfileStyle(){
 function renderHiddenChips(){
   const el=document.getElementById('hidden-chips');if(!el)return;
   const hidden=panelOrder.filter(id=>panelHidden.includes(id));
-  if(!hidden.length){el.innerHTML='<span style="font-size:12px;color:var(--white-faint)">None hidden</span>';return;}
-  el.innerHTML=hidden.map(id=>{const def=PANEL_DEFS.find(p=>p.id===id);return`<div class="hidden-panel-chip" onclick="showPanel('${id}')"><i class="ti ti-eye"></i> ${def?.title||id}</div>`;}).join('');
+  if(!hidden.length){el.innerHTML='<span style="font-size:12px;color:var(--text-muted)">All panels visible</span>';return;}
+  el.innerHTML=hidden.map(id=>{
+    const def=PANEL_DEFS.find(p=>p.id===id);
+    return`<div class="hidden-panel-chip" onclick="showPanel('${id}')"><i class="ti ti-plus" style="font-size:11px"></i> ${def?.title||id}</div>`;
+  }).join('');
 }
 
 function showPanel(id){panelHidden=panelHidden.filter(x=>x!==id);save('panel_hidden',panelHidden);saveTabState();renderPanels();renderHiddenChips();}
+
+function renderAddPanelCard(){
+  const container=document.getElementById('panels-container');if(!container)return;
+  const hidden=panelOrder.filter(id=>panelHidden.includes(id));
+  if(!hidden.length)return;
+  const card=document.createElement('div');
+  card.className='panel-wrapper';
+  card.innerHTML=`
+    <div class="add-panel-card" id="add-panel-card" style="display:flex">
+      <div class="apc-icon"><i class="ti ti-layout-grid-add"></i></div>
+      <div class="apc-label">Add a panel</div>
+      <div class="apc-chips">
+        ${hidden.map(id=>{
+          const def=PANEL_DEFS.find(p=>p.id===id);
+          return`<div class="add-panel-chip" onclick="showPanel('${id}')">${def?.title||id}</div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  container.appendChild(card);
+}
 
 /* ══ PANEL RENDERING ══ */
 function getPanelColorStyle(panelId){
@@ -1402,6 +1438,8 @@ function renderPanels(){
     wrapper.addEventListener('drop',onDrop);
   });
   renderLinks();renderAlerts();renderCountdowns();renderCalendar();restoreTimetable();renderTodos();renderNews();
+  // Add-panel card — shown when there are hidden panels
+  renderAddPanelCard();
 }
 
 function buildPanelInner(id){
