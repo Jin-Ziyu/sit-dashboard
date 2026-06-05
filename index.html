@@ -148,6 +148,23 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .link-card.add-card{border-style:dashed;border-width:1.5px;justify-content:center;align-items:center;min-height:84px;color:var(--text-muted);font-weight:700;font-size:12px;gap:5px;background:transparent;box-shadow:none;display:none;}
 .edit-mode .link-card.add-card{display:flex;}
 .link-card.add-card:hover{color:var(--primary);border-color:var(--primary);background:var(--primary-light);}
+/* Link group tabs */
+.lgtab-bar{display:flex;align-items:center;gap:4px;margin-bottom:10px;flex-wrap:wrap;}
+.lgtab{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--bg-3);color:var(--text-muted);transition:all .15s;white-space:nowrap;font-family:var(--font-body);}
+.lgtab:hover{background:var(--bg-4);color:var(--text);border-color:var(--border-strong);}
+.lgtab.active{background:var(--primary-light);color:var(--primary);border-color:var(--primary);}
+.lgtab-del{display:none;background:none;border:none;cursor:pointer;color:inherit;font-size:11px;padding:0 0 0 3px;line-height:1;}
+.lgtab:hover .lgtab-del,.edit-mode .lgtab-del{display:inline;}
+.lgtab-add{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px dashed rgba(108,71,255,0.3);background:transparent;color:var(--text-muted);transition:all .15s;white-space:nowrap;font-family:var(--font-body);}
+.lgtab-add:hover{color:var(--primary);border-color:var(--primary);background:var(--primary-light);}
+.lgtab-rename-input{font-size:12px;font-weight:700;font-family:var(--font-body);border:none;outline:none;background:transparent;color:var(--primary);width:80px;}
+/* Panel checklist in new tab modal */
+.panel-check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-3);cursor:pointer;transition:all .15s;user-select:none;}
+.panel-check-item:hover{border-color:var(--border-strong);background:var(--bg-4);}
+.panel-check-item.checked{border-color:var(--primary);background:var(--primary-light);}
+.panel-check-item i.ti-check-circle{color:var(--primary);}
+.panel-check-item i.ti-circle{color:var(--text-muted);}
+.panel-check-label{font-size:12px;font-weight:600;color:var(--text);}
 .alert-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--ai-border,rgba(245,158,11,0.35));background:var(--ai-bg,rgba(245,158,11,0.08));margin-bottom:8px;position:relative;}
 .alert-item .ai-icon{font-size:16px;color:var(--ai-text,#d97706);flex-shrink:0;margin-top:2px;}
 .alert-item .ai-name{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ai-text,var(--text-muted));font-weight:700;}
@@ -598,8 +615,12 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
   <div class="modal"><h3>Add quick link</h3>
     <label>Name</label><input type="text" id="link-name" placeholder="e.g. IN4SIT">
     <label>URL</label><input type="text" id="link-url" placeholder="https://...">
+    <label>Description <span style="font-weight:500;text-transform:none;font-size:10px">(optional)</span></label>
+    <input type="text" id="link-desc-in" placeholder="e.g. Grades, module reg & admin">
     <label>Category</label>
     <select id="link-cat"><option>Portal</option><option>Library</option><option>Tool</option><option>App</option><option>Forum</option><option>Other</option></select>
+    <label>Group <span style="font-weight:500;text-transform:none;font-size:10px">(optional)</span></label>
+    <select id="link-group-sel"></select>
     <label>Colour</label><div class="color-swatch-row" id="link-color-row"></div>
     <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-link')">Cancel</button><button class="btn-primary" onclick="saveLink()">Add link</button></div>
   </div>
@@ -654,11 +675,14 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
 
 <!-- ADD TAB MODAL -->
 <div class="modal-overlay" id="modal-addtab" onclick="if(event.target===this)closeModal('modal-addtab')">
-  <div class="modal"><h3>New tab</h3>
+  <div class="modal" style="width:460px">
+    <h3>New tab</h3>
     <label>Tab name</label>
-    <input type="text" id="addtab-name" placeholder="e.g. Year 2, Research, Side projects" maxlength="24">
+    <input type="text" id="addtab-name" placeholder="e.g. Timetable, Research, Year 2" maxlength="24">
     <label>Icon <span style="font-weight:500;text-transform:none;font-size:10px">(Tabler icon name, optional)</span></label>
-    <input type="text" id="addtab-icon" placeholder="e.g. ti-book, ti-rocket, ti-star">
+    <input type="text" id="addtab-icon" placeholder="e.g. ti-book, ti-rocket, ti-calendar">
+    <label style="margin-bottom:8px">Panels to include</label>
+    <div id="addtab-panel-list" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px"></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal('modal-addtab')">Cancel</button>
       <button class="btn-primary" onclick="confirmAddTab()">Create tab</button>
@@ -948,6 +972,7 @@ function load(key,def){try{const v=localStorage.getItem(NS+key);return v?JSON.pa
 function save(key,val){try{localStorage.setItem(NS+key,JSON.stringify(val));}catch{}}
 
 let links,alerts,countdowns,editMode=false,layoutCols,panelOrder,panelHidden,panelColors,panelSpan;
+let linkGroups=[], activeLinkGroup='lg_all';
 let calYear,calMonth;
 const todayDate=new Date();
 let colorTarget=null;
@@ -968,6 +993,11 @@ function dismissWelcome(){
 function initDashboard(){
   editMode=false;
   links      =load('links',     getDefaultLinks(currentUser.prog));
+  // Link groups — each group has {id, name} and links are tagged with groupId
+  linkGroups=load('link_groups',[{id:'lg_all',name:'All'}]);
+  if(!linkGroups.length)linkGroups=[{id:'lg_all',name:'All'}];
+  activeLinkGroup=load('active_link_group','lg_all');
+  if(!linkGroups.find(g=>g.id===activeLinkGroup))activeLinkGroup=linkGroups[0].id;
   alerts     =load('alerts',    getDefaultAlerts(currentUser.prog));
   countdowns =load('cds',       getDefaultCountdowns());
   layoutCols =load('layout_cols',2);
@@ -1112,13 +1142,37 @@ function startTabRename(tabId,e){
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='Escape')inp.blur();});
 }
 
+function buildAddTabPanelList(){
+  const container=document.getElementById('addtab-panel-list');if(!container)return;
+  const PANEL_ICONS={links:'ti-link',alerts:'ti-bell',news:'ti-news',timetable:'ti-calendar',deadlines:'ti-clock',todo:'ti-checkbox',calendar:'ti-calendar-month',support:'ti-heart'};
+  container.innerHTML=PANEL_DEFS.map(p=>`
+    <div class="panel-check-item checked" id="pci-${p.id}" onclick="togglePanelCheck('${p.id}')">
+      <i class="ti ti-check-circle" id="pci-icon-${p.id}"></i>
+      <i class="ti ${PANEL_ICONS[p.id]||'ti-layout-dashboard'}" style="font-size:14px;color:var(--text-muted)"></i>
+      <span class="panel-check-label">${p.title}</span>
+    </div>`).join('');
+}
+
+function togglePanelCheck(panelId){
+  const item=document.getElementById('pci-'+panelId);
+  const icon=document.getElementById('pci-icon-'+panelId);
+  if(!item)return;
+  const checked=item.classList.toggle('checked');
+  icon.className=`ti ${checked?'ti-check-circle':'ti-circle'}`;
+}
+
 function confirmAddTab(){
   const name=document.getElementById('addtab-name').value.trim()||'New Tab';
   const icon=document.getElementById('addtab-icon').value.trim()||'ti-layout-dashboard';
+  // Gather selected panels
+  const selected=PANEL_DEFS.filter(p=>document.getElementById('pci-'+p.id)?.classList.contains('checked')).map(p=>p.id);
+  const allIds=PANEL_DEFS.map(p=>p.id);
+  const hidden=allIds.filter(id=>!selected.includes(id));
   const newTab={
     id:'tab_'+Date.now(),name,icon,
-    panelOrder:PANEL_DEFS.map(p=>p.id),
-    panelHidden:[],panelColors:{},panelSpan:{},layoutCols:2
+    panelOrder:allIds,
+    panelHidden:hidden,
+    panelColors:{},panelSpan:{},layoutCols:2
   };
   tabs.push(newTab);
   save('tabs',tabs);
@@ -1352,7 +1406,7 @@ function renderPanels(){
 
 function buildPanelInner(id){
   switch(id){
-    case'links':return`<div class="panel-title">Quick Links</div><div class="links-grid" id="links-grid"></div>`;
+    case'links':return`<div class="panel-title">Quick Links</div><div class="lgtab-bar" id="lgtab-bar"></div><div class="links-grid" id="links-grid"></div>`;
     case'alerts':return`
       <div class="panel-title">
         <span style="display:flex;align-items:center;gap:6px"><i class="ti ti-bell-ringing" style="font-size:13px"></i>Notifications
@@ -1522,9 +1576,73 @@ function onDrop(e){
 
 /* ══ LINKS ══ */
 let linkColorSel='blue';
+
+function renderLinkGroupTabs(){
+  const bar=document.getElementById('lgtab-bar');if(!bar)return;
+  bar.innerHTML=linkGroups.map(g=>{
+    const isActive=g.id===activeLinkGroup;
+    const count=g.id==='lg_all'?links.length:links.filter(l=>l.groupId===g.id).length;
+    return`<div class="lgtab${isActive?' active':''}" onclick="switchLinkGroup('${g.id}')" ondblclick="startLgRename('${g.id}',event)">
+      ${g.name}<span style="font-size:10px;opacity:.65;margin-left:2px">${count}</span>
+      ${linkGroups.length>1&&g.id!=='lg_all'?`<button class="lgtab-del" title="Delete group" onclick="event.stopPropagation();deleteLinkGroup('${g.id}')"><i class="ti ti-x"></i></button>`:''}
+    </div>`;
+  }).join('')+`<div class="lgtab-add" onclick="addLinkGroup()"><i class="ti ti-plus" style="font-size:11px"></i> Group</div>`;
+}
+
+function switchLinkGroup(id){
+  activeLinkGroup=id;
+  save('active_link_group',id);
+  renderLinkGroupTabs();
+  renderLinks();
+}
+
+function addLinkGroup(){
+  const name=prompt('Group name:','');
+  if(!name||!name.trim())return;
+  const g={id:'lg_'+Date.now(),name:name.trim()};
+  linkGroups.push(g);
+  save('link_groups',linkGroups);
+  switchLinkGroup(g.id);
+}
+
+function deleteLinkGroup(id){
+  if(!confirm('Delete this group? Links in it will move to All.'))return;
+  links=links.map(l=>l.groupId===id?{...l,groupId:null}:l);
+  save('links',links);
+  linkGroups=linkGroups.filter(g=>g.id!==id);
+  save('link_groups',linkGroups);
+  if(activeLinkGroup===id)activeLinkGroup='lg_all';
+  save('active_link_group',activeLinkGroup);
+  renderLinkGroupTabs();renderLinks();
+}
+
+function startLgRename(id,e){
+  e.stopPropagation();
+  if(id==='lg_all')return;
+  const g=linkGroups.find(x=>x.id===id);if(!g)return;
+  // Find the lgtab span text node and replace inline
+  const tabs=document.querySelectorAll('.lgtab');
+  tabs.forEach(el=>{
+    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes(id)){
+      const inp=document.createElement('input');
+      inp.className='lgtab-rename-input';inp.value=g.name;inp.maxLength=20;
+      el.innerHTML='';el.appendChild(inp);inp.focus();inp.select();
+      function finish(){
+        const v=inp.value.trim()||g.name;
+        g.name=v;save('link_groups',linkGroups);
+        renderLinkGroupTabs();renderLinks();
+      }
+      inp.addEventListener('blur',finish);
+      inp.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key==='Escape')inp.blur();});
+    }
+  });
+}
+
 function renderLinks(){
+  renderLinkGroupTabs();
   const grid=document.getElementById('links-grid');if(!grid)return;
-  grid.innerHTML=links.map(lk=>{
+  const visible=activeLinkGroup==='lg_all'?links:links.filter(l=>l.groupId===activeLinkGroup);
+  grid.innerHTML=visible.map(lk=>{
     const c=COLORS.find(x=>x.id===lk.color)||COLORS[0];
     const style=c.bg?`--lc-bg:${c.bg};--lc-text:${c.text};--lc-sub:${c.sub};--lc-border:${c.border}`:'';
     return`<div class="link-card" style="${style}" onclick="openLink(event,'${lk.url}')">
@@ -1535,15 +1653,32 @@ function renderLinks(){
       <button class="del-btn" onclick="event.stopPropagation();deleteLink('${lk.id}')"><i class="ti ti-x"></i></button>
       <button class="color-btn" onclick="event.stopPropagation();openColorModal('link','${lk.id}')"><i class="ti ti-palette"></i></button>
     </div>`;
-  }).join('')+`<div class="link-card add-card" onclick="openModal('modal-link')"><i class="ti ti-plus"></i> Add link</div>`;
+  }).join('')+`<div class="link-card add-card" onclick="openAddLinkModal()"><i class="ti ti-plus"></i> Add link</div>`;
 }
+
+function openAddLinkModal(){
+  // Pre-select current group in the modal dropdown
+  buildLinkGroupSelect();
+  openModal('modal-link');
+}
+
+function buildLinkGroupSelect(){
+  const sel=document.getElementById('link-group-sel');if(!sel)return;
+  sel.innerHTML=linkGroups.filter(g=>g.id!=='lg_all').map(g=>`<option value="${g.id}"${g.id===activeLinkGroup?' selected':''}>${g.name}</option>`).join('');
+  if(!linkGroups.filter(g=>g.id!=='lg_all').length)sel.innerHTML='<option value="">No groups yet</option>';
+}
+
 function openLink(e,url){if(editMode)return;if(url&&url!=='#')window.open(url,'_blank');}
+
 function saveLink(){
   const name=document.getElementById('link-name').value.trim();
   const url=document.getElementById('link-url').value.trim();
   if(!name)return;
   const cat=document.getElementById('link-cat').value;
-  links.push({id:'l'+Date.now(),name,url:url||'#',cat,icon:CAT_ICONS[cat]||'ti-link',color:linkColorSel||'blue'});
+  const desc=document.getElementById('link-desc-in')?.value.trim()||'';
+  const groupSel=document.getElementById('link-group-sel');
+  const groupId=groupSel&&groupSel.value?groupSel.value:null;
+  links.push({id:'l'+Date.now(),name,url:url||'#',cat,icon:CAT_ICONS[cat]||'ti-link',color:linkColorSel||'blue',desc,groupId});
   save('links',links);closeModal('modal-link');renderLinks();
 }
 function deleteLink(id){links=links.filter(l=>l.id!==id);save('links',links);renderLinks();}
@@ -1725,10 +1860,11 @@ function openModal(id){
   if(id==='modal-link')      buildColorRow('link-color-row',  linkColorSel,  c=>{linkColorSel=c;});
   if(id==='modal-alert')     buildColorRow('alert-color-row', alertColorSel, c=>{alertColorSel=c;});
   if(id==='modal-countdown') buildColorRow('cd-color-row',    cdColorSel,    c=>{cdColorSel=c;});
+  if(id==='modal-addtab')    buildAddTabPanelList();
 }
 function closeModal(id){
   document.getElementById(id)?.classList.remove('open');
-  if(id==='modal-link'){document.getElementById('link-name').value='';document.getElementById('link-url').value='';}
+  if(id==='modal-link'){document.getElementById('link-name').value='';document.getElementById('link-url').value='';const d=document.getElementById('link-desc-in');if(d)d.value='';}
   if(id==='modal-alert'){document.getElementById('alert-mod').value='';document.getElementById('alert-msg').value='';document.getElementById('alert-date').value='';}
   if(id==='modal-countdown'){document.getElementById('cd-label-in').value='';document.getElementById('cd-date-in').value='';}
 }
