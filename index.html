@@ -395,6 +395,7 @@ body.dark{--bg:#0f0d1a;--bg-2:#1a1630;--bg-3:#201c35;--bg-4:#27224a;--bg-5:#2e28
 body.accent-red{--primary:#e01c2e;--primary-light:rgba(224,28,46,0.12);--primary-mid:#ff6b6b;--bg:#fff5f5;}
 body.accent-teal{--primary:#14b8a6;--primary-light:rgba(20,184,166,0.1);--primary-mid:#2dd4bf;--bg:#f0fdfc;}
 body.accent-amber{--primary:#d97706;--primary-light:rgba(245,158,11,0.1);--primary-mid:#f59e0b;--bg:#fffbeb;}
+body.accent-grey{--primary:#6b7280;--primary-light:rgba(107,114,128,0.1);--primary-mid:#9ca3af;--bg:#f6f6f7;--bg-3:#f0f0f2;--bg-4:#e8e8eb;--bg-5:#e0e0e4;--text:#1a1a1f;--text-mid:#4a4a55;--text-muted:#8a8a96;--border:rgba(107,114,128,0.18);--border-strong:rgba(107,114,128,0.38);--shadow:0 4px 24px rgba(0,0,0,0.08);}
 /* Font size */
 :root{--base-fs:13px;}
 body.text-sm{--base-fs:11px;}
@@ -616,6 +617,7 @@ body.text-lg{--base-fs:16px;}
       <div class="pcp-swatch" style="background:#e01c2e;width:22px;height:22px" title="Red" onclick="setAccent('red')" id="acc-red"></div>
       <div class="pcp-swatch" style="background:#14b8a6;width:22px;height:22px" title="Teal" onclick="setAccent('teal')" id="acc-teal"></div>
       <div class="pcp-swatch" style="background:#d97706;width:22px;height:22px" title="Amber" onclick="setAccent('amber')" id="acc-amber"></div>
+      <div class="pcp-swatch" style="background:#6b7280;width:22px;height:22px" title="Grey" onclick="setAccent('grey')" id="acc-grey"></div>
     </div>
     <div class="layout-divider"></div>
     <span class="layout-bar-label">Text</span>
@@ -2390,7 +2392,7 @@ function applyTheme(){
   setFontSize(fs,true);
 }
 function setAccent(name,silent){
-  ['purple','red','teal','amber'].forEach(a=>{
+  ['purple','red','teal','amber','grey'].forEach(a=>{
     document.body.classList.remove('accent-'+a);
     document.getElementById('acc-'+a)?.style?.setProperty('border-color','transparent');
   });
