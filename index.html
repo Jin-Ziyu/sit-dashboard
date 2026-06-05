@@ -404,7 +404,7 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
 .custom-panel-title-editable{font-size:11px;font-weight:700;color:var(--panel-title-color,var(--text-muted));text-transform:uppercase;letter-spacing:1px;background:transparent;border:none;outline:none;font-family:var(--font-body);min-width:40px;max-width:180px;cursor:default;}
 .edit-mode .custom-panel-title-editable{border-bottom:1.5px dashed rgba(108,71,255,0.4);cursor:text;padding-bottom:1px;}
 .custom-panel-body{flex:1;position:relative;}
-.custom-panel-content{width:100%;min-height:80px;background:transparent;border:none;outline:none;resize:none;font-family:var(--font-body);font-size:13px;color:var(--text);line-height:1.65;overflow:hidden;cursor:default;display:block;padding:0;}
+.custom-panel-content{width:100%;min-height:80px;background:transparent;border:none;outline:none;resize:none;font-family:var(--font-body);font-size:13px;color:var(--text-muted);line-height:1.65;overflow:hidden;cursor:default;display:block;padding:0;}
 .edit-mode .custom-panel-content{cursor:text;background:var(--bg-3);border-radius:var(--radius-sm);padding:10px;border:1px solid var(--border);transition:border-color .2s;}
 .edit-mode .custom-panel-content:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,71,255,0.1);}
 .custom-panel-toolbar{display:none;gap:5px;flex-wrap:wrap;margin-bottom:8px;align-items:center;}
@@ -1114,7 +1114,7 @@ function setCustomPanelFontSize(id,size){
   const cp=customPanels.find(p=>p.id===id);if(!cp)return;
   cp.fontSize=parseInt(size);saveCustomPanels();
   const ta=document.getElementById('cpc-content-'+id);
-  if(ta)ta.style.fontSize=size+'px';
+  if(ta){ta.style.fontSize=size+'px';autoResize(ta);}
 }
 
 function buildCustomPanelInner(id){
@@ -1141,12 +1141,12 @@ function buildCustomPanelInner(id){
       <button class="cp-tool-btn" title="Bullet list lines" onclick="applyCustomPanelFormat('${id}','bullet')"><i class="ti ti-list"></i></button>
       <div class="cp-tool-sep"></div>
       <select class="cp-font-size-sel" title="Font size" onchange="setCustomPanelFontSize('${id}',this.value)">
-        <option value="11" ${fs===11?'selected':''}>11px</option>
-        <option value="12" ${fs===12?'selected':''}>12px</option>
-        <option value="13" ${fs===13?'selected':''}>13px</option>
-        <option value="15" ${fs===15?'selected':''}>15px</option>
-        <option value="18" ${fs===18?'selected':''}>18px</option>
-        <option value="22" ${fs===22?'selected':''}>22px</option>
+        <option value="11" ${String(fs)==='11'?'selected':''}>11px</option>
+        <option value="12" ${String(fs)==='12'?'selected':''}>12px</option>
+        <option value="13" ${String(fs)==='13'?'selected':''}>13px</option>
+        <option value="15" ${String(fs)==='15'?'selected':''}>15px</option>
+        <option value="18" ${String(fs)==='18'?'selected':''}>18px</option>
+        <option value="22" ${String(fs)==='22'?'selected':''}>22px</option>
       </select>
     </div>
     <div class="custom-panel-body">
