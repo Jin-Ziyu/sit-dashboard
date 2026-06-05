@@ -140,6 +140,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .link-card .lc-icon{font-size:20px;color:var(--lc-text,var(--text-muted));}
 .link-card .lc-name{font-size:13px;font-weight:700;color:var(--lc-text,var(--text));line-height:1.3;margin-top:1px;}
 .link-card .lc-tag{font-size:11px;font-weight:500;color:var(--lc-sub,var(--text-muted));opacity:.8;}
+.link-card .lc-desc{font-size:10.5px;font-weight:500;color:var(--lc-sub,var(--text-muted));line-height:1.35;margin-top:1px;opacity:.75;}
 .link-card .del-btn,.alert-item .del-btn,.cd-card .del-btn{position:absolute;top:6px;right:6px;background:rgba(224,28,46,0.1);border:none;border-radius:5px;cursor:pointer;color:var(--sit-red);width:20px;height:20px;display:none;align-items:center;justify-content:center;font-size:11px;}
 .link-card .color-btn,.alert-item .color-btn,.cd-card .color-btn{position:absolute;bottom:6px;right:6px;background:var(--bg-3);border:1px solid var(--border);border-radius:5px;cursor:pointer;color:var(--text-muted);width:20px;height:20px;display:none;align-items:center;justify-content:center;font-size:11px;}
 .edit-mode .link-card .del-btn,.edit-mode .alert-item .del-btn,.edit-mode .cd-card .del-btn{display:flex;}
@@ -895,22 +896,22 @@ const CAT_ICONS={Portal:'ti-layout-dashboard',Library:'ti-books',Tool:'ti-tool',
 
 function getDefaultLinks(prog){
   const links=[
-    {id:'l1', name:'IN4SIT',            url:'https://in4sit.singaporetech.edu.sg',           cat:'Portal',  icon:'ti-school',            color:'blue'},
-    {id:'l2', name:'xSITE',             url:'https://xsite.singaporetech.edu.sg',             cat:'Portal',  icon:'ti-layout-dashboard',  color:'teal'},
-    {id:'l3', name:'Outlook',           url:'https://www.outlook.com/sit.singaporetech.edu.sg', cat:'Portal', icon:'ti-mail',             color:'blue'},
-    {id:'l4', name:'Library Databases', url:'https://libguides.singaporetech.edu.sg/az/databases', cat:'Library', icon:'ti-books',        color:'purple'},
-    {id:'l5', name:'ONE SEARCH',        url:'https://libguides.singaporetech.edu.sg/findit/onesearch', cat:'Library', icon:'ti-search',  color:'purple'},
-    {id:'l6', name:'Campus Wayfinder',  url:'https://www.singaporetech.edu.sg/campus-wayfinder', cat:'Tool',  icon:'ti-map-pin',          color:'green'},
-    {id:'l7', name:'Resource Booking',  url:'https://rbs.singaporetech.edu.sg/',              cat:'Tool',    icon:'ti-calendar-event',   color:'green'},
-    {id:'l8', name:'Echo360',           url:'https://echo360.net.au/',                        cat:'App',     icon:'ti-video',            color:'red'},
-    {id:'l9', name:'Zoom',              url:'https://singaporetech.zoom.us/',                 cat:'App',     icon:'ti-camera',           color:'blue'},
-    {id:'l10',name:'Pulse App',         url:'https://apps.brightspace.com/pulse/launch',      cat:'App',     icon:'ti-bell',             color:'teal'},
-    {id:'l11',name:'Intranet',          url:'https://sitsingaporetechedu.sharepoint.com/sites/Students/SitePages/SITizen-Guide.aspx', cat:'Portal', icon:'ti-building', color:'blue'},
-    {id:'l12',name:'WHOLEsome',         url:'https://selforder.eighthawker.com/checkin/6811ce630cc9967e0e3ae478', cat:'App', icon:'ti-soup', color:'green'},
-    {id:'l13',name:'CATES App',         url:'https://cates.sg/',                              cat:'App',     icon:'ti-first-aid-kit',    color:'amber'},
-    {id:'l14',name:'123RF Media',       url:'https://libguides.singaporetech.edu.sg/az/databases?q=123RF', cat:'Library', icon:'ti-photo', color:'gray'},
-    {id:'l15',name:'Media Equip Book',  url:'https://singaporetech.primo.exlibrisgroup.com/discovery/collectionDiscovery?vid=65SIT_INST:SIT&inst=65SIT_INST&collectionId=8130219950004056', cat:'Library', icon:'ti-device-tv', color:'gray'},
-    {id:'l16',name:'Job Portal',        url:'https://readytalent2.singaporetech.edu.sg/',     cat:'Portal',  icon:'ti-briefcase',        color:'amber'},
+    {id:'l1', name:'IN4SIT',            url:'https://in4sit.singaporetech.edu.sg',           cat:'Portal',  icon:'ti-school',            color:'blue',   desc:'Grades, module reg & admin'},
+    {id:'l2', name:'xSITE',             url:'https://xsite.singaporetech.edu.sg',             cat:'Portal',  icon:'ti-layout-dashboard',  color:'teal',   desc:'Module content, slides & assessments'},
+    {id:'l3', name:'Outlook',           url:'https://www.outlook.com/sit.singaporetech.edu.sg', cat:'Portal', icon:'ti-mail',             color:'blue',   desc:'Official SIT student email'},
+    {id:'l4', name:'Library Databases', url:'https://libguides.singaporetech.edu.sg/az/databases', cat:'Library', icon:'ti-books',        color:'purple', desc:'IEEE, ScienceDirect & more'},
+    {id:'l5', name:'ONE SEARCH',        url:'https://libguides.singaporetech.edu.sg/findit/onesearch', cat:'Library', icon:'ti-search',  color:'purple', desc:'Search all library resources'},
+    {id:'l6', name:'Campus Wayfinder',  url:'https://www.singaporetech.edu.sg/campus-wayfinder', cat:'Tool',  icon:'ti-map-pin',          color:'green',  desc:'Find classrooms & facilities'},
+    {id:'l7', name:'Resource Booking',  url:'https://rbs.singaporetech.edu.sg/',              cat:'Tool',    icon:'ti-calendar-event',   color:'green',  desc:'Book rooms, pods & plinths'},
+    {id:'l8', name:'Echo360',           url:'https://echo360.net.au/',                        cat:'App',     icon:'ti-video',            color:'red',    desc:'Rewatch recorded lectures'},
+    {id:'l9', name:'Zoom',              url:'https://singaporetech.zoom.us/',                 cat:'App',     icon:'ti-camera',           color:'blue',   desc:'Online classes via SIT account'},
+    {id:'l10',name:'Pulse App',         url:'https://apps.brightspace.com/pulse/launch',      cat:'App',     icon:'ti-bell',             color:'teal',   desc:'xSITE on mobile — turn on notifs!'},
+    {id:'l11',name:'Intranet',          url:'https://sitsingaporetechedu.sharepoint.com/sites/Students/SitePages/SITizen-Guide.aspx', cat:'Portal', icon:'ti-building', color:'blue',   desc:'Student guides, policies & IT info'},
+    {id:'l12',name:'WHOLEsome',         url:'https://selforder.eighthawker.com/checkin/6811ce630cc9967e0e3ae478', cat:'App', icon:'ti-soup', color:'green',  desc:'Self-order food at W3 canteen'},
+    {id:'l13',name:'CATES App',         url:'https://cates.sg/',                              cat:'App',     icon:'ti-first-aid-kit',    color:'amber',  desc:'Book counselling appointments'},
+    {id:'l14',name:'123RF Media',       url:'https://libguides.singaporetech.edu.sg/az/databases?q=123RF', cat:'Library', icon:'ti-photo', color:'gray',   desc:'Stock photos for projects'},
+    {id:'l15',name:'Media Equip Book',  url:'https://singaporetech.primo.exlibrisgroup.com/discovery/collectionDiscovery?vid=65SIT_INST:SIT&inst=65SIT_INST&collectionId=8130219950004056', cat:'Library', icon:'ti-device-tv', color:'gray',   desc:'Loan cameras & AV equipment'},
+    {id:'l16',name:'Job Portal',        url:'https://readytalent2.singaporetech.edu.sg/',     cat:'Portal',  icon:'ti-briefcase',        color:'amber',  desc:'Internships & IWSP listings'},
   ];
   return links;
 }
@@ -1529,6 +1530,7 @@ function renderLinks(){
     return`<div class="link-card" style="${style}" onclick="openLink(event,'${lk.url}')">
       <i class="ti ${lk.icon||'ti-link'} lc-icon"></i>
       <div class="lc-name">${lk.name}</div>
+      ${lk.desc?`<div class="lc-desc">${lk.desc}</div>`:''}
       <div class="lc-tag">${lk.cat||''}</div>
       <button class="del-btn" onclick="event.stopPropagation();deleteLink('${lk.id}')"><i class="ti ti-x"></i></button>
       <button class="color-btn" onclick="event.stopPropagation();openColorModal('link','${lk.id}')"><i class="ti ti-palette"></i></button>
