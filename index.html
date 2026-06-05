@@ -182,7 +182,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .tt-header.today-col{background:var(--primary-light);color:var(--primary);border-color:var(--primary);}
 .tt-time{color:var(--text-muted);text-align:right;padding-right:6px;font-size:10px;font-weight:600;display:flex;align-items:flex-start;justify-content:flex-end;padding-top:5px;}
 .tt-cell{min-height:40px;border-radius:5px;display:flex;flex-direction:column;gap:2px;}
-.tt-event{border-radius:5px;padding:5px 7px;margin:1px 0;overflow:hidden;cursor:default;border:1px solid rgba(0,0,0,0.06);}
+.tt-event{border-radius:5px;padding:5px 7px;overflow:hidden;cursor:default;border:1px solid rgba(0,0,0,0.06);display:flex;flex-direction:column;box-sizing:border-box;}
 .tt-event-title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;}
 .tt-event-loc{opacity:.85;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;margin-top:1px;}
 .tt-empty{font-size:13px;font-weight:500;color:var(--text-muted);text-align:center;padding:2rem;}
@@ -1350,9 +1350,12 @@ function renderTimetable(){
   const lbl=document.getElementById('tt-week-label');
   if(lbl)lbl.textContent=fmt(weekStart)+' – '+fmt(new Date(+weekStart+6*86400000));
   const days=Array.from({length:7},(_,i)=>{const d=new Date(weekStart);d.setDate(weekStart.getDate()+i);return d;});
-  // Always use local date string (not UTC) for comparisons
   const localDateStr=d=>{const pad=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;};
   const todayIso=localDateStr(new Date());
+  const parseLocalHour=iso=>parseInt(iso.slice(11,13),10);
+  const parseLocalMin=iso=>parseInt(iso.slice(14,16),10);
+  // Minutes since midnight from local ISO string
+  const toMins=iso=>parseLocalHour(iso)*60+parseLocalMin(iso);
   const dayEvents=days.map(d=>{
     const iso=localDateStr(d);
     return ttEvents.filter(ev=>ev.start.slice(0,10)===iso).sort((a,b)=>a.start.localeCompare(b.start));
@@ -1360,41 +1363,59 @@ function renderTimetable(){
   const allThisWeek=dayEvents.flat();
   const container=document.getElementById('tt-grid-container');if(!container)return;
   if(!allThisWeek.length){container.innerHTML='<div class="tt-empty">No classes this week.</div>';renderTtLegend();return;}
-  // Parse hours directly from stored local ISO string (no Date constructor to avoid UTC shift)
-  const parseLocalHour=iso=>parseInt(iso.slice(11,13),10);
-  const parseLocalMin=iso=>parseInt(iso.slice(14,16),10);
-  let minH=8,maxH=18;
+  // Find time bounds in 30-min slots
+  let minMins=8*60,maxMins=18*60;
   allThisWeek.forEach(ev=>{
-    const h1=parseLocalHour(ev.start);
-    const h2=parseLocalHour(ev.end)+(parseLocalMin(ev.end)>0?1:0);
-    if(h1<minH)minH=h1;if(h2>maxH)maxH=h2;
+    const s=toMins(ev.start),e=toMins(ev.end);
+    if(s<minMins)minMins=s;if(e>maxMins)maxMins=e;
   });
+  // Round minMins down to hour, maxMins up to hour
+  minMins=Math.floor(minMins/60)*60;
+  maxMins=Math.ceil(maxMins/60)*60;
+  const totalSlots=(maxMins-minMins)/60; // one row per hour
   const DAY_NAMES=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  let html=`<div style="display:grid;grid-template-columns:44px repeat(7,1fr);gap:4px;overflow-x:auto;min-width:0;padding-bottom:4px;">`;
-  html+=`<div></div>`;
-  days.forEach((d,i)=>{const iso=localDateStr(d);html+=`<div class="tt-header${iso===todayIso?' today-col':''}">${DAY_NAMES[i]}<br><span style="font-weight:500;font-size:10px;opacity:.8">${d.getDate()}</span></div>`;});
-  for(let h=minH;h<=maxH;h++){
-    html+=`<div class="tt-time">${String(h).padStart(2,'0')}:00</div>`;
-    days.forEach((d,di)=>{
-      const evs=dayEvents[di].filter(ev=>parseLocalHour(ev.start)===h);
-      html+=`<div class="tt-cell">`;
-      evs.forEach(ev=>{
-        const col=ttColor(ev.summary);
-        const sh=parseLocalHour(ev.start),sm=parseLocalMin(ev.start);
-        const eh=parseLocalHour(ev.end),em=parseLocalMin(ev.end);
-        const ts=`${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
-        const isLab=ev.summary&&/(lab|practical|skills|prac)/i.test(ev.summary);
-        const locHtml=ev.location?`<div class="tt-event-loc"><i class="ti ti-map-pin" style="font-size:9px"></i> <a href="https://www.singaporetech.edu.sg/campus-wayfinder?q=${encodeURIComponent(ev.location)}" target="_blank" style="color:inherit;text-decoration:underline dotted;cursor:pointer" onclick="event.stopPropagation()" title="Open in Campus Wayfinder">${ev.location}</a></div>`:'';
-        html+=`<div class="tt-event" style="background:${col.bg};color:${col.text}" title="${ev.summary}${ev.location?'\n'+ev.location:''}\n${ts}">
-          <div class="tt-event-title">${ev.summary}</div>
-          ${locHtml}
-          <div style="font-size:9px;opacity:.8;font-weight:700;margin-top:2px">${ts}</div>
-          ${isLab?`<div class="tt-attire-badge"><i class="ti ti-shirt"></i> Check attire</div>`:''}
-        </div>`;
-      });
-      html+=`</div>`;
+  // Grid: row 1 = header, rows 2..(totalSlots+1) = hour rows
+  // Columns: col 1 = time labels, cols 2..8 = days
+  // Each hour row = 1 grid row; events span grid rows by their duration
+  const SLOT_H=56; // px per hour row
+  let html=`<div style="display:grid;grid-template-columns:44px repeat(7,1fr);grid-template-rows:auto repeat(${totalSlots},${SLOT_H}px);gap:0 4px;min-width:0;padding-bottom:4px;position:relative;">`;
+  // Header row (row 1)
+  html+=`<div style="grid-column:1;grid-row:1;"></div>`;
+  days.forEach((d,i)=>{
+    const iso=localDateStr(d);
+    html+=`<div class="tt-header${iso===todayIso?' today-col':''}" style="grid-column:${i+2};grid-row:1;">${DAY_NAMES[i]}<br><span style="font-weight:500;font-size:10px;opacity:.8">${d.getDate()}</span></div>`;
+  });
+  // Hour label + background stripe for each hour slot
+  for(let s=0;s<totalSlots;s++){
+    const h=minMins/60+s;
+    const gridRow=s+2;
+    html+=`<div class="tt-time" style="grid-column:1;grid-row:${gridRow};align-self:start;padding-top:4px;">${String(h).padStart(2,'0')}:00</div>`;
+    // Light horizontal rule across all day columns
+    days.forEach((_,i)=>{
+      html+=`<div style="grid-column:${i+2};grid-row:${gridRow};border-top:1px solid var(--border);min-height:${SLOT_H}px;"></div>`;
     });
   }
+  // Place events using grid-row span
+  dayEvents.forEach((evs,di)=>{
+    evs.forEach(ev=>{
+      const startMins=toMins(ev.start);
+      const endMins=toMins(ev.end);
+      const rowStart=Math.round((startMins-minMins)/60)+2;
+      const rowSpan=Math.max(1,Math.round((endMins-startMins)/60));
+      const col=ttColor(ev.summary);
+      const sh=parseLocalHour(ev.start),sm=parseLocalMin(ev.start);
+      const eh=parseLocalHour(ev.end),em=parseLocalMin(ev.end);
+      const ts=`${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
+      const isLab=ev.summary&&/(lab|practical|skills|prac)/i.test(ev.summary);
+      const locHtml=ev.location?`<div class="tt-event-loc"><i class="ti ti-map-pin" style="font-size:9px"></i> <a href="https://www.singaporetech.edu.sg/campus-wayfinder?q=${encodeURIComponent(ev.location)}" target="_blank" style="color:inherit;text-decoration:underline dotted;cursor:pointer" onclick="event.stopPropagation()" title="Open in Campus Wayfinder">${ev.location}</a></div>`:'';
+      html+=`<div class="tt-event" style="grid-column:${di+2};grid-row:${rowStart}/span ${rowSpan};background:${col.bg};color:${col.text};margin:2px 1px;align-self:stretch;z-index:1;" title="${ev.summary}${ev.location?'\n'+ev.location:''}\n${ts}">
+        <div class="tt-event-title">${ev.summary}</div>
+        ${locHtml}
+        <div style="font-size:9px;opacity:.8;font-weight:700;margin-top:2px">${ts}</div>
+        ${isLab?`<div class="tt-attire-badge"><i class="ti ti-shirt"></i> Check attire</div>`:''}
+      </div>`;
+    });
+  });
   html+='</div>';container.innerHTML=html;renderTtLegend();
 }
 function renderTtLegend(){
