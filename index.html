@@ -399,6 +399,25 @@ body.accent-amber{--primary:#d97706;--primary-light:rgba(245,158,11,0.1);--prima
 body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 @keyframes scaleUp{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
+
+/* ── CUSTOM PANELS ── */
+.custom-panel-title-editable{font-size:11px;font-weight:700;color:var(--panel-title-color,var(--text-muted));text-transform:uppercase;letter-spacing:1px;background:transparent;border:none;outline:none;font-family:var(--font-body);min-width:40px;max-width:180px;cursor:default;}
+.edit-mode .custom-panel-title-editable{border-bottom:1.5px dashed rgba(108,71,255,0.4);cursor:text;padding-bottom:1px;}
+.custom-panel-body{flex:1;position:relative;}
+.custom-panel-content{width:100%;min-height:80px;background:transparent;border:none;outline:none;resize:none;font-family:var(--font-body);font-size:13px;color:var(--text);line-height:1.65;overflow:hidden;cursor:default;display:block;padding:0;}
+.edit-mode .custom-panel-content{cursor:text;background:var(--bg-3);border-radius:var(--radius-sm);padding:10px;border:1px solid var(--border);transition:border-color .2s;}
+.edit-mode .custom-panel-content:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,71,255,0.1);}
+.custom-panel-toolbar{display:none;gap:5px;flex-wrap:wrap;margin-bottom:8px;align-items:center;}
+.edit-mode .custom-panel-toolbar{display:flex;}
+.cp-tool-btn{padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg-2);cursor:pointer;color:var(--text-muted);font-size:11px;font-weight:700;display:flex;align-items:center;gap:3px;transition:all .15s;font-family:var(--font-body);}
+.cp-tool-btn:hover{background:var(--bg-4);color:var(--text);border-color:var(--border-strong);}
+.cp-tool-btn.active{background:var(--primary-light);color:var(--primary);border-color:var(--primary);}
+.cp-font-size-sel{padding:4px 6px;border-radius:6px;border:1px solid var(--border);background:var(--bg-2);color:var(--text-muted);font-size:11px;font-weight:700;font-family:var(--font-body);cursor:pointer;outline:none;}
+.cp-font-size-sel:focus{border-color:var(--primary);}
+.cp-color-sel{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--bg-2);cursor:pointer;padding:2px;outline:none;}
+.cp-tool-sep{width:1px;height:20px;background:var(--border);margin:0 2px;}
+.custom-panel-hint{font-size:11px;color:var(--text-muted);font-style:italic;display:none;margin-top:6px;}
+.edit-mode .custom-panel-hint{display:block;}
 </style>
 </head>
 <body>
@@ -604,7 +623,8 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
     </div>
     <div class="layout-divider"></div>
     <span class="layout-bar-label">Add Panel</span>
-    <div id="hidden-chips" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+    <div id="hidden-chips" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;"></div>
+    <div class="hidden-panel-chip" onclick="openCustomPanelModal()" title="Add a free-text custom panel"><i class="ti ti-plus" style="font-size:11px"></i> Custom</div>
   </div>
 
   <!-- TAB BAR + PANELS -->
@@ -699,6 +719,28 @@ body.text-sm{font-size:13px;}body.text-lg{font-size:16px;}
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal('modal-addtab')">Cancel</button>
       <button class="btn-primary" onclick="confirmAddTab()">Create tab</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM PANEL MODAL -->
+<div class="modal-overlay" id="modal-custom-panel" onclick="if(event.target===this)closeModal('modal-custom-panel')">
+  <div class="modal" style="width:460px">
+    <h3>New custom panel</h3>
+    <label>Panel title</label>
+    <input type="text" id="cp-title-in" placeholder="e.g. My Notes, Module Info, Reminders" maxlength="40">
+    <label>Content <span style="font-weight:500;text-transform:none;font-size:10px">(you can edit this anytime in Customise mode)</span></label>
+    <textarea id="cp-content-in" placeholder="Type anything here — notes, links, module info…" style="width:100%;min-height:100px;background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 11px;font-size:13px;font-family:var(--font-body);color:var(--text);outline:none;resize:vertical;margin-bottom:14px;"></textarea>
+    <label>Font size</label>
+    <select id="cp-fontsize-in" style="margin-bottom:14px">
+      <option value="12">Small (12px)</option>
+      <option value="13" selected>Normal (13px)</option>
+      <option value="15">Large (15px)</option>
+      <option value="18">Extra large (18px)</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-custom-panel')">Cancel</button>
+      <button class="btn-primary" onclick="saveCustomPanel()">Add panel</button>
     </div>
   </div>
 </div>
@@ -981,6 +1023,145 @@ const PANEL_DEFS=[
   {id:'support',  title:'Support & wellbeing',icon:'ti-heart'},
 ];
 
+/* ══ CUSTOM PANELS ══ */
+// customPanels: array of {id, title, content, fontSize} — shared across all tabs in storage
+// Per-tab: customPanels are added to that tab's panelOrder, and their data is stored in NS+'custom_panels'
+let customPanels=[];
+
+function loadCustomPanels(){customPanels=load('custom_panels',[]);}
+function saveCustomPanels(){save('custom_panels',customPanels);}
+
+function openCustomPanelModal(){
+  document.getElementById('cp-title-in').value='';
+  document.getElementById('cp-content-in').value='';
+  document.getElementById('cp-fontsize-in').value='13';
+  openModal('modal-custom-panel');
+  setTimeout(()=>document.getElementById('cp-title-in').focus(),100);
+}
+
+function saveCustomPanel(){
+  const title=document.getElementById('cp-title-in').value.trim()||'Custom Panel';
+  const content=document.getElementById('cp-content-in').value;
+  const fontSize=parseInt(document.getElementById('cp-fontsize-in').value)||13;
+  const id='cp_'+Date.now();
+  loadCustomPanels();
+  customPanels.push({id,title,content,fontSize});
+  saveCustomPanels();
+  // Add to current tab's panelOrder
+  panelOrder.push(id);
+  save('panel_order',panelOrder);
+  saveTabState();
+  closeModal('modal-custom-panel');
+  renderPanels();
+  showToast('Panel added','Your custom panel has been added to this tab.','info',3500);
+}
+
+function deleteCustomPanel(id){
+  loadCustomPanels();
+  customPanels=customPanels.filter(p=>p.id!==id);
+  saveCustomPanels();
+  // Remove from all tabs
+  tabs.forEach(t=>{if(t.panelOrder)t.panelOrder=t.panelOrder.filter(x=>x!==id);if(t.panelHidden)t.panelHidden=t.panelHidden.filter(x=>x!==id);});
+  panelOrder=panelOrder.filter(x=>x!==id);
+  panelHidden=panelHidden.filter(x=>x!==id);
+  save('panel_order',panelOrder);save('panel_hidden',panelHidden);
+  saveTabState();save('tabs',tabs);
+  renderPanels();
+}
+
+function saveCustomPanelContent(id){
+  loadCustomPanels();
+  const cp=customPanels.find(p=>p.id===id);if(!cp)return;
+  const el=document.getElementById('cpc-content-'+id);
+  if(el)cp.content=el.value;
+  saveCustomPanels();
+}
+
+function saveCustomPanelTitle(id){
+  loadCustomPanels();
+  const cp=customPanels.find(p=>p.id===id);if(!cp)return;
+  const el=document.getElementById('cpc-title-'+id);
+  if(el)cp.title=el.value||cp.title;
+  saveCustomPanels();
+  // Also update panel edit bar label
+  const lbl=document.getElementById('pebl-'+id);
+  if(lbl&&el)lbl.textContent=el.value||cp.title;
+}
+
+function applyCustomPanelFormat(id,cmd,value){
+  const ta=document.getElementById('cpc-content-'+id);if(!ta)return;
+  // Since we use textarea (plain text), we apply formatting as markdown-style toggles
+  // for bold: wrap selection in **
+  const start=ta.selectionStart, end=ta.selectionEnd;
+  const sel=ta.value.substring(start,end);
+  if(!sel)return;
+  let wrapped='';
+  if(cmd==='bold')wrapped=`**${sel}**`;
+  else if(cmd==='italic')wrapped=`_${sel}_`;
+  else if(cmd==='underline')wrapped=`__${sel}__`;
+  else if(cmd==='strikethrough')wrapped=`~~${sel}~~`;
+  else if(cmd==='code')wrapped=`\`${sel}\``;
+  else if(cmd==='bullet')wrapped=sel.split('\n').map(l=>'• '+l).join('\n');
+  if(wrapped){
+    ta.value=ta.value.substring(0,start)+wrapped+ta.value.substring(end);
+    ta.selectionStart=start;ta.selectionEnd=start+wrapped.length;
+    saveCustomPanelContent(id);
+  }
+}
+
+function setCustomPanelFontSize(id,size){
+  loadCustomPanels();
+  const cp=customPanels.find(p=>p.id===id);if(!cp)return;
+  cp.fontSize=parseInt(size);saveCustomPanels();
+  const ta=document.getElementById('cpc-content-'+id);
+  if(ta)ta.style.fontSize=size+'px';
+}
+
+function buildCustomPanelInner(id){
+  loadCustomPanels();
+  const cp=customPanels.find(p=>p.id===id);
+  if(!cp)return`<div style="color:var(--text-muted);font-size:13px">Panel not found.</div>`;
+  const fs=cp.fontSize||13;
+  return`
+    <div class="panel-title" style="display:flex;align-items:center;justify-content:space-between;gap:6px">
+      <input id="cpc-title-${id}" class="custom-panel-title-editable" value="${cp.title.replace(/"/g,'&quot;')}" maxlength="40" readonly
+        onfocus="if(document.getElementById('dashboard-screen').classList.contains('edit-mode'))this.removeAttribute('readonly')"
+        onblur="this.setAttribute('readonly','');saveCustomPanelTitle('${id}')"
+        onkeydown="if(event.key==='Enter')this.blur()">
+      <button class="section-add-btn" style="display:none;flex-shrink:0" id="cp-del-btn-${id}" onclick="if(confirm('Delete this custom panel?'))deleteCustomPanel('${id}')">
+        <i class="ti ti-trash"></i> Delete panel
+      </button>
+    </div>
+    <div class="custom-panel-toolbar" id="cp-toolbar-${id}">
+      <button class="cp-tool-btn" title="Bold selection" onclick="applyCustomPanelFormat('${id}','bold')"><b>B</b></button>
+      <button class="cp-tool-btn" title="Italic selection" onclick="applyCustomPanelFormat('${id}','italic')"><i>I</i></button>
+      <button class="cp-tool-btn" title="Underline selection" onclick="applyCustomPanelFormat('${id}','underline')"><u>U</u></button>
+      <button class="cp-tool-btn" title="Strikethrough" onclick="applyCustomPanelFormat('${id}','strikethrough')"><s>S</s></button>
+      <button class="cp-tool-btn" title="Inline code" onclick="applyCustomPanelFormat('${id}','code')"><i class="ti ti-code"></i></button>
+      <button class="cp-tool-btn" title="Bullet list lines" onclick="applyCustomPanelFormat('${id}','bullet')"><i class="ti ti-list"></i></button>
+      <div class="cp-tool-sep"></div>
+      <select class="cp-font-size-sel" title="Font size" onchange="setCustomPanelFontSize('${id}',this.value)">
+        <option value="11" ${fs===11?'selected':''}>11px</option>
+        <option value="12" ${fs===12?'selected':''}>12px</option>
+        <option value="13" ${fs===13?'selected':''}>13px</option>
+        <option value="15" ${fs===15?'selected':''}>15px</option>
+        <option value="18" ${fs===18?'selected':''}>18px</option>
+        <option value="22" ${fs===22?'selected':''}>22px</option>
+      </select>
+    </div>
+    <div class="custom-panel-body">
+      <textarea id="cpc-content-${id}" class="custom-panel-content" style="font-size:${fs}px" readonly
+        onfocus="if(document.getElementById('dashboard-screen').classList.contains('edit-mode')){this.removeAttribute('readonly');autoResize(this);}"
+        onblur="this.setAttribute('readonly','');saveCustomPanelContent('${id}')"
+        oninput="autoResize(this)"
+        spellcheck="true"
+      >${(cp.content||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+    </div>
+    <div class="custom-panel-hint">💡 Click title or text area to edit. Select text and use toolbar to format.</div>`;
+}
+
+function autoResize(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';}
+
 function load(key,def){try{const v=localStorage.getItem(NS+key);return v?JSON.parse(v):def;}catch{return def;}}
 function save(key,val){try{localStorage.setItem(NS+key,JSON.stringify(val));}catch{}}
 
@@ -1023,6 +1204,7 @@ function initDashboard(){
   ttEvents=load('ics_events',[]);
   ttWeekOffset=0;
 
+  loadCustomPanels();
   PANEL_DEFS.forEach(p=>{if(!panelOrder.includes(p.id))panelOrder.push(p.id);});
 
   // Load tabs — default single "Home" tab
@@ -1107,6 +1289,12 @@ function saveTabState(){
 
 function switchTab(tabId){
   saveTabState();
+  // Save any open custom panel content before switching
+  loadCustomPanels();
+  customPanels.forEach(cp=>{
+    const el=document.getElementById('cpc-content-'+cp.id);
+    if(el&&!el.readOnly)saveCustomPanelContent(cp.id);
+  });
   activeTabId=tabId;
   save('active_tab',tabId);
   const state=getTabState(tabId);
@@ -1358,7 +1546,7 @@ function saveProfileStyle(){
 
 function renderHiddenChips(){
   const el=document.getElementById('hidden-chips');if(!el)return;
-  const hidden=panelOrder.filter(id=>panelHidden.includes(id));
+  const hidden=panelOrder.filter(id=>panelHidden.includes(id)&&!id.startsWith('cp_'));
   if(!hidden.length){el.innerHTML='<span style="font-size:12px;color:var(--text-muted)">All panels visible</span>';return;}
   el.innerHTML=hidden.map(id=>{
     const def=PANEL_DEFS.find(p=>p.id===id);
@@ -1370,7 +1558,7 @@ function showPanel(id){panelHidden=panelHidden.filter(x=>x!==id);save('panel_hid
 
 function renderAddPanelCard(){
   const container=document.getElementById('panels-container');if(!container)return;
-  const hidden=panelOrder.filter(id=>panelHidden.includes(id));
+  const hidden=panelOrder.filter(id=>panelHidden.includes(id)&&!id.startsWith('cp_'));
   if(!hidden.length)return;
   const card=document.createElement('div');
   card.className='panel-wrapper';
@@ -1406,12 +1594,16 @@ function renderPanels(){
     if(panelSpan[id])wrapper.classList.add('span-'+panelSpan[id]);
     wrapper.draggable=editMode;
     const def=PANEL_DEFS.find(p=>p.id===id);
+    const isCustom=id.startsWith('cp_');
+    loadCustomPanels();
+    const cpDef=isCustom?customPanels.find(p=>p.id===id):null;
+    const panelTitle=isCustom?(cpDef?.title||'Custom'):(def?.title||id);
     const colorId=panelColors[id]||'none';
     const spanActive=!!panelSpan[id];
     wrapper.innerHTML=`
       <div class="panel-edit-bar">
         <span class="panel-drag-handle" title="Drag"><i class="ti ti-grip-vertical"></i></span>
-        <span style="font-size:12px;font-weight:700;color:var(--white)">${def?.title||id}</span>
+        <span style="font-size:12px;font-weight:700;color:var(--white)" id="pebl-${id}">${panelTitle}</span>
         <div class="panel-edit-bar-right">
           <button class="panel-mini-btn span-btn${spanActive?' active':''}" onclick="togglePanelSpan('${id}')"><i class="ti ti-arrows-horizontal"></i> Wide</button>
           <div style="position:relative">
@@ -1562,7 +1754,9 @@ function buildPanelInner(id){
       </div>
       <div id="news-list"></div>
       <div id="news-empty" style="font-size:13px;color:var(--text-muted);text-align:center;padding:2rem;">No news posts yet — paste a screenshot or add one above.</div>`;
-    default:return`<div class="panel-title">${id}</div>`;
+    default:
+      if(id.startsWith('cp_'))return buildCustomPanelInner(id);
+      return`<div class="panel-title">${id}</div>`;
   }
 }
 
@@ -1596,6 +1790,19 @@ function toggleEdit(){
   t.contentEditable=editMode?'true':'false';
   s.contentEditable=editMode?'true':'false';
   if(!editMode){save('dash_title',t.textContent);save('dash_subtitle',s.textContent);saveTabState();}
+  // Toggle custom panel interactivity
+  loadCustomPanels();
+  customPanels.forEach(cp=>{
+    const titleEl=document.getElementById('cpc-title-'+cp.id);
+    const contentEl=document.getElementById('cpc-content-'+cp.id);
+    const delBtn=document.getElementById('cp-del-btn-'+cp.id);
+    if(titleEl){if(editMode)titleEl.removeAttribute('readonly');else titleEl.setAttribute('readonly','');}
+    if(contentEl){
+      if(editMode){contentEl.removeAttribute('readonly');autoResize(contentEl);}
+      else{contentEl.setAttribute('readonly','');saveCustomPanelContent(cp.id);}
+    }
+    if(delBtn)delBtn.style.display=editMode?'flex':'none';
+  });
 }
 
 /* ══ DRAG & DROP ══ */
