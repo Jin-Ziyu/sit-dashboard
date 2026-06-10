@@ -150,7 +150,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .link-card.add-card:hover{color:var(--primary);border-color:var(--primary);background:var(--primary-light);}
 /* Link group tabs */
 .lgtab-bar{display:flex;align-items:center;gap:4px;margin-bottom:10px;flex-wrap:wrap;}
-.lgtab{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--bg-3);color:var(--text-muted);transition:all .15s;white-space:nowrap;font-family:var(--font-body);}
+.lgtab{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--bg-3);color:var(--text-muted);transition:all .15px;white-space:nowrap;font-family:var(--font-body);}
 .lgtab:hover{background:var(--bg-4);color:var(--text);border-color:var(--border-strong);}
 .lgtab.active{background:var(--primary-light);color:var(--primary);border-color:var(--primary);}
 .lgtab-del{display:none;background:none;border:none;cursor:pointer;color:inherit;font-size:11px;padding:0 0 0 3px;line-height:1;}
@@ -175,9 +175,6 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .add-panel-card .apc-chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:4px;}
 .add-panel-chip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--bg-3);border:1px solid var(--border);color:var(--text-mid);cursor:pointer;transition:all .15s;}
 .add-panel-chip:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary);}
-/* Layout bar hidden chips — rebranded as add buttons */
-.hidden-panel-chip{font-size:12px;font-weight:600;padding:5px 11px;border-radius:20px;background:var(--bg-3);border:1px dashed var(--border-strong);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s;}
-.hidden-panel-chip:hover{color:var(--primary);border-color:var(--primary);background:var(--primary-light);}
 .alert-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--ai-border,rgba(245,158,11,0.35));background:var(--ai-bg,rgba(245,158,11,0.08));margin-bottom:8px;position:relative;}
 .alert-item .ai-icon{font-size:16px;color:var(--ai-text,#d97706);flex-shrink:0;margin-top:2px;}
 .alert-item .ai-name{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ai-text,var(--text-muted));font-weight:700;}
@@ -422,6 +419,11 @@ body.text-lg{--base-fs:16px;}
 .cp-tool-sep{width:1px;height:20px;background:var(--border);margin:0 2px;}
 .custom-panel-hint{font-size:11px;color:var(--text-muted);font-style:italic;display:none;margin-top:6px;}
 .edit-mode .custom-panel-hint{display:block;}
+
+/* OASIS location rows */
+.oasis-locations{display:flex;flex-direction:column;gap:3px;margin-top:6px;}
+.oasis-loc-row{font-size:10px;font-weight:600;color:var(--text-muted);display:flex;align-items:center;gap:4px;line-height:1.4;}
+.oasis-loc-row i{font-size:10px;color:var(--primary);flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -540,18 +542,14 @@ body.text-lg{--base-fs:16px;}
 <!-- SHAREPOINT-STYLE GLOBAL NAV BAR -->
 <div id="sp-nav" style="display:none">
   <div style="display:flex;align-items:center;height:48px;background:#111111;padding:0 12px;gap:0;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(255,255,255,0.08);">
-    <!-- Waffle menu -->
     <button style="background:none;border:none;color:#ccc;cursor:pointer;padding:8px;border-radius:4px;display:flex;align-items:center;justify-content:center;margin-right:4px" title="Microsoft 365" onclick="this.blur()">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><rect x="0" y="0" width="5" height="5"/><rect x="6.5" y="0" width="5" height="5"/><rect x="13" y="0" width="5" height="5"/><rect x="0" y="6.5" width="5" height="5"/><rect x="6.5" y="6.5" width="5" height="5"/><rect x="13" y="6.5" width="5" height="5"/><rect x="0" y="13" width="5" height="5"/><rect x="6.5" y="13" width="5" height="5"/><rect x="13" y="13" width="5" height="5"/></svg>
     </button>
-    <!-- SharePoint wordmark -->
     <span style="font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;font-weight:600;color:#ffffff;letter-spacing:-.2px;margin-right:auto;padding-left:4px;white-space:nowrap;">SharePoint</span>
-    <!-- Search bar -->
     <div style="flex:1;max-width:420px;margin:0 16px;position:relative;display:flex;align-items:center;">
       <svg style="position:absolute;left:10px;color:#aaa;pointer-events:none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" placeholder="Search" style="width:100%;height:32px;background:#2a2a2a;border:1px solid #444;border-radius:4px;padding:0 10px 0 32px;font-size:13px;color:#fff;font-family:'Segoe UI',system-ui,sans-serif;outline:none;" onfocus="this.style.borderColor='#aaa'" onblur="this.style.borderColor='#444'">
     </div>
-    <!-- Right icons -->
     <div style="display:flex;align-items:center;gap:2px;margin-left:auto;">
       <button style="background:none;border:none;color:#ccc;cursor:pointer;padding:8px;border-radius:50%;display:flex;align-items:center;justify-content:center;" title="Share">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -560,7 +558,6 @@ body.text-lg{--base-fs:16px;}
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
       <button style="background:none;border:none;color:#ccc;cursor:pointer;padding:8px;border-radius:50%;font-size:18px;display:flex;align-items:center;justify-content:center;" title="Help">?</button>
-      <!-- User avatar circle -->
       <div id="sp-nav-avatar" style="width:32px;height:32px;border-radius:50%;background:#6c47ff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;font-family:'Segoe UI',sans-serif;cursor:pointer;margin-left:4px;border:2px solid #555;">JZ</div>
     </div>
   </div>
@@ -585,7 +582,7 @@ body.text-lg{--base-fs:16px;}
       <button class="icon-btn" id="layout-toggle" onclick="toggleLayoutBar()"><i class="ti ti-layout-columns"></i> <span>Layout</span></button>
       <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit"></i> <span>Customise</span></button>
       <button class="icon-btn" id="theme-toggle" onclick="cycleTheme()" title="Toggle dark/light mode"><i class="ti ti-moon"></i></button>
-      <button class="icon-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable push alerts: get notified 3 days before, 1 day before, and the morning of each deadline — even when the tab is closed"><i class="ti ti-bell-ringing"></i> <span>Alerts</span></button>
+      <button class="icon-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable push alerts"><i class="ti ti-bell-ringing"></i> <span>Alerts</span></button>
       <button class="logout-btn" onclick="doLogout()"><i class="ti ti-logout"></i> Sign out</button>
     </div>
   </div>
@@ -594,7 +591,7 @@ body.text-lg{--base-fs:16px;}
       <div class="wb-icon">🎉</div>
       <div>
         <div class="wb-title" id="wb-title">Welcome to your dashboard!</div>
-        <div class="wb-sub">Everything's set up. Click <strong>Customise</strong> to add links, alerts, and more.</div>
+        <div class="wb-sub" id="wb-sub">Everything's set up. Click <strong>Customise</strong> to add links, alerts, and more.</div>
       </div>
       <button class="wb-close" onclick="dismissWelcome()"><i class="ti ti-x"></i></button>
     </div>
@@ -752,7 +749,6 @@ body.text-lg{--base-fs:16px;}
 
 <script>
 /* ══ AUTH DATA ══ */
-// Seed accounts (pre-existing demo users)
 const SEED_ACCOUNTS = {
   alicia:   {password:'password1',name:'Alicia Tan',    id:'S1234501',color:'#e01c2e',prog:'BSc Information & Communications Technology'},
   bob:     {password:'password2',name:'Bob Lim',      id:'S1234502',color:'#3b82f6',prog:'BEng Civil Engineering'},
@@ -771,17 +767,13 @@ function getAccounts(){
   try{
     const stored=localStorage.getItem('sit_accounts');
     if(stored){
-      // Merge: stored accounts take priority, but seed accounts always exist as fallback
       const parsed=JSON.parse(stored);
       return Object.assign({},JSON.parse(JSON.stringify(SEED_ACCOUNTS)),parsed);
     }
     return JSON.parse(JSON.stringify(SEED_ACCOUNTS));
   }catch{return JSON.parse(JSON.stringify(SEED_ACCOUNTS));}
 }
-function saveAccounts(a){
-  // Always save the full merged set
-  localStorage.setItem('sit_accounts',JSON.stringify(a));
-}
+function saveAccounts(a){localStorage.setItem('sit_accounts',JSON.stringify(a));}
 
 function showScreen(id){
   ['login-screen','register-screen','dashboard-screen'].forEach(s=>{
@@ -816,7 +808,6 @@ function loginAs(u,acc){
   document.getElementById('tb-user-name').textContent=acc.name;
   document.getElementById('tb-badge-initials').textContent=initials;
   document.getElementById('tb-badge-initials').style.background=col;
-  // Show SharePoint nav bar with user initials
   const spNav=document.getElementById('sp-nav');
   const spAvatar=document.getElementById('sp-nav-avatar');
   if(spNav)spNav.style.display='';
@@ -936,11 +927,8 @@ function regFinish(){
   };
   accounts[u]=newAcc;
   saveAccounts(accounts);
-  // Pre-save a customised title for the new user
   localStorage.setItem('sit_'+u+'_dash_title', JSON.stringify(dashTitle));
-  // Flag to show welcome banner
   localStorage.setItem('sit_'+u+'_is_new', 'true');
-  // Reset reg form
   document.getElementById('reg-step-3').style.display='none';
   document.getElementById('reg-step-1').style.display='';
   ['rs-1','rs-2','rs-3'].forEach((id,i)=>{
@@ -1029,8 +1017,6 @@ const PANEL_DEFS=[
 ];
 
 /* ══ CUSTOM PANELS ══ */
-// customPanels: array of {id, title, content, fontSize} — shared across all tabs in storage
-// Per-tab: customPanels are added to that tab's panelOrder, and their data is stored in NS+'custom_panels'
 let customPanels=[];
 
 function loadCustomPanels(){customPanels=load('custom_panels',[]);}
@@ -1052,7 +1038,6 @@ function saveCustomPanel(){
   loadCustomPanels();
   customPanels.push({id,title,content,fontSize});
   saveCustomPanels();
-  // Add to current tab's panelOrder
   panelOrder.push(id);
   save('panel_order',panelOrder);
   saveTabState();
@@ -1065,7 +1050,6 @@ function deleteCustomPanel(id){
   loadCustomPanels();
   customPanels=customPanels.filter(p=>p.id!==id);
   saveCustomPanels();
-  // Remove from all tabs
   tabs.forEach(t=>{if(t.panelOrder)t.panelOrder=t.panelOrder.filter(x=>x!==id);if(t.panelHidden)t.panelHidden=t.panelHidden.filter(x=>x!==id);});
   panelOrder=panelOrder.filter(x=>x!==id);
   panelHidden=panelHidden.filter(x=>x!==id);
@@ -1088,15 +1072,12 @@ function saveCustomPanelTitle(id){
   const el=document.getElementById('cpc-title-'+id);
   if(el)cp.title=el.value||cp.title;
   saveCustomPanels();
-  // Also update panel edit bar label
   const lbl=document.getElementById('pebl-'+id);
   if(lbl&&el)lbl.textContent=el.value||cp.title;
 }
 
 function applyCustomPanelFormat(id,cmd,value){
   const ta=document.getElementById('cpc-content-'+id);if(!ta)return;
-  // Since we use textarea (plain text), we apply formatting as markdown-style toggles
-  // for bold: wrap selection in **
   const start=ta.selectionStart, end=ta.selectionEnd;
   const sel=ta.value.substring(start,end);
   if(!sel)return;
@@ -1192,7 +1173,6 @@ function dismissWelcome(){
 function initDashboard(){
   editMode=false;
   links      =load('links',     getDefaultLinks(currentUser.prog));
-  // Link groups — each group has {id, name} and links are tagged with groupId
   linkGroups=load('link_groups',[{id:'lg_all',name:'All'}]);
   if(!linkGroups.length)linkGroups=[{id:'lg_all',name:'All'}];
   activeLinkGroup=load('active_link_group','lg_all');
@@ -1212,13 +1192,11 @@ function initDashboard(){
   loadCustomPanels();
   PANEL_DEFS.forEach(p=>{if(!panelOrder.includes(p.id))panelOrder.push(p.id);});
 
-  // Load tabs — default single "Home" tab
   tabs=load('tabs',[{id:'tab_home',name:'Home',icon:'ti-home',panelOrder:null,panelHidden:null,panelColors:null,panelSpan:null,layoutCols:null}]);
   if(!tabs.length)tabs=[{id:'tab_home',name:'Home',icon:'ti-home',panelOrder:null,panelHidden:null,panelColors:null,panelSpan:null,layoutCols:null}];
   activeTabId=load('active_tab',tabs[0].id);
   if(!tabs.find(t=>t.id===activeTabId))activeTabId=tabs[0].id;
 
-  // Load profile style
   profileStyle=load('profile_style',{shape:'circle',borderColor:'none',borderStyle:'solid',photo:null});
 
   const defaultTitle=currentUser.name.split(' ')[0]+"'s Dashboard";
@@ -1231,7 +1209,6 @@ function initDashboard(){
   document.getElementById('edit-toggle').classList.remove('active');
   document.getElementById('dashboard-screen').classList.remove('edit-mode');
 
-  // Welcome banner for new registrations
   const isNew=localStorage.getItem(NS+'is_new');
   const dismissed=load('welcome_dismissed',false);
   if(isNew&&!dismissed){
@@ -1271,7 +1248,6 @@ function toggleLayoutBar(){
 
 /* ══ TAB SYSTEM ══ */
 function getTabState(tabId){
-  // Returns the per-tab saved state, falling back to global
   const t=tabs.find(x=>x.id===tabId);if(!t)return null;
   return{
     panelOrder: t.panelOrder||load('panel_order',PANEL_DEFS.map(p=>p.id)),
@@ -1294,7 +1270,6 @@ function saveTabState(){
 
 function switchTab(tabId){
   saveTabState();
-  // Save any open custom panel content before switching
   loadCustomPanels();
   customPanels.forEach(cp=>{
     const el=document.getElementById('cpc-content-'+cp.id);
@@ -1370,7 +1345,6 @@ function togglePanelCheck(panelId){
 function confirmAddTab(){
   const name=document.getElementById('addtab-name').value.trim()||'New Tab';
   const icon=document.getElementById('addtab-icon').value.trim()||'ti-layout-dashboard';
-  // Gather selected panels
   const selected=PANEL_DEFS.filter(p=>document.getElementById('pci-'+p.id)?.classList.contains('checked')).map(p=>p.id);
   const allIds=PANEL_DEFS.map(p=>p.id);
   const hidden=allIds.filter(id=>!selected.includes(id));
@@ -1426,14 +1400,8 @@ function getAvatarCSS(style){
   let css=`border-radius:${shape.br};`;
   if(shape.clip)css+=`clip-path:${shape.clip};`;
   if(bc.id==='none'){css+='border:none;';}
-  else if(bc.id==='gradient'){
-    css+='border:3px solid transparent;background-clip:padding-box;outline:3px solid transparent;';
-    // gradient border via box-shadow fallback
-    css+='box-shadow:0 0 0 3px transparent;';
-    // we'll apply via wrapper
-  } else {
-    css+=`border:3px ${style.borderStyle||'solid'} ${bc.hex};`;
-  }
+  else if(bc.id==='gradient'){css+='border:3px solid transparent;background-clip:padding-box;outline:3px solid transparent;';css+='box-shadow:0 0 0 3px transparent;';}
+  else{css+=`border:3px ${style.borderStyle||'solid'} ${bc.hex};`;}
   return css;
 }
 
@@ -1454,7 +1422,6 @@ function applyAvatarStyle(el,style){
     el.style.border=`3px ${style.borderStyle||'solid'} ${bc.hex}`;
     el.style.background='';
   }
-  // Photo
   const initials=currentUser?currentUser.name.split(' ').map(n=>n[0]).join('').toUpperCase():'S';
   if(style.photo){
     el.innerHTML=`<img src="${style.photo}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`;
@@ -1479,20 +1446,16 @@ function openProfileModal(){
 }
 
 function buildProfileModal(){
-  // Preview
   updateProfilePreview();
-  // Shape grid
   const sg=document.getElementById('shape-grid');
   if(sg)sg.innerHTML=AVATAR_SHAPES.map(s=>`
     <div class="shape-opt${profileStyleDraft.shape===s.id?' selected':''}" onclick="profileSetShape('${s.id}')">
       <div class="shape-swatch" style="border-radius:${s.br};clip-path:${s.clip||'none'};overflow:hidden;background:var(--primary)">${currentUser?.name?.split(' ').map(n=>n[0]).join('').toUpperCase()||'S'}</div>
       <span>${s.label}</span>
     </div>`).join('');
-  // Border colours
   const bcr=document.getElementById('border-color-row');
   if(bcr)bcr.innerHTML=BORDER_COLORS.map(bc=>`
     <div class="bc-swatch${profileStyleDraft.borderColor===bc.id?' selected':''}" style="background:${bc.id==='gradient'?'conic-gradient(#e01c2e,#6c47ff,#00bcd4,#00c853,#e01c2e)':bc.id==='none'?'var(--bg-3)':bc.hex};${bc.id==='none'?'border:1.5px dashed var(--border-strong)!important':''}" title="${bc.label}" onclick="profileSetBorderColor('${bc.id}')"></div>`).join('');
-  // Border styles
   const bsr=document.getElementById('border-style-row');
   if(bsr)bsr.innerHTML=BORDER_STYLES.map(bs=>`<div class="bs-opt${profileStyleDraft.borderStyle===bs?' selected':''}" onclick="profileSetBorderStyle('${bs}')">${bs.charAt(0).toUpperCase()+bs.slice(1)}</div>`).join('');
 }
@@ -1535,7 +1498,6 @@ function saveProfileStyle(){
   profileStyle={...profileStyleDraft};
   save('profile_style',profileStyle);
   applyProfileStyle();
-  // Also update SP nav avatar
   const spAv=document.getElementById('sp-nav-avatar');
   if(spAv){
     const initials=currentUser?.name.split(' ').map(n=>n[0]).join('').toUpperCase()||'S';
@@ -1635,7 +1597,6 @@ function renderPanels(){
     wrapper.addEventListener('drop',onDrop);
   });
   renderLinks();renderAlerts();renderCountdowns();renderCalendar();restoreTimetable();renderTodos();renderNews();
-  // Add-panel card — shown when there are hidden panels
   renderAddPanelCard();
 }
 
@@ -1720,6 +1681,20 @@ function buildPanelInner(id){
           <div class="sc-name">CCAs</div>
           <div class="sc-desc">Clubs, societies & student life</div>
         </a>
+        <a class="support-card" href="https://www.singaporetech.edu.sg/campus-life/student-wellbeing/oasis" target="_blank" style="grid-column:1/-1">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <div class="sc-icon" style="background:rgba(108,71,255,0.15);color:#9b7bff;flex-shrink:0"><i class="ti ti-armchair"></i></div>
+            <div style="flex:1;min-width:0">
+              <div class="sc-name">OASIS</div>
+              <div class="sc-desc">Quiet study &amp; rest spaces — drop in anytime during operating hours</div>
+              <div class="oasis-locations">
+                <div class="oasis-loc-row"><i class="ti ti-map-pin"></i><span><strong>E2</strong> &middot; Level 2M &middot; Room E2-2M-017</span></div>
+                <div class="oasis-loc-row"><i class="ti ti-map-pin"></i><span><strong>E6</strong> &middot; Level 6 &middot; Room E6-06-01</span></div>
+                <div class="oasis-loc-row"><i class="ti ti-map-pin"></i><span><strong>W3</strong> &middot; Level 2 &middot; SIT Campus Heart</span></div>
+              </div>
+            </div>
+          </div>
+        </a>
       </div>`;
     case'todo':return`
       <div class="panel-title">To-do List
@@ -1795,7 +1770,6 @@ function toggleEdit(){
   t.contentEditable=editMode?'true':'false';
   s.contentEditable=editMode?'true':'false';
   if(!editMode){save('dash_title',t.textContent);save('dash_subtitle',s.textContent);saveTabState();}
-  // Toggle custom panel interactivity
   loadCustomPanels();
   customPanels.forEach(cp=>{
     const titleEl=document.getElementById('cpc-title-'+cp.id);
@@ -1870,7 +1844,6 @@ function startLgRename(id,e){
   e.stopPropagation();
   if(id==='lg_all')return;
   const g=linkGroups.find(x=>x.id===id);if(!g)return;
-  // Find the lgtab span text node and replace inline
   const tabs=document.querySelectorAll('.lgtab');
   tabs.forEach(el=>{
     if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes(id)){
@@ -1907,7 +1880,6 @@ function renderLinks(){
 }
 
 function openAddLinkModal(){
-  // Pre-select current group in the modal dropdown
   buildLinkGroupSelect();
   openModal('modal-link');
 }
@@ -1937,7 +1909,6 @@ function deleteLink(id){links=links.filter(l=>l.id!==id);save('links',links);ren
 let alertColorSel='amber';
 
 function getAlertUrgency(al){
-  // Determine notification style based on color or date proximity
   if(al.color==='red')return'urgent';
   if(al.date){
     const today=new Date();today.setHours(0,0,0,0);
@@ -2183,24 +2154,20 @@ function showTimetable(name){
   renderTimetable();
 }
 function parseICS(text){
-  // Unfold lines (RFC 5545: CRLF + whitespace = continuation)
   text=text.replace(/\r?\n[ \t]/g,'');
   const events=[];let cur=null;
   const parseDate=v=>{
     if(!v)return null;
-    // Strip TZID prefix e.g. "TZID=Asia/Singapore:20240101T080000"
     const ci=v.lastIndexOf(':');if(ci>0)v=v.slice(ci+1);
     const isUtc=v.endsWith('Z');
     v=v.replace('Z','');
     const m=v.match(/^(\d{4})(\d{2})(\d{2})T?(\d{2})?(\d{2})?(\d{2})?/);
     if(!m)return null;
-    // Always treat as local time (ICS with TZID or floating) — or convert UTC to local
     if(isUtc){
       return new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)));
     }
     return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));
   };
-  // Returns YYYY-MM-DDTHH:MM:SS in local time (no Z), so .slice(0,10) gives local date
   const toLocalISO=d=>{
     const pad=n=>String(n).padStart(2,'0');
     return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
@@ -2233,7 +2200,6 @@ function renderTimetable(){
   const todayIso=localDateStr(new Date());
   const parseLocalHour=iso=>parseInt(iso.slice(11,13),10);
   const parseLocalMin=iso=>parseInt(iso.slice(14,16),10);
-  // Minutes since midnight from local ISO string
   const toMins=iso=>parseLocalHour(iso)*60+parseLocalMin(iso);
   const dayEvents=days.map(d=>{
     const iso=localDateStr(d);
@@ -2242,39 +2208,30 @@ function renderTimetable(){
   const allThisWeek=dayEvents.flat();
   const container=document.getElementById('tt-grid-container');if(!container)return;
   if(!allThisWeek.length){container.innerHTML='<div class="tt-empty">No classes this week.</div>';renderTtLegend();return;}
-  // Find time bounds in 30-min slots
   let minMins=8*60,maxMins=18*60;
   allThisWeek.forEach(ev=>{
     const s=toMins(ev.start),e=toMins(ev.end);
     if(s<minMins)minMins=s;if(e>maxMins)maxMins=e;
   });
-  // Round minMins down to hour, maxMins up to hour
   minMins=Math.floor(minMins/60)*60;
   maxMins=Math.ceil(maxMins/60)*60;
-  const totalSlots=(maxMins-minMins)/60; // one row per hour
+  const totalSlots=(maxMins-minMins)/60;
   const DAY_NAMES=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  // Grid: row 1 = header, rows 2..(totalSlots+1) = hour rows
-  // Columns: col 1 = time labels, cols 2..8 = days
-  // Each hour row = 1 grid row; events span grid rows by their duration
-  const SLOT_H=56; // px per hour row
+  const SLOT_H=56;
   let html=`<div style="display:grid;grid-template-columns:44px repeat(7,1fr);grid-template-rows:auto repeat(${totalSlots},${SLOT_H}px);gap:0 4px;min-width:0;padding-bottom:4px;position:relative;">`;
-  // Header row (row 1)
   html+=`<div style="grid-column:1;grid-row:1;"></div>`;
   days.forEach((d,i)=>{
     const iso=localDateStr(d);
     html+=`<div class="tt-header${iso===todayIso?' today-col':''}" style="grid-column:${i+2};grid-row:1;">${DAY_NAMES[i]}<br><span style="font-weight:500;font-size:10px;opacity:.8">${d.getDate()}</span></div>`;
   });
-  // Hour label + background stripe for each hour slot
   for(let s=0;s<totalSlots;s++){
     const h=minMins/60+s;
     const gridRow=s+2;
     html+=`<div class="tt-time" style="grid-column:1;grid-row:${gridRow};align-self:start;padding-top:4px;">${String(h).padStart(2,'0')}:00</div>`;
-    // Light horizontal rule across all day columns
     days.forEach((_,i)=>{
       html+=`<div style="grid-column:${i+2};grid-row:${gridRow};border-top:1px solid var(--border);min-height:${SLOT_H}px;"></div>`;
     });
   }
-  // Place events using grid-row span
   dayEvents.forEach((evs,di)=>{
     evs.forEach(ev=>{
       const startMins=toMins(ev.start);
@@ -2467,7 +2424,6 @@ function saveNews(){
 }
 function deleteNews(id){newsItems=load('news_items',[]);newsItems=newsItems.filter(n=>n.id!==id);save('news_items',newsItems);renderNews();}
 
-// Support paste-to-add image anywhere on the news panel
 document.addEventListener('paste',function(e){
   const form=document.getElementById('news-form');
   if(!form||!form.classList.contains('open'))return;
