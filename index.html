@@ -660,48 +660,6 @@ function showScreen(id){
   });
 }
 
-function fillSample(u,p){
-  document.getElementById('login-user').value=u;
-  document.getElementById('login-pass').value=p;
-  document.getElementById('login-error').style.display='none';
-}
-
-function doLogin(){
-  const u=document.getElementById('login-user').value.trim().toLowerCase();
-  const p=document.getElementById('login-pass').value;
-  const accounts=getAccounts();
-  const acc=accounts[u];
-  if(!acc||acc.password!==p){document.getElementById('login-error').style.display='block';return;}
-  loginAs(u,acc);
-}
-
-function loginAs(u,acc){
-  currentUser={username:u,...acc};
-  NS='sit_'+u+'_';
-  showScreen('dashboard-screen');
-  const initials=acc.name.split(' ').map(n=>n[0]).join('').toUpperCase();
-  const col=acc.color||'#e01c2e';
-  document.getElementById('tb-user-avatar').textContent=initials;
-  document.getElementById('tb-user-avatar').style.background=col;
-  document.getElementById('tb-user-name').textContent=acc.name;
-  document.getElementById('tb-badge-initials').textContent=initials;
-  document.getElementById('tb-badge-initials').style.background=col;
-  const spNav=document.getElementById('sp-nav');
-  const spAvatar=document.getElementById('sp-nav-avatar');
-  if(spNav)spNav.style.display='';
-  if(spAvatar){spAvatar.textContent=initials;spAvatar.style.background=col;}
-  initDashboard();
-}
-
-function doLogout(){
-  currentUser=null;NS='';
-  showScreen('login-screen');
-  document.getElementById('login-user').value='';
-  document.getElementById('login-pass').value='';
-  document.getElementById('login-error').style.display='none';
-  const spNav=document.getElementById('sp-nav');if(spNav)spNav.style.display='none';
-}
-
 /* ══ REGISTRATION ══ */
 function checkUsername(){
   const u=document.getElementById('reg-user').value.trim().toLowerCase();
@@ -790,35 +748,6 @@ function selectAvatar(c,el){
   el.classList.add('selected');
 }
 
-function regFinish(){
-  const accounts=getAccounts();
-  const u=regData.username;
-  const fname=regData.first, lname=regData.last;
-  const dashTitle=document.getElementById('reg-dash-title').value.trim()||`${fname}'s Dashboard`;
-  const newAcc={
-    password:regData.password,
-    name:`${fname} ${lname}`,
-    id:'S'+Math.floor(1000000+Math.random()*9000000),
-    color:selectedAvatarColor,
-    prog:regData.prog,
-    isNew:true,
-  };
-  accounts[u]=newAcc;
-  saveAccounts(accounts);
-  localStorage.setItem('sit_'+u+'_dash_title', JSON.stringify(dashTitle));
-  localStorage.setItem('sit_'+u+'_is_new', 'true');
-  document.getElementById('reg-step-3').style.display='none';
-  document.getElementById('reg-step-1').style.display='';
-  ['rs-1','rs-2','rs-3'].forEach((id,i)=>{
-    document.getElementById(id).className='reg-step'+(i===0?' active':'');
-  });
-  ['reg-first','reg-last','reg-user','reg-pass','reg-pass2','reg-dash-title'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
-  document.getElementById('reg-prog').value='';
-  regData={};selectedAvatarColor=AVATAR_COLORS[0];
-  loginAs(u,newAcc);
-}
 
 /* ══ COLOURS ══ */
 const COLORS=[
@@ -2349,10 +2278,6 @@ function scheduleNotifications(){
   });
   if(updated)save('push_shown',shown);
 }
-
-/* Enter key on login */
-document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-document.getElementById('login-user').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 </script>
 </body>
 </html>
