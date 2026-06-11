@@ -638,36 +638,7 @@ body.text-lg{--base-fs:16px;}
 </div>
 
 <script>
-/* ══ AUTH DATA ══ */
-const SEED_ACCOUNTS = {
-  alicia:   {password:'password1',name:'Alicia Tan',    id:'S1234501',color:'#e01c2e',prog:'BSc Information & Communications Technology'},
-  bob:     {password:'password2',name:'Bob Lim',      id:'S1234502',color:'#3b82f6',prog:'BEng Civil Engineering'},
-  charlie: {password:'password3',name:'Charlie Wong', id:'S1234503',color:'#8b5cf6',prog:'BEng Mechanical Design & Manufacturing'},
-  diana:   {password:'password4',name:'Diana Ng',     id:'S1234504',color:'#14b8a6',prog:'BSc Nursing'},
-  evan:    {password:'password5',name:'Evan Koh',     id:'S1234505',color:'#f59e0b',prog:'BEng Robotics Systems'},
-};
 
-const AVATAR_COLORS=['#e01c2e','#3b82f6','#8b5cf6','#14b8a6','#f59e0b','#4ade80','#ec4899','#f97316','#06b6d4','#a3e635','#6366f1','#10b981'];
-
-let currentUser=null, NS='';
-let regData={};
-let selectedAvatarColor=AVATAR_COLORS[0];
-
-function showScreen(id){
-  ['dashboard-screen'].forEach(s=>{
-    const el=document.getElementById(s);
-    if(el) el.style.display=s===id?(s==='dashboard-screen'?'block':'flex'):'none';
-  });
-}
-
-/* ══ REGISTRATION ══ */
-function checkUsername(){
-  const u=document.getElementById('reg-user').value.trim().toLowerCase();
-  const accounts=getAccounts();
-  const el=document.getElementById('reg-user');
-  if(u.length>2&&accounts[u]){el.style.borderColor='var(--red)';}
-  else{el.style.borderColor='';}
-}
 
 function checkStrength(){
   const p=document.getElementById('reg-pass').value;
