@@ -653,20 +653,8 @@ let currentUser=null, NS='';
 let regData={};
 let selectedAvatarColor=AVATAR_COLORS[0];
 
-function getAccounts(){
-  try{
-    const stored=localStorage.getItem('sit_accounts');
-    if(stored){
-      const parsed=JSON.parse(stored);
-      return Object.assign({},JSON.parse(JSON.stringify(SEED_ACCOUNTS)),parsed);
-    }
-    return JSON.parse(JSON.stringify(SEED_ACCOUNTS));
-  }catch{return JSON.parse(JSON.stringify(SEED_ACCOUNTS));}
-}
-function saveAccounts(a){localStorage.setItem('sit_accounts',JSON.stringify(a));}
-
 function showScreen(id){
-  ['login-screen','register-screen','dashboard-screen'].forEach(s=>{
+  ['dashboard-screen'].forEach(s=>{
     const el=document.getElementById(s);
     if(el) el.style.display=s===id?(s==='dashboard-screen'?'block':'flex'):'none';
   });
