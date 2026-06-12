@@ -32,48 +32,8 @@
 
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
-.auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;background:var(--bg);position:relative;overflow:hidden;}
-.auth-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(108,71,255,0.18) 0%,transparent 70%),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(108,71,255,0.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(108,71,255,0.04) 40px);pointer-events:none;}
-.auth-card{position:relative;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem 2.25rem 2rem;width:100%;max-width:440px;box-shadow:var(--shadow);animation:slideUp 0.5s cubic-bezier(.16,1,.3,1) both;}
-.auth-card::before{content:'';position:absolute;top:0;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);}
-@keyframes slideUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
-.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:1.75rem;}
-.auth-logo-badge{width:40px;height:40px;background:var(--sit-logo-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--sit-red);flex-shrink:0;box-shadow:0 0 14px rgba(224,28,46,0.25);}
-.auth-logo-text{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.3px;line-height:1.2;}
-.auth-logo-sub{font-family:var(--font-body);font-size:12px;font-weight:500;color:var(--text-muted);letter-spacing:.2px;}
-.auth-heading{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.5px;}
-.auth-sub{font-size:14px;color:var(--text-mid);margin-bottom:1.75rem;font-weight:500;}
-.form-group{margin-bottom:1rem;}
-.form-group label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:7px;}
-.form-group input,.form-group select{width:100%;background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-size:14px;font-family:var(--font-body);color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;}
-.form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,71,255,0.12);}
-.form-group input::placeholder{color:var(--text-muted);}
-.form-group select option{background:#fff;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.auth-btn{width:100%;padding:13px;background:var(--primary);border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;font-family:var(--font-body);color:#fff;cursor:pointer;transition:background .2s,box-shadow .2s,transform .1s;margin-top:.5rem;letter-spacing:.3px;}
-.auth-btn:hover{background:#5236d6;box-shadow:0 4px 16px rgba(108,71,255,0.4);}
-.auth-btn:active{transform:scale(.99);}
-.auth-error{font-size:13px;color:var(--sit-red);font-weight:600;margin-top:10px;display:none;}
-.auth-divider{height:1px;background:var(--border);margin:1.5rem 0;}
-.auth-switch{text-align:center;font-size:13px;color:var(--text-muted);}
-.auth-switch a{color:var(--primary);font-weight:700;text-decoration:none;cursor:pointer;}
-.auth-switch a:hover{text-decoration:underline;}
-.sample-accounts{font-size:12px;color:var(--text-muted);font-weight:500;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
-.sample-chips{display:flex;flex-wrap:wrap;gap:6px;}
-.sample-chip{font-size:12px;font-weight:600;padding:5px 10px;background:var(--bg-3);border:1px solid var(--border);border-radius:20px;color:var(--text-mid);cursor:pointer;transition:all .15s;font-family:var(--font-display);}
-.sample-chip:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary);}
-.strength-bar{height:4px;border-radius:2px;background:var(--bg-4);margin-top:6px;overflow:hidden;}
-.strength-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0%;}
-.strength-label{font-size:11px;font-weight:600;margin-top:4px;color:var(--text-muted);}
-.reg-steps{display:flex;gap:8px;margin-bottom:1.5rem;}
-.reg-step{flex:1;height:3px;border-radius:2px;background:var(--bg-4);transition:background .3s;}
-.reg-step.active{background:var(--primary);}
-.reg-step.done{background:#00c853;}
-.avatar-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px;}
-.av-opt{width:100%;aspect-ratio:1;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;border:2px solid transparent;transition:all .15s;font-family:var(--font-display);}
-.av-opt:hover{transform:scale(1.1);}
-.av-opt.selected{border-color:var(--text);transform:scale(1.05);}
-#dashboard-screen{display:none;}
+
+
 .dash-wrap{max-width:1320px;margin:0 auto;padding:1.75rem 1.5rem;display:flex;flex-direction:column;gap:1.25rem;}
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.5rem;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-lg);gap:1rem;position:relative;overflow:hidden;}
 .top-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6c47ff,#00bcd4,#ff6b2b,#00c853,#6c47ff);}
@@ -430,7 +390,7 @@ body.text-lg{--base-fs:16px;}
 
 
 <!-- SHAREPOINT-STYLE GLOBAL NAV BAR -->
-<div id="sp-nav" style="display:none">
+<div id="sp-nav">
   <div style="display:flex;align-items:center;height:48px;background:#111111;padding:0 12px;gap:0;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(255,255,255,0.08);">
     <button style="background:none;border:none;color:#ccc;cursor:pointer;padding:8px;border-radius:4px;display:flex;align-items:center;justify-content:center;margin-right:4px" title="Microsoft 365" onclick="this.blur()">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><rect x="0" y="0" width="5" height="5"/><rect x="6.5" y="0" width="5" height="5"/><rect x="13" y="0" width="5" height="5"/><rect x="0" y="6.5" width="5" height="5"/><rect x="6.5" y="6.5" width="5" height="5"/><rect x="13" y="6.5" width="5" height="5"/><rect x="0" y="13" width="5" height="5"/><rect x="6.5" y="13" width="5" height="5"/><rect x="13" y="13" width="5" height="5"/></svg>
@@ -448,13 +408,13 @@ body.text-lg{--base-fs:16px;}
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
       <button style="background:none;border:none;color:#ccc;cursor:pointer;padding:8px;border-radius:50%;font-size:18px;display:flex;align-items:center;justify-content:center;" title="Help">?</button>
-      <div id="sp-nav-avatar" style="width:32px;height:32px;border-radius:50%;background:#6c47ff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;font-family:'Segoe UI',sans-serif;cursor:pointer;margin-left:4px;border:2px solid #555;">JZ</div>
+      <div id="sp-nav-avatar" style="width:32px;height:32px;border-radius:50%;background:#6c47ff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;font-family:'Segoe UI',sans-serif;cursor:pointer;margin-left:4px;border:2px solid #555;">AT</div>
     </div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard-screen" style="display:none">
+<div id="dashboard-screen">
 <div class="dash-wrap" id="dashboard">
   <div class="top-bar">
     <div class="tb-left">
@@ -473,7 +433,7 @@ body.text-lg{--base-fs:16px;}
       <button class="icon-btn" id="edit-toggle" onclick="toggleEdit()"><i class="ti ti-edit"></i> <span>Customise</span></button>
       <button class="icon-btn" id="theme-toggle" onclick="cycleTheme()" title="Toggle dark/light mode"><i class="ti ti-moon"></i></button>
       <button class="icon-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable push alerts"><i class="ti ti-bell-ringing"></i> <span>Alerts</span></button>
-      <button class="logout-btn" onclick="doLogout()"><i class="ti ti-logout"></i> Sign out</button>
+
     </div>
   </div>
   <div id="welcome-banner" style="display:none">
@@ -639,85 +599,18 @@ body.text-lg{--base-fs:16px;}
 
 <script>
 
+/* ── No-login defaults ── */
+const NS = 'sit_dash_';
+let currentUser = JSON.parse(localStorage.getItem(NS+'user') || 'null') || {
+  name: 'Alicia Tan',
+  username: 'aliciatan',
+  prog: '',
+  color: '#6c47ff'
+};
+function doLogout(){}
 
-function checkStrength(){
-  const p=document.getElementById('reg-pass').value;
-  const fill=document.getElementById('strength-fill');
-  const lbl=document.getElementById('strength-label');
-  let score=0;
-  if(p.length>=8)score++;if(p.length>=12)score++;
-  if(/[A-Z]/.test(p))score++;if(/[0-9]/.test(p))score++;if(/[^A-Za-z0-9]/.test(p))score++;
-  const levels=[
-    {w:'0%',bg:'#3f3f46',t:'Enter a password'},
-    {w:'20%',bg:'#e01c2e',t:'Very weak'},
-    {w:'40%',bg:'#f97316',t:'Weak'},
-    {w:'60%',bg:'#f59e0b',t:'Fair'},
-    {w:'80%',bg:'#4ade80',t:'Good'},
-    {w:'100%',bg:'#4ade80',t:'Strong ✓'},
-  ];
-  const l=levels[Math.min(score,5)];
-  fill.style.width=l.w;fill.style.background=l.bg;lbl.textContent=l.t;lbl.style.color=l.bg;
-}
+document.addEventListener('DOMContentLoaded', () => { initDashboard(); });
 
-function regNext(step){
-  if(step===1){
-    const first=document.getElementById('reg-first').value.trim();
-    const last=document.getElementById('reg-last').value.trim();
-    const u=document.getElementById('reg-user').value.trim().toLowerCase();
-    const prog=document.getElementById('reg-prog').value;
-    const err=document.getElementById('reg-err-1');
-    if(!first||!last){err.textContent='Please enter your full name.';err.style.display='block';return;}
-    if(!u||u.length<3){err.textContent='Username must be at least 3 characters.';err.style.display='block';return;}
-    if(!/^[a-z0-9_]+$/.test(u)){err.textContent='Username: letters, numbers, underscores only.';err.style.display='block';return;}
-    const accounts=getAccounts();
-    if(accounts[u]){err.textContent='Username already taken. Choose another.';err.style.display='block';return;}
-    if(!prog){err.textContent='Please select your programme.';err.style.display='block';return;}
-    err.style.display='none';
-    regData={first,last,username:u,prog};
-    document.getElementById('reg-step-1').style.display='none';
-    document.getElementById('reg-step-2').style.display='';
-    document.getElementById('rs-1').className='reg-step done';
-    document.getElementById('rs-2').className='reg-step active';
-  } else if(step===2){
-    const p=document.getElementById('reg-pass').value;
-    const p2=document.getElementById('reg-pass2').value;
-    const err=document.getElementById('reg-err-2');
-    if(p.length<8){err.textContent='Password must be at least 8 characters.';err.style.display='block';return;}
-    if(p!==p2){err.textContent='Passwords do not match.';err.style.display='block';return;}
-    err.style.display='none';
-    regData.password=p;
-    buildAvatarGrid();
-    document.getElementById('reg-step-2').style.display='none';
-    document.getElementById('reg-step-3').style.display='';
-    document.getElementById('rs-2').className='reg-step done';
-    document.getElementById('rs-3').className='reg-step active';
-  }
-}
-
-function regBack(step){
-  if(step===2){
-    document.getElementById('reg-step-2').style.display='none';
-    document.getElementById('reg-step-1').style.display='';
-    document.getElementById('rs-2').className='reg-step';
-    document.getElementById('rs-1').className='reg-step active';
-  } else if(step===3){
-    document.getElementById('reg-step-3').style.display='none';
-    document.getElementById('reg-step-2').style.display='';
-    document.getElementById('rs-3').className='reg-step';
-    document.getElementById('rs-2').className='reg-step active';
-  }
-}
-
-function buildAvatarGrid(){
-  const grid=document.getElementById('avatar-grid');
-  grid.innerHTML=AVATAR_COLORS.map(c=>`<div class="av-opt${c===selectedAvatarColor?' selected':''}" style="background:${c}" onclick="selectAvatar('${c}',this)">${regData.first?regData.first[0].toUpperCase():''}</div>`).join('');
-}
-
-function selectAvatar(c,el){
-  selectedAvatarColor=c;
-  document.querySelectorAll('.av-opt').forEach(a=>a.classList.remove('selected'));
-  el.classList.add('selected');
-}
 
 
 /* ══ COLOURS ══ */
